@@ -1,6 +1,7 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class HiderController : MonoBehaviour
+public class HiderController : MonoBehaviourPunCallbacks
 {
     #region PrivateField
     private bool isGrounded;
