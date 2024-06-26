@@ -9,23 +9,26 @@ public class SeekerCamera : MonoBehaviour
     #endregion
 
     #region SerializeField
-    /// <summary>Å‘åƒJƒƒ‰‹——£</summary>
+    /// <summary>summary>
     [SerializeField] private float mouseSensitivity = 100.0f;
-    /// <summary>Å¬ƒJƒƒ‰‹——£</summary>
+    /// <summary></summary>
     [SerializeField] private Transform playerBody;
     #endregion
 
-    void Start()
+    #region UnityEvent
+    private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
+    private void Update()
     {
         LookAround();
     }
+    #endregion
 
-    void LookAround()
+    #region PrivateMethod
+    private void LookAround()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
@@ -36,4 +39,5 @@ public class SeekerCamera : MonoBehaviour
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         playerBody.Rotate(Vector3.up * mouseX);
     }
+    #endregion
 }

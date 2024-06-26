@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class SeekerController : MonoBehaviour
 {
+    #region PrivateField
+    private bool isGrounded;
+    private Vector3 velocity;
+    private CharacterController characterController;
+    #endregion
+
     #region SerializeField
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private float jumpHeight = 2.0f;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private Transform cameraTransform;
-    #endregion
-
-    #region PrivateField
-    private bool isGrounded;
-    private Vector3 velocity;
-    private CharacterController characterController;
     #endregion
 
     #region UnityEvent
