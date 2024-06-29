@@ -53,16 +53,19 @@ namespace Title
         public void Init()
         {
             // 初回起動かどうかの判定
-            /*if (!PlayerPrefs.HasKey("FirstTime"))
+            if (!PlayerPrefs.HasKey("FirstTime"))
             {
                 firstStartup.Init();
             }
             else
             {
                 firstStartup.AlreadyStartUp();
-            }*/
+            }
 
-            //titleUI.Init();
+            InputMatchingObservable.Subscribe(_ =>
+            {
+                SceneLoader.Instance().Load(SceneLoader.SceneName.Game);
+            }).AddTo(this);
         }
         #endregion
 

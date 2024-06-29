@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameData;
+using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ namespace Title
     /// </summary>
     public class FirstStartup : MonoBehaviour
     {
-        /*#region PrivateField
+        #region PrivateField
         /// <summary>プレイヤー名の初期名</summary>
         private const string initialText = "ユーザー";
         /// <summary>決定ボタンを選択した時の処理</summary>
@@ -57,9 +58,7 @@ namespace Title
                 PlayerPrefs.SetString("UserName", nameInputField.text);
 
                 PlayerData playerData = new PlayerData(nameInputField.text);
-                GameDataManager.instance.SetPlayerData(playerData);
-
-                SE.instance.Play(SE.SEName.ButtonSE);
+                GameDataManager.Instance().PlayerDataInit();
 
                 firstStartupWindow.SetActive(false);
             }).AddTo(this);
@@ -70,6 +69,8 @@ namespace Title
         /// </summary>
         public void AlreadyStartUp()
         {
+            GameDataManager.Instance().PlayerDataInit();
+
             firstStartupWindow.SetActive(false);
         }
         #endregion

@@ -70,8 +70,6 @@ namespace NetWork
         /// </summary>
         private void Init()
         {
-            PhotonNetwork.NickName = "Player";
-
             PhotonNetwork.ConnectUsingSettings();
         }
         #endregion
