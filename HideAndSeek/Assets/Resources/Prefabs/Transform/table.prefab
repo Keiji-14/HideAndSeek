@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2927840630853547092}
   - component: {fileID: 1476923198947966795}
   - component: {fileID: 7030319266593685568}
+  - component: {fileID: 5168150581953742769}
   m_Layer: 0
   m_Name: table
   m_TagString: Untagged
@@ -106,3 +107,24 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!65 &5168150581953742769
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8166709448631958598}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1875677, y: 0.77490145, z: 1.1875687}
+  m_Center: {x: -0.00015106797, y: 0.3874124, z: 0.00071439147}

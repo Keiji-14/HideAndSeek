@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 637302472241838487}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: -36.71}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -58,13 +58,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 0
+  m_Height: 1.5
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.45, z: 0}
 --- !u!54 &2750199365097021231
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -148,10 +148,11 @@ MonoBehaviour:
   jumpHeight: 1
   gravity: -9.81
   cameraTransform: {fileID: 7786678533296474787}
-  transformObjLists:
+  playerModel: {fileID: 3778883793254947671}
+  transformObjList:
   - {fileID: 8318791718542456950, guid: 3fa775bb83a521040a00c081ad57e783, type: 3}
-  - {fileID: 8261508811039212895, guid: cabe52ea39b70dc4a9a866680afc2fc8, type: 3}
-  - {fileID: 3852969939083127166, guid: deaad61e72908fc4b908f8c5b4351620, type: 3}
+  - {fileID: 8958062434727102317, guid: e3a438cec5d94f64d84a1056c4c78434, type: 3}
+  - {fileID: 1065699774562215107, guid: 6fae41e4f12d28146881c6f30871f611, type: 3}
 --- !u!1 &748993076912131672
 GameObject:
   m_ObjectHideFlags: 0
