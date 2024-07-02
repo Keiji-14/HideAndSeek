@@ -10,8 +10,6 @@ namespace NetWork
         public static NetworkManager instance = null;
         #endregion
 
-        [SerializeField] private GameObject playerObj;
-
         #region UnityEvent
         private void Awake()
         {
@@ -51,7 +49,7 @@ namespace NetWork
         public override void OnJoinedRoom()
         {
             var position = new Vector3(Random.Range(-3f, 3f), 3f);
-            PhotonNetwork.Instantiate("Prefabs/HiderPlayer", position, Quaternion.identity);
+            PhotonNetwork.Instantiate("Prefabs/SeekerPlayer", position, Quaternion.identity);
         }
 
         /// <summary>

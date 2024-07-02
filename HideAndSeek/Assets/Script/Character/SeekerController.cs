@@ -1,17 +1,28 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SeekerController : MonoBehaviour
 {
     #region PrivateField
+    /// <summary>地面についているかの判定</summary>
     private bool isGrounded;
+    /// <summary>速度ベクトル</summary>
     private Vector3 velocity;
+    /// <summary>カメラ</summary>
+    private Camera camera;
+    /// <summary>キャラクターコントローラー</summary>
     private CharacterController characterController;
     #endregion
 
     #region SerializeField
-    [SerializeField] private float speed = 5.0f;
-    [SerializeField] private float jumpHeight = 2.0f;
-    [SerializeField] private float gravity = -9.81f;
+    /// <summary>移動速度</summary>
+    [SerializeField] private float speed;
+    /// <summary>ジャンプの高さ</summary>
+    [SerializeField] private float jumpHeight;
+    /// <summary>重力</summary>
+    [SerializeField] private float gravity;
+    /// <summary>攻撃の射程距離</summary>
+    [SerializeField] private float attackRange;
+    /// <summary>カメラのTransform</summary>
     [SerializeField] private Transform cameraTransform;
     #endregion
 
@@ -19,11 +30,13 @@ public class SeekerController : MonoBehaviour
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
+        camera = Camera.main;
     }
 
     private void Update()
     {
         Move();
+        HandleAttack();
     }
     #endregion
 
@@ -49,6 +62,42 @@ public class SeekerController : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
+    }
+
+    private void HandleAttack()
+    {
+        if (Input.GetMouseButtonDown(0)) // 左クリックで攻撃
+        {
+            RaycastHit hit;
+            Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
+
+            if (Physics.Raycast(camera.transform.position, forward, out hit, attackRange))
+            {
+                if (hit.collider.CompareTag("Hider"))
+                {
+                    Debug.Log("Hider hit: " + hit.collider.name);
+                    // Hiderを捕まえた時の処理を追加
+                    CaptureHider(hit.collider.gameObject);
+                }
+                else
+                {
+                    Debug.Log("Hit something else: " + hit.collider.name);
+                }
+            }
+        }
+    }
+
+    private void CaptureHider(GameObject hider)
+    {
+        // Hiderを捕まえた時の処理
+        Debug.Log("Captured Hider: " + hider.name);
+        // ここに捕まえた時の処理を追加
+        // 例えば、hiderの状態を変更するなど
+        // HiderController hiderController = hider.GetComponent<HiderController>();
+        // if (hiderController != null)
+        // {
+        //     hiderController.Capture();
+        // }
     }
     #endregion
 }
