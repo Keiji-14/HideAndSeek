@@ -93,13 +93,17 @@ namespace NetWork
                 if (playerIndex == seekerIndex)
                 {
                     player.CustomProperties["Role"] = "Seeker";
+                    Debug.Log("探す側です");
                 }
                 else
                 {
                     player.CustomProperties["Role"] = "Hider";
+                    Debug.Log("隠れる側です");
                 }
                 playerIndex++;
             }
+
+            Debug.Log("マッチング完了");
 
             // ゲームシーンに移行
             SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
