@@ -29,11 +29,11 @@ namespace NetWork
             if (isGameStarted || !isMatching)
                 return;
 
-            // ここに他のプレイヤーがいるかどうかを確認する処理を追加
-            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+            // 4人揃ったかどうかを確認
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 4)
             {
                 isGameStarted = true;
-                StartCoroutine(MovePlayersBattleRoom());
+                StartCoroutine(MoveGameRoom());
             }
         }
         #endregion
@@ -58,12 +58,14 @@ namespace NetWork
 
         #region PrivateMethod
         /// <summary>
-        /// 対戦画面に移動する処理
+        /// ゲーム画面に移動する処理
         /// </summary>
-        private IEnumerator MovePlayersBattleRoom()
+        private IEnumerator MoveGameRoom()
         {
-            yield return null;
+            yield return new WaitForSeconds(2.0f);
 
+            // ゲームシーンに移行
+            PhotonNetwork.LoadLevel("GameScene");
             MatchingCompletedSubject.OnNext(Unit.Default);
         }
         #endregion
