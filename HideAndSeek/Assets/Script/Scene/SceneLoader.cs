@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -62,6 +63,15 @@ namespace Scene
         }
 
         /// <summary>
+        /// PhotonNetworkを使用したシーンロード
+        /// </summary>
+        /// <param name="sceneName">シーン名</param>
+        public void PhotonNetworkLoad(SceneName sceneName)
+        {
+            StartCoroutine(PhotonNetworkLoadAsync(SceneNames[sceneName]));
+        }
+
+        /// <summary>
         /// シーンアンロード
         /// </summary>
         /// <param name="sceneName">シーン名</param>
@@ -91,6 +101,24 @@ namespace Scene
 
             // シーンが追加された後に、アクティブ状態を変更する
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+
+            // シーンロード完了を通知する
+            OnSceneLoaded?.Invoke(sceneName);
+        }
+
+        /// <summary>
+        /// PhotonNetworkを使用した非同期シーンロード
+        /// </summary>
+        /// <param name="sceneName">シーン名</param>
+        private IEnumerator PhotonNetworkLoadAsync(string sceneName)
+        {
+            PhotonNetwork.LoadLevel(sceneName);
+
+            // シーンロード完了を待機
+            while (PhotonNetwork.LevelLoadingProgress < 1)
+            {
+                yield return null;
+            }
 
             // シーンロード完了を通知する
             OnSceneLoaded?.Invoke(sceneName);
