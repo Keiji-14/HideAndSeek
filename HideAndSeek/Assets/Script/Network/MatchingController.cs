@@ -30,7 +30,7 @@ namespace NetWork
                 return;
 
             // 4人揃ったかどうかを確認
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 4)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 isGameStarted = true;
                 StartCoroutine(MoveGameRoom());
@@ -65,7 +65,6 @@ namespace NetWork
             yield return new WaitForSeconds(2.0f);
 
             // ゲームシーンに移行
-            PhotonNetwork.LoadLevel("GameScene");
             MatchingCompletedSubject.OnNext(Unit.Default);
         }
         #endregion

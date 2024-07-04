@@ -54,11 +54,7 @@ namespace NetWork
         /// </summary>
         public override void OnJoinedRoom()
         {
-            // プレイヤーが4人揃ったら役割を設定
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 4)
-            {
-                AssignRolesAndLoadGameScene();
-            }
+            matchingController.MatchingStart();
         }
 
         /// <summary>
@@ -89,7 +85,7 @@ namespace NetWork
         private void AssignRolesAndLoadGameScene()
         {
             // ランダムに鬼を選出
-            int seekerIndex = Random.Range(0, 4);
+            int seekerIndex = Random.Range(0, 2);
             int playerIndex = 0;
 
             foreach (var player in PhotonNetwork.PlayerList)

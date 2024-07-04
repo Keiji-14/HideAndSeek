@@ -24,12 +24,12 @@ namespace Title
         private bool isMatching = false;
         /// <summary>マッチング開始ボタンを選択した時の処理 </summary>
         private IObservable<Unit> InputMatchingObservable =>
-            onlinePlayerBtn.OnClickAsObservable();
+            matchingBtn.OnClickAsObservable();
         #endregion
 
         #region SerializeField
-        /// <summary>オンライン対戦開始ボタン</summary>
-        [SerializeField] private Button onlinePlayerBtn;
+        /// <summary>マッチング開始ボタン</summary>
+        [SerializeField] private Button matchingBtn;
         /// <summary>初回起動時の処理</summary>
         [SerializeField] private FirstStartup firstStartup;
         /// <summary>タイトル画面のUI</summary>
@@ -64,7 +64,7 @@ namespace Title
 
             InputMatchingObservable.Subscribe(_ =>
             {
-                SceneLoader.Instance().Load(SceneLoader.SceneName.Game);
+                NetworkManager.instance.ConnectUsingSettings();
             }).AddTo(this);
         }
         #endregion
