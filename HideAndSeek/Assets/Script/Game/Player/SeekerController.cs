@@ -37,6 +37,10 @@ public class SeekerController : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        // 自分のキャラクターかどうかを確認
+        if (!photonView.IsMine)
+            return;
+
         Move();
         HandleAttack();
     }

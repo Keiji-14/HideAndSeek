@@ -140,37 +140,38 @@ public class HiderController : MonoBehaviourPunCallbacks
             return;
         }
 
-        // 現在のオブジェクトを削除
+        currentTransformIndex = (currentTransformIndex + 1) % transformObjList.Count;
+
+        photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, currentTransformIndex);
+    }
+
+    /// <summary>
+    /// プレイヤーの変身を解除する処理
+    /// </summary>
+    private void RevertToPlayer()
+    {
+        photonView.RPC("RPC_RevertToPlayer", RpcTarget.AllBuffered);
+    }
+
+    [PunRPC]
+    private void RPC_TransformIntoObject(int transformIndex)
+    {
         if (currentObject != null && currentObject != gameObject)
         {
             PhotonNetwork.Destroy(currentObject);
         }
 
-        // プレイヤーモデルを非表示
         playerModel.SetActive(false);
 
-        // 次のオブジェクトにインデックスを更新
-        currentTransformIndex = (currentTransformIndex + 1) % transformObjList.Count;
-
-        // 新しいオブジェクトを生成
         var position = transform.position;
         var rotation = transform.rotation;
-        currentObject = PhotonNetwork.Instantiate($"{transformPath + transformObjList[currentTransformIndex].name}", position, rotation);
-
-        // 新しいオブジェクトを子オブジェクトとして設定
+        currentObject = Instantiate(transformObjList[transformIndex], position, rotation);
         currentObject.transform.SetParent(this.transform);
+        currentObject.transform.localPosition = Vector3.zero;
+        currentObject.transform.localRotation = Quaternion.identity;
 
-        // プレイヤーの位置と回転を新しいオブジェクトに引き継ぐ
-        currentObject.transform.position = position;
-        currentObject.transform.rotation = rotation;
-
-        // CharacterControllerを無効化
         characterController.enabled = false;
-
-        // Rigidbodyを有効化
         rigidbody.isKinematic = false;
-
-        // 子オブジェクトのコライダーを有効化
         EnableColliders(currentObject, true);
 
         isTransformed = true;
@@ -179,25 +180,18 @@ public class HiderController : MonoBehaviourPunCallbacks
     /// <summary>
     /// プレイヤーの変身を解除する処理
     /// </summary>
-    private void RevertToPlayer()
+    [PunRPC]
+    private void RPC_RevertToPlayer()
     {
         if (currentObject != null && currentObject != gameObject)
         {
-            // 子オブジェクトのコライダーを無効化
             EnableColliders(currentObject, false);
-
-            PhotonNetwork.Destroy(currentObject);
+            Destroy(currentObject);
         }
 
-        // プレイヤーモデルを表示
         playerModel.SetActive(true);
-
-        // CharacterControllerを再度有効化
         characterController.enabled = true;
-
-        // Rigidbodyを無効化
         rigidbody.isKinematic = true;
-
         isTransformed = false;
     }
 
