@@ -1,26 +1,26 @@
-using UnityEngine;
-using TMPro;
+ï»¿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game
 {
     /// <summary>
-    /// ƒQ[ƒ€‰æ–Ê‚ÌUI
+    /// ã‚²ãƒ¼ãƒ ç”»é¢ã®UI
     /// </summary>
     public class GameUI : MonoBehaviour
     {
         #region SerializeField
-        /// <summary>ƒQ[ƒ€‚Ì§ŒÀŠÔƒeƒLƒXƒg</summary>
-        [SerializeField] private TextMeshProUGUI timerText;
+        /// <summary>ã‚²ãƒ¼ãƒ ã®åˆ¶é™æ™‚é–“ãƒ†ã‚­ã‚¹ãƒˆ</summary>
+        [SerializeField] private Text timerText;
         #endregion
 
         #region PublicMethod
         /// <summary>
-        /// c‚èŠÔ‚ğXV‚·‚é
+        /// æ®‹ã‚Šæ™‚é–“ã‚’æ›´æ–°ã™ã‚‹
         /// </summary>
-        /// <param name="time">c‚èŠÔ</param>
+        /// <param name="time">æ®‹ã‚Šæ™‚é–“</param>
         public void UpdateTimer(float time)
         {
-            timerText.text = $"Time Left: {Mathf.Ceil(time)}s";
+            timerText.text = $"{Mathf.Ceil(time)}";
         }
         #endregion
     }

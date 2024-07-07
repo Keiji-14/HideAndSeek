@@ -85,24 +85,33 @@ namespace NetWork
         /// </summary>
         private void AssignRolesAndLoadGameScene()
         {
-            // ランダムに鬼を選出
-            int seekerIndex = Random.Range(0, 2);
-            int playerIndex = 0;
-
-            foreach (var player in PhotonNetwork.PlayerList)
+            if (PhotonNetwork.IsMasterClient)
             {
-                if (playerIndex == seekerIndex)
-                {
-                    player.CustomProperties["Role"] = "Seeker";
-                }
-                else
-                {
-                    player.CustomProperties["Role"] = "Hider";
-                }
-                playerIndex++;
-            }
+                int seekerIndex = Random.Range(0, PhotonNetwork.PlayerList.Length);
+                int playerIndex = 0;
 
-            // ゲームシーンに移行
+                foreach (var player in PhotonNetwork.PlayerList)
+                {
+                    ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+                    if (playerIndex == seekerIndex)
+                    {
+                        customProperties["Role"] = "Seeker";
+                    }
+                    else
+                    {
+                        customProperties["Role"] = "Hider";
+                    }
+                    player.SetCustomProperties(customProperties);
+                    playerIndex++;
+                }
+
+                photonView.RPC("LoadGameScene", RpcTarget.All);
+            }
+        }
+
+        [PunRPC]
+        private void LoadGameScene()
+        {
             SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
         }
         #endregion
