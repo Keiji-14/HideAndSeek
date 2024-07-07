@@ -12,6 +12,10 @@ namespace NetWork
         public static NetworkManager instance = null;
         #endregion
 
+        #region PrivateField
+        private PhotonView photonView;
+        #endregion
+
         #region SerializeField
         [SerializeField] private MatchingController matchingController;
         #endregion
@@ -74,9 +78,14 @@ namespace NetWork
         /// </summary>
         private void Init()
         {
+            photonView = GetComponent<PhotonView>();
+
             matchingController.MatchingCompletedSubject.Subscribe(_ =>
             {
-                AssignRolesAndLoadGameScene();
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    AssignRolesAndLoadGameScene();
+                }
             }).AddTo(this);
         }
 
