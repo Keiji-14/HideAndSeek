@@ -1490,6 +1490,7 @@ MonoBehaviour:
   gameTimeSeconds: 180
   seekerPrefab: {fileID: 9205597036917788355, guid: a378cd052e0236740a9568293cc67387, type: 3}
   hiderPrefab: {fileID: 637302472241838487, guid: 1a95f4889f6f19743908f80864d8eb85, type: 3}
+  overheadCameraPrefab: {fileID: 9174065159109127017, guid: 431a290072d11734bb6bd87ecfdf59ea, type: 3}
   gameUI: {fileID: 521101039}
 --- !u!4 &1465376391
 Transform:

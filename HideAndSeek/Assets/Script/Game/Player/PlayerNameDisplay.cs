@@ -1,7 +1,6 @@
 using GameData;
 using Photon.Pun;
-using TMPro;
-using UnityEngine;
+using UnityEngine.UI;
 
 namespace Player
 {
@@ -10,7 +9,7 @@ namespace Player
         #region UnityEvent
         private void Start()
         {
-            var nameLabel = gameObject.GetComponent<TextMeshProUGUI>();
+            var nameLabel = gameObject.GetComponent<Text>();
             var playerName = GameDataManager.Instance().GetPlayerData().name;
             PhotonNetwork.NickName = playerName;
 

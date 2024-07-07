@@ -1,4 +1,4 @@
-using Photon.Pun;
+﻿using Photon.Pun;
 using System.Collections;
 using UniRx;
 using UnityEngine;
@@ -6,69 +6,128 @@ using UnityEngine;
 namespace Game
 {
     /// <summary>
-    /// �Q�[����ʂ̏����Ǘ�
+    /// ゲーム画面の処理管理
     /// </summary>
     public class GameController : MonoBehaviour
     {
         #region PrivateField
+        /// <summary>ゲームが開始されたかどうかのフラグ</summary>
         private bool gameStarted = false;
+        /// <summary>残り時間</summary>
         private float remainingTime;
+        /// <summary>上空視点カメラ</summary>
+        private Camera overheadCamera;
+        /// <summary>隠れる側のプレイヤーオブジェクトの配列</summary>
+        private GameObject[] hiders;
         #endregion
 
         #region SerializeField
-        /// <summary>�B��鎞��</summary>
+        /// <summary>隠れる時の猶予時間</summary>
         [SerializeField] private float gracePeriodSeconds;
-        /// <summary>�Q�[���̐�������</summary>
+        /// <summary>ゲーム全体の制限時間</summary>
         [SerializeField] private float gameTimeSeconds;
         [Header("Player Prefab")]
-        /// <summary>�T�����̃v���C���[�I�u�W�F�N�g</summary>
+        /// <summary>探す側のプレイヤーオブジェクト</summary>
         [SerializeField] private GameObject seekerPrefab;
-        /// <summary>�B��鑤�̃v���C���[�I�u�W�F�N�g</summary>
+        /// <summary>隠れる側のプレイヤーオブジェクト</summary>
         [SerializeField] private GameObject hiderPrefab;
+        /// <summary>上空カメラのオブジェクト</summary>
+        [SerializeField] private GameObject overheadCameraPrefab;
         [Header("Component")]
-        /// <summary>�Q�[��UI</summary>
+        /// <summary>ゲームUI</summary>
         [SerializeField] private GameUI gameUI;
         #endregion
 
         #region PublicMethod
         /// <summary>
-        /// ������
+        /// 初期化
         /// </summary>
         public void Init()
         {
+            // プレイヤーの役割に応じてプレイヤーをスポーンし、猶予時間を開始
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
                 SpawnPlayer(seekerPrefab);
+                StartCoroutine(GracePeriodSeekerCoroutine());
             }
             else
             {
                 SpawnPlayer(hiderPrefab);
+                StartCoroutine(GracePeriodHiderCoroutine());
             }
-
-            // �B��鑤�̎��Ԃ��J�n
-            StartCoroutine(GracePeriodCoroutine());
         }
         #endregion
 
         #region PrivateMethod
-        private void SpawnPlayer(GameObject prefab)
+        /// <summary>
+        /// プレイヤーオブジェクトを生成する処理
+        /// </summary>
+        /// <param name="playerObj">生成するプレイヤーオブジェクト</param>
+        private void SpawnPlayer(GameObject playerObj)
         {
             var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
-            PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
+            PhotonNetwork.Instantiate($"Prefabs/{playerObj.name}", position, Quaternion.identity);
         }
 
-        private IEnumerator GracePeriodCoroutine()
+        /// <summary>
+        /// 猶予時間中の鬼側の処理
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator GracePeriodSeekerCoroutine()
         {
-            // �P�\���Ԓ��̃J�E���g�_�E���\��
+            // 上空視点カメラ
+            overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
+            hiders = GameObject.FindGameObjectsWithTag("Hider");
+
+            // 隠れる側のプレイヤーを見えなくする
+            foreach (var hider in hiders)
+            {
+                hider.GetComponent<Renderer>().enabled = false;
+            }
+
+            // 猶予時間中のカウントダウン表示
             remainingTime = gracePeriodSeconds;
             while (remainingTime > 0)
             {
                 remainingTime -= Time.deltaTime;
-                gameUI.UpdateTimer(remainingTime); // GameUI�Ɏc�莞�Ԃ�n��
+                gameUI.UpdateTimer(remainingTime);
                 yield return null;
             }
 
-            // �Q�[���J�n
+            // 上空視点カメラを削除し、隠れる側のプレイヤーを見えるようにする
+            Destroy(overheadCamera.gameObject);
+            foreach (var hider in hiders)
+            {
+                hider.GetComponent<Renderer>().enabled = true;
+            }
+
+            // ゲーム開始
+            StartGameTimer();
+        }
+
+        /// <summary>
+        /// 猶予時間中の隠れる側の処理
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator GracePeriodHiderCoroutine()
+        {
+            remainingTime = gracePeriodSeconds;
+            while (remainingTime > 0)
+            {
+                remainingTime -= Time.deltaTime;
+                gameUI.UpdateTimer(remainingTime);
+                yield return null;
+            }
+
+            // ゲーム開始
+            StartGameTimer();
+        }
+
+        /// <summary>
+        /// ゲーム開始後のタイマー処理を行う
+        /// </summary>
+        private void StartGameTimer()
+        {
             gameStarted = true;
             remainingTime = gameTimeSeconds;
             Observable.EveryUpdate().Subscribe(_ =>
@@ -76,8 +135,6 @@ namespace Game
                 if (gameStarted)
                 {
                     remainingTime -= Time.deltaTime;
-
-                    // GameUI�Ɏc�莞�Ԃ�n��
                     gameUI.UpdateTimer(remainingTime);
                     if (remainingTime <= 0)
                     {
@@ -88,6 +145,9 @@ namespace Game
             }).AddTo(this);
         }
 
+        /// <summary>
+        /// プレイヤーが捕まった時の処理
+        /// </summary>
         public void OnPlayerCaught()
         {
             if (gameStarted)
@@ -97,9 +157,13 @@ namespace Game
             }
         }
 
+        /// <summary>
+        /// ゲームオーバー時の処理
+        /// </summary>
+        /// <param name="isSeekerWin">鬼の勝利かどうかのフラグ</param>
         private void GameOver(bool isSeekerWin)
         {
-            // �Q�[���I������
+            // ゲーム終了処理
             if (isSeekerWin)
             {
                 Debug.Log("Seeker Wins!");
@@ -109,7 +173,7 @@ namespace Game
                 Debug.Log("Hiders Win!");
             }
 
-            // �����ŃV�[���J�ڂ⃊�U���g�\�����s��
+            // ここでシーン遷移やリザルト表示を行う
         }
         #endregion
 

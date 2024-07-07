@@ -1,8 +1,5 @@
-﻿using System;
-using UniRx;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace Title
 {
@@ -15,7 +12,7 @@ namespace Title
         /// <summary>マッチング中の経過時間UI</summary>
         [SerializeField] private GameObject timeCountUIObj;
         /// <summary>マッチング中の経過時間テキスト</summary>
-        [SerializeField] private TextMeshProUGUI timeCountText;
+        [SerializeField] private Text timeCountText;
         #endregion
 
         #region PublicMethod
