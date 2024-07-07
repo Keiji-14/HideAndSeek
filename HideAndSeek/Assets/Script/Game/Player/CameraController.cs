@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Player
-{
+
     /// <summary>
     /// プレイヤーに追従するカメラの処理
     /// </summary>
@@ -161,4 +160,3 @@ namespace Player
         }
         #endregion
     }
-}

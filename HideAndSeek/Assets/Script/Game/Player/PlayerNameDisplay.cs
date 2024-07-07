@@ -2,8 +2,7 @@ using GameData;
 using Photon.Pun;
 using UnityEngine.UI;
 
-namespace Player
-{
+
     public class PlayerNameDisplay : MonoBehaviourPunCallbacks
     {
         #region UnityEvent
@@ -18,4 +17,3 @@ namespace Player
         }
         #endregion
     }
-}

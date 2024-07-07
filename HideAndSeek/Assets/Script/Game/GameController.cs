@@ -44,7 +44,18 @@ namespace Game
         /// </summary>
         public void Init()
         {
-            // プレイヤーの役割に応じてプレイヤーをスポーンし、猶予時間を開始
+            StartCoroutine(WaitForCustomProperties());
+        }
+        #endregion
+
+        #region PrivateMethod
+        private IEnumerator WaitForCustomProperties()
+        {
+            while (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Role"))
+            {
+                yield return null;
+            }
+
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
                 SpawnPlayer(seekerPrefab);
@@ -56,9 +67,7 @@ namespace Game
                 StartCoroutine(GracePeriodHiderCoroutine());
             }
         }
-        #endregion
 
-        #region PrivateMethod
         /// <summary>
         /// プレイヤーオブジェクトを生成する処理
         /// </summary>

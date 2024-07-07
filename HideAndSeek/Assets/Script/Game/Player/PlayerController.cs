@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Player
-{
+
     public enum PlayerMoveStatus
     {
         idol,
@@ -73,4 +72,3 @@ namespace Player
         }
         #endregion
     }
-}

@@ -12,10 +12,6 @@ namespace NetWork
         public static NetworkManager instance = null;
         #endregion
 
-        #region PrivateField
-        private PhotonView photonView;
-        #endregion
-
         #region SerializeField
         [SerializeField] private MatchingController matchingController;
         #endregion
@@ -70,6 +66,28 @@ namespace NetWork
             matchingController.MatchingFinish();
             PhotonNetwork.LeaveRoom();
         }
+
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+        {
+            // Ensure that all players have their role assigned before starting the game
+            if (PhotonNetwork.IsMasterClient)
+            {
+                bool allRolesAssigned = true;
+                foreach (var player in PhotonNetwork.PlayerList)
+                {
+                    if (!player.CustomProperties.ContainsKey("Role"))
+                    {
+                        allRolesAssigned = false;
+                        break;
+                    }
+                }
+
+                if (allRolesAssigned)
+                {
+                    photonView.RPC("LoadGameScene", RpcTarget.All);
+                }
+            }
+        }
         #endregion
 
         #region PrivateMethod
@@ -78,14 +96,9 @@ namespace NetWork
         /// </summary>
         private void Init()
         {
-            photonView = GetComponent<PhotonView>();
-
             matchingController.MatchingCompletedSubject.Subscribe(_ =>
             {
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    AssignRolesAndLoadGameScene();
-                }
+                AssignRolesAndLoadGameScene();
             }).AddTo(this);
         }
 
