@@ -46,7 +46,7 @@ namespace NetWork
         public override void OnConnectedToMaster()
         {
             // "Room"という名前のルームに参加する（ルームが存在しなければ作成して参加する）
-            PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions { MaxPlayers = 4 }, TypedLobby.Default);
+            PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions { MaxPlayers = 2 }, TypedLobby.Default);
         }
 
         /// <summary>
@@ -63,6 +63,7 @@ namespace NetWork
         public void LeaveRoom()
         {
             // PhotonのLeaveRoomメソッドを使用してゲームサーバーから退出する
+            matchingController.MatchingFinish();
             PhotonNetwork.LeaveRoom();
         }
         #endregion

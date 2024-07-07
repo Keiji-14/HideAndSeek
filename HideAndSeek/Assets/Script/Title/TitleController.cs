@@ -11,10 +11,8 @@ namespace Title
     public class TitleController : MonoBehaviour
     {
         #region PrivateField
-        /// <summary>マッチング中の分を計測する値</summary>
-        private float minuteCount;
-        /// <summary>マッチング中の秒を計測する値</summary>
-        private float secondCount;
+        /// <summary>マッチング中を計測する値</summary>
+        private float matchingTime;
         /// <summary>初期化用の値</summary>
         private const float resetCount = 0.0f;
         /// <summary>マッチング完了時の待機時間</summary>
@@ -63,7 +61,7 @@ namespace Title
 
             InputMatchingObservable.Subscribe(_ =>
             {
-                NetworkManager.instance.ConnectUsingSettings();
+                IsMatching(!isMatching);
             }).AddTo(this);
         }
         #endregion
@@ -74,18 +72,15 @@ namespace Title
         /// </summary>
         private void MatchingTimeCount()
         {
-            /*secondCount += Time.deltaTime;
+            matchingTime += Time.deltaTime;
 
-            if (secondCount >= 59.5f)
-            {
-                minuteCount++;
-                secondCount -= 59.5f;
-            }
-
-            titleUI.MatchingTimeUI(minuteCount, secondCount);
+            int minutes = Mathf.FloorToInt(matchingTime / 60f);
+            int seconds = Mathf.FloorToInt(matchingTime % 60f);
+            
+            titleUI.MatchingTimeUI(minutes, seconds);
 
             // 3分経過した場合は対戦相手が見つからなかったと表示する
-            if (minuteCount >= 3.0f)
+            /*if (minuteCount >= 3.0f)
             {
                 IsMatching(false);
                 titleUI.NoMatchingUI(true);
@@ -97,20 +92,19 @@ namespace Title
         /// </summary>
         private void IsMatching(bool isMatchingStart)
         {
-            /*isMatching = isMatchingStart;
+            isMatching = isMatchingStart;
+            matchingTime = resetCount;
 
-            titleUI.SwicthMatchingUI(isMatching);
+            titleUI.ViewMatchingTimeUI(isMatching);
 
             if (isMatching)
             {
                 NetworkManager.instance.ConnectUsingSettings();
-                minuteCount = resetCount;
-                secondCount = resetCount;
             }
             else
             {
                 NetworkManager.instance.LeaveRoom();
-            }*/
+            }
         }
         #endregion
     }
