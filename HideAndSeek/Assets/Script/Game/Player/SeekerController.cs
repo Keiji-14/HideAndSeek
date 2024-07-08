@@ -33,6 +33,14 @@ public class SeekerController : MonoBehaviourPunCallbacks
     {
         characterController = GetComponent<CharacterController>();
         camera = Camera.main;
+        if (photonView.IsMine)
+        {
+            cameraTransform.gameObject.SetActive(true);
+        }
+        else
+        {
+            cameraTransform.gameObject.SetActive(false);
+        }
     }
 
     private void Update()

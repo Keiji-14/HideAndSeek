@@ -21,6 +21,8 @@ public class HiderController : MonoBehaviourPunCallbacks
     private bool isTransformed = false;
     /// <summary>現在の変身オブジェクト</summary>
     private GameObject currentObject;
+    /// <summary>カメラ</summary>
+    private Camera camera;
     /// <summary>Rigidbody</summary>
     private Rigidbody rigidbody;
     #endregion
@@ -49,6 +51,16 @@ public class HiderController : MonoBehaviourPunCallbacks
         rigidbody = GetComponent<Rigidbody>();
 
         rigidbody.isKinematic = true;
+
+        camera = Camera.main;
+        if (photonView.IsMine)
+        {
+            cameraTransform.gameObject.SetActive(true);
+        }
+        else
+        {
+            cameraTransform.gameObject.SetActive(false);
+        }
     }
 
     private void Update()

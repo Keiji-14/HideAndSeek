@@ -88,6 +88,17 @@ namespace Game
 
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
+
+                // カメラの管理
+                if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
+                {
+                    // Seekerの場合、プレイヤーのカメラを無効化
+                    var camera = playerObject.GetComponentInChildren<Camera>();
+                    if (camera != null)
+                    {
+                        camera.gameObject.SetActive(false);
+                    }
+                }
             }
         }
 
@@ -142,6 +153,10 @@ namespace Game
             {
                 hider.GetComponent<Renderer>().enabled = true;
             }
+
+            // 鬼のカメラを有効化
+            var seeker = PhotonNetwork.LocalPlayer.TagObject as GameObject;
+            seeker.GetComponent<SeekerController>().enabled = true;
 
             // ゲーム開始
             StartGameTimer();
