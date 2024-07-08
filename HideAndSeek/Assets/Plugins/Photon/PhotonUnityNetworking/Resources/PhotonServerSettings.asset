@@ -42,6 +42,7 @@ MonoBehaviour:
   - NotifyCapture
   - RPC_RevertToPlayer
   - RPC_TransformIntoObject
+  - LoadGameScene
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

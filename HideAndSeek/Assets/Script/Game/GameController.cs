@@ -1,5 +1,7 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
+using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
@@ -8,7 +10,7 @@ namespace Game
     /// <summary>
     /// ゲーム画面の処理管理
     /// </summary>
-    public class GameController : MonoBehaviour
+    public class GameController : MonoBehaviourPunCallbacks
     {
         #region PrivateField
         /// <summary>ゲームが開始されたかどうかのフラグ</summary>
@@ -19,6 +21,8 @@ namespace Game
         private Camera overheadCamera;
         /// <summary>隠れる側のプレイヤーオブジェクトの配列</summary>
         private GameObject[] hiders;
+        /// <summary>生成したプレイヤーオブジェクトの配列</summary>
+        private List<GameObject> spawnedPlayers = new List<GameObject>();
         #endregion
 
         #region SerializeField
@@ -71,11 +75,40 @@ namespace Game
         /// <summary>
         /// プレイヤーオブジェクトを生成する処理
         /// </summary>
-        /// <param name="playerObj">生成するプレイヤーオブジェクト</param>
-        private void SpawnPlayer(GameObject playerObj)
+        /// <param name="prefab">生成するプレイヤーオブジェクト</param>
+        private void SpawnPlayer(GameObject prefab)
         {
-            var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
-            PhotonNetwork.Instantiate($"Prefabs/{playerObj.name}", position, Quaternion.identity);
+            if (!HasSpawnedPlayer(PhotonNetwork.LocalPlayer))
+            {
+                var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
+                var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
+
+                // プレイヤーオブジェクトをリストに追加
+                spawnedPlayers.Add(playerObject);
+
+                // TagObjectに生成したプレイヤーオブジェクトを設定
+                PhotonNetwork.LocalPlayer.TagObject = playerObject;
+            }
+        }
+
+        private bool HasSpawnedPlayer(Player player)
+        {
+            // TagObjectがnullでない場合、すでにプレイヤーが生成されていると見なす
+            if (player.TagObject != null)
+            {
+                return true;
+            }
+
+            // 生成済みのプレイヤーオブジェクトリストを確認し、一致するプレイヤーがあればtrueを返す
+            foreach (var spawnedPlayer in spawnedPlayers)
+            {
+                if (spawnedPlayer.GetPhotonView().Owner == player)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
