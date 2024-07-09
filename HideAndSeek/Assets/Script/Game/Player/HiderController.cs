@@ -91,14 +91,15 @@ public class HiderController : MonoBehaviourPunCallbacks
     /// </summary>
     public void SetCamera()
     {
-        if (photonView.IsMine)
-        {
-            cameraTransform.gameObject.SetActive(true);
-        }
-        else
-        {
-            cameraTransform.gameObject.SetActive(false);
-        }
+        cameraTransform.gameObject.SetActive(photonView.IsMine);
+    }
+
+    /// <summary>
+    /// プレイヤーが物に変身しているかどうかの処理
+    /// </summary>
+    public void IsTransform()
+    {
+        playerModel.SetActive(!isTransformed);
     }
     #endregion
 
@@ -172,12 +173,15 @@ public class HiderController : MonoBehaviourPunCallbacks
         photonView.RPC("RPC_RevertToPlayer", RpcTarget.AllBuffered);
     }
 
+    /// <summary>
+    /// プレイヤーを物に変身させる処理
+    /// </summary>
     [PunRPC]
     private void RPC_TransformIntoObject(int transformIndex)
     {
         if (currentObject != null && currentObject != gameObject)
         {
-            PhotonNetwork.Destroy(currentObject);
+            Destroy(currentObject);
         }
 
         playerModel.SetActive(false);

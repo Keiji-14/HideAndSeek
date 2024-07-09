@@ -54,14 +54,7 @@ public class SeekerController : MonoBehaviourPunCallbacks
     /// </summary>
     public void SetCamera()
     {
-        if (photonView.IsMine)
-        {
-            cameraTransform.gameObject.SetActive(true);
-        }
-        else
-        {
-            cameraTransform.gameObject.SetActive(false);
-        }
+        cameraTransform.gameObject.SetActive(photonView.IsMine);
     }
 
     [PunRPC]
