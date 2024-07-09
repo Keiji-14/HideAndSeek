@@ -21,8 +21,6 @@ namespace Game
         private Camera overheadCamera;
         /// <summary>隠れる側のプレイヤーオブジェクトの配列</summary>
         private GameObject[] hiders;
-        /// <summary>生成したプレイヤーオブジェクトの配列</summary>
-        private List<GameObject> spawnedPlayers = new List<GameObject>();
         #endregion
 
         #region SerializeField
@@ -83,9 +81,6 @@ namespace Game
                 var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
 
-                // プレイヤーオブジェクトをリストに追加
-                spawnedPlayers.Add(playerObject);
-
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
             }
@@ -97,15 +92,6 @@ namespace Game
             if (player.TagObject != null)
             {
                 return true;
-            }
-
-            // 生成済みのプレイヤーオブジェクトリストを確認し、一致するプレイヤーがあればtrueを返す
-            foreach (var spawnedPlayer in spawnedPlayers)
-            {
-                if (spawnedPlayer.GetPhotonView().Owner == player)
-                {
-                    return true;
-                }
             }
 
             return false;
@@ -128,7 +114,7 @@ namespace Game
                 SeekerController seekerController = playerObject.GetComponent<SeekerController>();
                 if (seekerController != null)
                 {
-                    seekerController.SetCanMove(false);
+                    seekerController.enabled = false;
                 }
             }
 
@@ -154,13 +140,13 @@ namespace Game
                 hider.GetComponent<Renderer>().enabled = true;
             }
 
-            // 自プレイヤーのSeekerControllerの移動を有効にする
+            // 自プレイヤーのSeekerControllerを有効にする
             if (playerObject != null)
             {
                 SeekerController seekerController = playerObject.GetComponent<SeekerController>();
                 if (seekerController != null)
                 {
-                    seekerController.SetCanMove(true);
+                    seekerController.enabled = true;
                 }
             }
 

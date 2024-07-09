@@ -57,12 +57,6 @@ public class SeekerController : MonoBehaviourPunCallbacks
     #endregion
 
     #region PublicMethod
-
-    public void SetCanMove(bool value)
-    {
-        canMove = value;
-    }
-
     [PunRPC]
     public void NotifyCapture(int hiderViewID)
     {
