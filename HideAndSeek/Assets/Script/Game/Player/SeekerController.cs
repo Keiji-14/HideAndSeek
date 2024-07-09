@@ -32,15 +32,9 @@ public class SeekerController : MonoBehaviourPunCallbacks
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
+        camera = Camera.main;
 
-        if (photonView.IsMine)
-        {
-            cameraTransform.gameObject.SetActive(true);
-        }
-        else
-        {
-            cameraTransform.gameObject.SetActive(false);
-        }
+        SetCamera();
     }
 
     private void Update()
@@ -55,6 +49,21 @@ public class SeekerController : MonoBehaviourPunCallbacks
     #endregion
 
     #region PublicMethod
+    /// <summary>
+    /// カメラの有効を切り替える処理
+    /// </summary>
+    public void SetCamera()
+    {
+        if (photonView.IsMine)
+        {
+            cameraTransform.gameObject.SetActive(true);
+        }
+        else
+        {
+            cameraTransform.gameObject.SetActive(false);
+        }
+    }
+
     [PunRPC]
     public void NotifyCapture(int hiderViewID)
     {

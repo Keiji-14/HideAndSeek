@@ -127,6 +127,9 @@ namespace Game
             {
                 // オブジェクトごと非表示にする
                 SetActiveRecursively(hider, false);
+                var hiderController = hider.GetComponent<HiderController>();
+
+                hiderController.SetCamera();
             }
 
             // 猶予時間中のカウントダウン表示

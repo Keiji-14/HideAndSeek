@@ -50,14 +50,7 @@ public class HiderController : MonoBehaviourPunCallbacks
 
         rigidbody.isKinematic = true;
 
-        if (photonView.IsMine)
-        {
-            cameraTransform.gameObject.SetActive(true);
-        }
-        else
-        {
-            cameraTransform.gameObject.SetActive(false);
-        }
+        SetCamera();
     }
 
     private void Update()
@@ -88,6 +81,23 @@ public class HiderController : MonoBehaviourPunCallbacks
             {
                 RevertToPlayer();
             }
+        }
+    }
+    #endregion
+
+    #region PublicMethod
+    /// <summary>
+    /// カメラの有効を切り替える処理
+    /// </summary>
+    public void SetCamera()
+    {
+        if (photonView.IsMine)
+        {
+            cameraTransform.gameObject.SetActive(true);
+        }
+        else
+        {
+            cameraTransform.gameObject.SetActive(false);
         }
     }
     #endregion
