@@ -5,6 +5,8 @@ using UnityEngine;
 public class SeekerController : MonoBehaviourPunCallbacks
 {
     #region PrivateField
+    /// <summary>移動可能かどうかの判定</summary>
+    private bool canMove;
     /// <summary>地面についているかの判定</summary>
     private bool isGrounded;
     /// <summary>速度ベクトル</summary>
@@ -46,11 +48,33 @@ public class SeekerController : MonoBehaviourPunCallbacks
     private void Update()
     {
         // 自分のキャラクターかどうかを確認
-        if (!photonView.IsMine)
+        if (!photonView.IsMine || !canMove)
             return;
 
         Move();
         HandleAttack();
+    }
+    #endregion
+
+    #region PublicMethod
+
+    public void SetCanMove(bool value)
+    {
+        canMove = value;
+    }
+
+    [PunRPC]
+    public void NotifyCapture(int hiderViewID)
+    {
+        PhotonView hiderPhotonView = PhotonView.Find(hiderViewID);
+        if (hiderPhotonView != null && hiderPhotonView.CompareTag("Hider"))
+        {
+            GameController gameController = FindObjectOfType<GameController>();
+            if (gameController != null)
+            {
+                gameController.OnPlayerCaught();
+            }
+        }
     }
     #endregion
 
@@ -80,7 +104,8 @@ public class SeekerController : MonoBehaviourPunCallbacks
 
     private void HandleAttack()
     {
-        if (Input.GetMouseButtonDown(0)) // 左クリックで攻撃
+        // 左クリックで攻撃
+        if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
@@ -108,20 +133,6 @@ public class SeekerController : MonoBehaviourPunCallbacks
         if (hiderPhotonView != null)
         {
             photonView.RPC("NotifyCapture", RpcTarget.All, hiderPhotonView.ViewID);
-        }
-    }
-
-    [PunRPC]
-    public void NotifyCapture(int hiderViewID)
-    {
-        PhotonView hiderPhotonView = PhotonView.Find(hiderViewID);
-        if (hiderPhotonView != null && hiderPhotonView.CompareTag("Hider"))
-        {
-            GameController gameController = FindObjectOfType<GameController>();
-            if (gameController != null)
-            {
-                gameController.OnPlayerCaught();
-            }
         }
     }
     #endregion

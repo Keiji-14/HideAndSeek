@@ -1,10 +1,10 @@
-using Scene;
+ï»¿using Scene;
 using UnityEngine;
 
 namespace Game
 {
     /// <summary>
-    /// ƒQ[ƒ€‰æ–Ê‚ÌŠÇ—
+    /// ã‚²ãƒ¼ãƒ ç”»é¢ã®ç®¡ç†
     /// </summary>
     public class GameScene : SceneBase
     {

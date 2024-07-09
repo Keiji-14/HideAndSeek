@@ -121,6 +121,17 @@ namespace Game
             overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
             hiders = GameObject.FindGameObjectsWithTag("Hider");
 
+            // 自プレイヤーのSeekerControllerを取得して移動を無効にする
+            GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
+            if (playerObject != null)
+            {
+                SeekerController seekerController = playerObject.GetComponent<SeekerController>();
+                if (seekerController != null)
+                {
+                    seekerController.SetCanMove(false);
+                }
+            }
+
             // 隠れる側のプレイヤーを見えなくする
             foreach (var hider in hiders)
             {
@@ -141,6 +152,16 @@ namespace Game
             foreach (var hider in hiders)
             {
                 hider.GetComponent<Renderer>().enabled = true;
+            }
+
+            // 自プレイヤーのSeekerControllerの移動を有効にする
+            if (playerObject != null)
+            {
+                SeekerController seekerController = playerObject.GetComponent<SeekerController>();
+                if (seekerController != null)
+                {
+                    seekerController.SetCanMove(true);
+                }
             }
 
             // ゲーム開始

@@ -1,37 +1,52 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ã‹ó‹“_ƒJƒƒ‰‚Ìˆ—
+/// ä¸Šç©ºè¦–ç‚¹ã‚«ãƒ¡ãƒ©ã®å‡¦ç†
 /// </summary>
 public class OverheadCamera : MonoBehaviour
 {
     #region PrivateField
-    /// <summary>ƒJƒƒ‰‚ÌˆÚ“®‘¬“x</summary>
+    /// <summary>ã‚«ãƒ¡ãƒ©ã®ç§»å‹•é€Ÿåº¦</summary>
     private float moveSpeed = 10f;
+    /// <summary>ã‚«ãƒ¡ãƒ©ã®å›è»¢é€Ÿåº¦</summary>
+    private float rotateSpeed = 100f;
     #endregion
 
     #region UnityEvent
     private void Update()
     {
         MoveCamera();
+        RotateCamera();
     }
     #endregion
 
     #region PrivateMethod
     /// <summary>
-    /// ƒJƒƒ‰‚ÌˆÚ“®‚ğˆ—‚·‚éƒƒ\ƒbƒh
+    /// ã‚«ãƒ¡ãƒ©ã®ç§»å‹•ã‚’å‡¦ç†ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
     /// </summary>
     private void MoveCamera()
     {
-        // “ü—Í‚©‚ç…•½‚¨‚æ‚Ñ‚’¼•ûŒü‚ÌˆÚ“®—Ê‚ğæ“¾
+        // å…¥åŠ›ã‹ã‚‰æ°´å¹³ãŠã‚ˆã³å‚ç›´æ–¹å‘ã®ç§»å‹•é‡ã‚’å–å¾—
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        // “ü—Í•ûŒü‚ğƒxƒNƒgƒ‹‚Æ‚µ‚Ä’è‹`
+        // å…¥åŠ›æ–¹å‘ã‚’ãƒ™ã‚¯ãƒˆãƒ«ã¨ã—ã¦å®šç¾©
         Vector3 direction = new Vector3(horizontal, 0, vertical);
 
-        // ƒJƒƒ‰‚ğˆÚ“®‚³‚¹‚é
+        // ã‚«ãƒ¡ãƒ©ã‚’ç§»å‹•ã•ã›ã‚‹
         transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);
+    }
+
+    /// <summary>
+    /// ã‚«ãƒ¡ãƒ©ã®å›è»¢ã‚’å‡¦ç†ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+    /// </summary>
+    private void RotateCamera()
+    {
+        // ãƒã‚¦ã‚¹ã®Xè»¸ã®ç§»å‹•é‡ã‚’å–å¾—
+        float mouseX = Input.GetAxis("Mouse X");
+
+        // ã‚«ãƒ¡ãƒ©ã‚’å›è»¢ã•ã›ã‚‹
+        transform.Rotate(Vector3.up, mouseX * rotateSpeed * Time.deltaTime);
     }
     #endregion
 }
