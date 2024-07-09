@@ -102,7 +102,13 @@ namespace Game
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
 
-                photonView.RPC("RPC_AddHiderPlayer", RpcTarget.AllBuffered, playerObject);
+                hiderPlayerList.Add(playerObject);
+
+                // hiderPlayerList内のインデックスを取得
+                int index = hiderPlayerList.IndexOf(playerObject);
+
+                // RPCでインデックスを送信
+                photonView.RPC("RPC_AddHiderPlayer", RpcTarget.AllBuffered, index);
             }
         }
 
@@ -207,9 +213,23 @@ namespace Game
         /// 隠れる側のプレイヤーを保持させる処理
         /// </summary>
         [PunRPC]
-        private void RPC_AddHiderPlayer(GameObject hiderPlayer)
+        private void RPC_AddHiderPlayer(int hiderPlayerIndex)
         {
-            hiderPlayerList.Add(hiderPlayer);
+            // 他のプレイヤーでインデックスを使ってhiderPlayerListに追加
+            if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.Players != null)
+            {
+                foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
+                {
+                    if (player.TagObject != null && player.TagObject is GameObject)
+                    {
+                        GameObject playerObject = player.TagObject as GameObject;
+                        if (!hiderPlayerList.Contains(playerObject))
+                        {
+                            hiderPlayerList.Add(playerObject);
+                        }
+                    }
+                }
+            }
         }
 
         private void SetActiveRecursively(GameObject obj, bool state)
