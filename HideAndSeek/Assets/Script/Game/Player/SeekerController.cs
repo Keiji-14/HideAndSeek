@@ -5,8 +5,6 @@ using UnityEngine;
 public class SeekerController : MonoBehaviourPunCallbacks
 {
     #region PrivateField
-    /// <summary>移動可能かどうかの判定</summary>
-    private bool canMove;
     /// <summary>地面についているかの判定</summary>
     private bool isGrounded;
     /// <summary>速度ベクトル</summary>
@@ -34,7 +32,7 @@ public class SeekerController : MonoBehaviourPunCallbacks
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
-        camera = Camera.main;
+
         if (photonView.IsMine)
         {
             cameraTransform.gameObject.SetActive(true);
@@ -48,7 +46,7 @@ public class SeekerController : MonoBehaviourPunCallbacks
     private void Update()
     {
         // 自分のキャラクターかどうかを確認
-        if (!photonView.IsMine || !canMove)
+        if (!photonView.IsMine)
             return;
 
         Move();
