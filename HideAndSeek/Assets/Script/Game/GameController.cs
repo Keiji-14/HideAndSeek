@@ -22,7 +22,7 @@ namespace Game
         /// <summary>上空視点カメラ</summary>
         private Camera overheadCamera;
         /// <summary>生成した隠れる側のプレイヤーリスト</summary>
-        private List<PhotonView> hiderPlayerList = new List<PhotonView>();
+        private List<GameObject> hiderPlayerList = new List<GameObject>();
         #endregion
 
         #region SerializeField
@@ -102,14 +102,13 @@ namespace Game
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
 
-                var photonView = playerObject.GetComponent<PhotonView>();
-                if (photonView != null)
-                {
-                    hiderPlayerList.Add(photonView);
+                hiderPlayerList.Add(playerObject);
 
-                    // RPCでPhotonViewのViewIDを送信
-                    photonView.RPC("RPC_AddHiderPlayer", RpcTarget.AllBuffered, photonView.ViewID);
-                }
+                // hiderPlayerList内のインデックスを取得
+                int index = hiderPlayerList.IndexOf(playerObject);
+
+                // RPCでインデックスを送信
+                photonView.RPC("RPC_AddHiderPlayer", RpcTarget.AllBuffered, index);
             }
         }
 
@@ -214,12 +213,15 @@ namespace Game
         /// 隠れる側のプレイヤーを保持させる処理
         /// </summary>
         [PunRPC]
-        private void RPC_AddHiderPlayer(int hiderPlayerViewID)
+        private void RPC_AddHiderPlayer(int hiderPlayerIndex)
         {
-            var photonView = PhotonView.Find(hiderPlayerViewID);
-            if (photonView != null && !hiderPlayerList.Contains(photonView))
+            // インデックスからプレイヤーオブジェクトを取得
+            GameObject hiderPlayer = hiderPlayerList[hiderPlayerIndex];
+
+            // リストに追加
+            if (!hiderPlayerList.Contains(hiderPlayer))
             {
-                hiderPlayerList.Add(photonView);
+                hiderPlayerList.Add(hiderPlayer);
             }
         }
 
