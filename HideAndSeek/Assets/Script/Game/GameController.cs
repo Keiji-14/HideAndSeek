@@ -15,6 +15,8 @@ namespace Game
         #region PrivateField
         /// <summary>ゲームが開始されたかどうかのフラグ</summary>
         private bool gameStarted = false;
+        /// <summary>サーバー時間を保持する変数</summary>
+        private double startTime;
         /// <summary>残り時間</summary>
         private float remainingTime;
         /// <summary>上空視点カメラ</summary>
@@ -105,7 +107,8 @@ namespace Game
         {
             // 上空視点カメラ
             overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
-            hiders = GameObject.FindGameObjectsWithTag("Hider");
+            // プレイヤー生成待ちのため少し待つ
+            yield return new WaitForSeconds(0.5f);
 
             // 自プレイヤーのSeekerControllerを取得して移動を無効にする
             GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
@@ -118,17 +121,21 @@ namespace Game
                 }
             }
 
+            hiders = GameObject.FindGameObjectsWithTag("Hider");
             // 隠れる側のプレイヤーを見えなくする
             foreach (var hider in hiders)
             {
-                hider.GetComponent<Renderer>().enabled = false;
+                // オブジェクトごと非表示にする
+                SetActiveRecursively(hider, false);
             }
 
             // 猶予時間中のカウントダウン表示
+            startTime = PhotonNetwork.Time;
             remainingTime = gracePeriodSeconds;
+            
             while (remainingTime > 0)
             {
-                remainingTime -= Time.deltaTime;
+                remainingTime = (float)(gracePeriodSeconds - (PhotonNetwork.Time - startTime));
                 gameUI.UpdateTimer(remainingTime);
                 yield return null;
             }
@@ -137,7 +144,8 @@ namespace Game
             Destroy(overheadCamera.gameObject);
             foreach (var hider in hiders)
             {
-                hider.GetComponent<Renderer>().enabled = true;
+                // オブジェクトを再表示
+                SetActiveRecursively(hider, true);
             }
 
             // 自プレイヤーのSeekerControllerを有効にする
@@ -160,16 +168,26 @@ namespace Game
         /// <returns></returns>
         private IEnumerator GracePeriodHiderCoroutine()
         {
+            startTime = PhotonNetwork.Time;
             remainingTime = gracePeriodSeconds;
             while (remainingTime > 0)
             {
-                remainingTime -= Time.deltaTime;
+                remainingTime = (float)(gracePeriodSeconds - (PhotonNetwork.Time - startTime));
                 gameUI.UpdateTimer(remainingTime);
                 yield return null;
             }
 
             // ゲーム開始
             StartGameTimer();
+        }
+
+        private void SetActiveRecursively(GameObject obj, bool state)
+        {
+            obj.SetActive(state);
+            foreach (Transform child in obj.transform)
+            {
+                SetActiveRecursively(child.gameObject, state);
+            }
         }
 
         /// <summary>
@@ -221,8 +239,6 @@ namespace Game
             {
                 Debug.Log("Hiders Win!");
             }
-
-            // ここでシーン遷移やリザルト表示を行う
         }
         #endregion
 
