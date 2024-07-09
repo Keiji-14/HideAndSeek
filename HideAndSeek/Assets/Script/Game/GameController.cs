@@ -88,29 +88,6 @@ namespace Game
 
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
-
-                photonView.RPC("OnPlayerSpawned", RpcTarget.AllBuffered, playerObject.GetPhotonView().ViewID);
-            }
-        }
-
-        [PunRPC]
-        private void OnPlayerSpawned(int viewID)
-        {
-            var playerObject = PhotonView.Find(viewID).gameObject;
-            spawnedPlayers.Add(playerObject);
-
-            if (playerObject.GetComponent<PhotonView>().IsMine)
-            {
-                // 自分のプレイヤーオブジェクトの場合
-                if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
-                {
-                    // Seekerの場合、プレイヤーのカメラを無効化
-                    var camera = playerObject.GetComponentInChildren<Camera>();
-                    if (camera != null)
-                    {
-                        camera.gameObject.SetActive(false);
-                    }
-                }
             }
         }
 
