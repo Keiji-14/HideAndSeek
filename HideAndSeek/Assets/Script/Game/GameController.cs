@@ -21,8 +21,8 @@ namespace Game
         private float remainingTime;
         /// <summary>上空視点カメラ</summary>
         private Camera overheadCamera;
-        /// <summary>隠れる側のプレイヤーオブジェクトの配列</summary>
-        private GameObject[] hiders;
+        /// <summary>生成した隠れる側のプレイヤーリスト</summary>
+        private List<GameObject> hiderPlayerList = new List<GameObject>();
         #endregion
 
         #region SerializeField
@@ -62,21 +62,21 @@ namespace Game
 
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
-                SpawnPlayer(seekerPrefab);
+                SpawnSeekerPlayer(seekerPrefab);
                 StartCoroutine(GracePeriodSeekerCoroutine());
             }
             else
             {
-                SpawnPlayer(hiderPrefab);
+                SpawnHiderPlayer(hiderPrefab);
                 StartCoroutine(GracePeriodHiderCoroutine());
             }
         }
 
         /// <summary>
-        /// プレイヤーオブジェクトを生成する処理
+        /// 鬼側のプレイヤーオブジェクトを生成する処理
         /// </summary>
         /// <param name="prefab">生成するプレイヤーオブジェクト</param>
-        private void SpawnPlayer(GameObject prefab)
+        private void SpawnSeekerPlayer(GameObject prefab)
         {
             if (!HasSpawnedPlayer(PhotonNetwork.LocalPlayer))
             {
@@ -85,6 +85,24 @@ namespace Game
 
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
+            }
+        }
+
+        /// <summary>
+        /// 隠れる側のプレイヤーオブジェクトを生成する処理
+        /// </summary>
+        /// <param name="prefab">生成するプレイヤーオブジェクト</param>
+        private void SpawnHiderPlayer(GameObject prefab)
+        {
+            if (!HasSpawnedPlayer(PhotonNetwork.LocalPlayer))
+            {
+                var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
+                var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
+
+                // TagObjectに生成したプレイヤーオブジェクトを設定
+                PhotonNetwork.LocalPlayer.TagObject = playerObject;
+
+                photonView.RPC("RPC_AddHiderPlayer", RpcTarget.AllBuffered, playerObject);
             }
         }
 
@@ -121,7 +139,7 @@ namespace Game
                 }
             }
 
-            hiders = GameObject.FindGameObjectsWithTag("Hider");
+            var hiders = GameObject.FindGameObjectsWithTag("Hider");
             // 隠れる側のプレイヤーを見えなくする
             foreach (var hider in hiders)
             {
@@ -183,6 +201,15 @@ namespace Game
 
             // ゲーム開始
             StartGameTimer();
+        }
+
+        /// <summary>
+        /// 隠れる側のプレイヤーを保持させる処理
+        /// </summary>
+        [PunRPC]
+        private void RPC_AddHiderPlayer(GameObject hiderPlayer)
+        {
+            hiderPlayerList.Add(hiderPlayer);
         }
 
         private void SetActiveRecursively(GameObject obj, bool state)
