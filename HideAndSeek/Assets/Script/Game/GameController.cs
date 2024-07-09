@@ -22,7 +22,7 @@ namespace Game
         /// <summary>上空視点カメラ</summary>
         private Camera overheadCamera;
         /// <summary>生成した隠れる側のプレイヤーリスト</summary>
-        private List<GameObject> hiderPlayerList = new List<GameObject>();
+        private List<PhotonView> hiderPlayerList = new List<PhotonView>();
         #endregion
 
         #region SerializeField
@@ -102,13 +102,14 @@ namespace Game
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
 
-                hiderPlayerList.Add(playerObject);
+                var photonView = playerObject.GetComponent<PhotonView>();
+                if (photonView != null)
+                {
+                    hiderPlayerList.Add(photonView);
 
-                // hiderPlayerList内のインデックスを取得
-                int index = hiderPlayerList.IndexOf(playerObject);
-
-                // RPCでインデックスを送信
-                photonView.RPC("RPC_AddHiderPlayer", RpcTarget.AllBuffered, index);
+                    // RPCでPhotonViewのViewIDを送信
+                    photonView.RPC("RPC_AddHiderPlayer", RpcTarget.AllBuffered, photonView.ViewID);
+                }
             }
         }
 
@@ -213,22 +214,12 @@ namespace Game
         /// 隠れる側のプレイヤーを保持させる処理
         /// </summary>
         [PunRPC]
-        private void RPC_AddHiderPlayer(int hiderPlayerIndex)
+        private void RPC_AddHiderPlayer(int hiderPlayerViewID)
         {
-            // 他のプレイヤーでインデックスを使ってhiderPlayerListに追加
-            if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.Players != null)
+            var photonView = PhotonView.Find(hiderPlayerViewID);
+            if (photonView != null && !hiderPlayerList.Contains(photonView))
             {
-                foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
-                {
-                    if (player.TagObject != null && player.TagObject is GameObject)
-                    {
-                        GameObject playerObject = player.TagObject as GameObject;
-                        if (!hiderPlayerList.Contains(playerObject))
-                        {
-                            hiderPlayerList.Add(playerObject);
-                        }
-                    }
-                }
+                hiderPlayerList.Add(photonView);
             }
         }
 
