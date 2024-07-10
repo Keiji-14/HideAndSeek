@@ -15,8 +15,6 @@ namespace Title
         private float matchingTime;
         /// <summary>初期化用の値</summary>
         private const float resetCount = 0.0f;
-        /// <summary>マッチング完了時の待機時間</summary>
-        private const float matchedWaitSeconds = 2.0f;
         /// <summary>マッチング中かどうかの処理</summary>
         private bool isMatching = false;
         /// <summary>マッチング開始ボタンを選択した時の処理 </summary>
