@@ -21,9 +21,10 @@ namespace Game
         private float remainingTime;
         /// <summary>上空視点カメラ</summary>
         private Camera overheadCamera;
+        /// <summary>隠れる側のIDリスト</summary>
+        private List<int> capturedHiderIDs = new List<int>();
         /// <summary>生成した隠れる側のプレイヤーリスト</summary>
         private List<GameObject> hiderPlayerList = new List<GameObject>();
-        private List<int> capturedHiderIDs = new List<int>();
         #endregion
 
         #region SerializeField
@@ -36,6 +37,8 @@ namespace Game
         [SerializeField] private GameObject seekerPrefab;
         /// <summary>隠れる側のプレイヤーオブジェクト</summary>
         [SerializeField] private GameObject hiderPrefab;
+        /// <summary>隠れる側のボットのプレイヤーオブジェクト</summary>
+        [SerializeField] private GameObject hiderBotPrefab;
         /// <summary>上空カメラのオブジェクト</summary>
         [SerializeField] private GameObject overheadCameraPrefab;
         [Header("Component")]
@@ -71,6 +74,12 @@ namespace Game
                 SpawnHiderPlayer(hiderPrefab);
                 StartCoroutine(GracePeriodHiderCoroutine());
             }
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                int numberOfBots = 3; // 生成するボットの数を指定
+                SpawnHiderBots(numberOfBots); // ボットを生成
+            }
         }
 
         /// <summary>
@@ -104,12 +113,19 @@ namespace Game
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
 
                 hiderPlayerList.Add(playerObject);
+            }
+        }
 
-                // hiderPlayerList内のインデックスを取得
-                int index = hiderPlayerList.IndexOf(playerObject);
-
-                // RPCでインデックスを送信
-                photonView.RPC("RPC_AddHiderPlayer", RpcTarget.AllBuffered, index);
+        /// <summary>
+        /// ボットを生成する処理
+        /// </summary>
+        private void SpawnHiderBots(int numberOfBots)
+        {
+            for (int i = 0; i < numberOfBots; i++)
+            {
+                var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
+                var botObject = PhotonNetwork.Instantiate($"Prefabs/{hiderBotPrefab.name}", position, Quaternion.identity);
+                hiderPlayerList.Add(botObject);
             }
         }
 
@@ -208,32 +224,6 @@ namespace Game
 
             // ゲーム開始
             StartGameTimer();
-        }
-
-        /// <summary>
-        /// 隠れる側のプレイヤーを保持させる処理
-        /// </summary>
-        /*[PunRPC]
-        private void RPC_AddHiderPlayer(int hiderPlayerIndex)
-        {
-            // インデックスからプレイヤーオブジェクトを取得
-            GameObject hiderPlayer = hiderPlayerList[hiderPlayerIndex];
-
-            // リストに追加
-            if (!hiderPlayerList.Contains(hiderPlayer))
-            {
-                hiderPlayerList.Add(hiderPlayer);
-            }
-        }*/
-
-        [PunRPC]
-        private void RPC_AddHiderPlayer(int hiderPlayerIndex)
-        {
-            GameObject hiderPlayer = hiderPlayerList[hiderPlayerIndex];
-            if (!hiderPlayerList.Contains(hiderPlayer))
-            {
-                hiderPlayerList.Add(hiderPlayer);
-            }
         }
 
         private void SetActiveRecursively(GameObject obj, bool state)
