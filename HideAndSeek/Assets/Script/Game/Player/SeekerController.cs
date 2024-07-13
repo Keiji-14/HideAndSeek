@@ -66,7 +66,7 @@ public class SeekerController : MonoBehaviourPunCallbacks
             GameController gameController = FindObjectOfType<GameController>();
             if (gameController != null)
             {
-                gameController.OnPlayerCaught();
+                gameController.OnPlayerCaught(hiderViewID);
             }
         }
     }

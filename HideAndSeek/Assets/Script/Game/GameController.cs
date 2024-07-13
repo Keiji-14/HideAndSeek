@@ -23,6 +23,7 @@ namespace Game
         private Camera overheadCamera;
         /// <summary>生成した隠れる側のプレイヤーリスト</summary>
         private List<GameObject> hiderPlayerList = new List<GameObject>();
+        private List<int> capturedHiderIDs = new List<int>();
         #endregion
 
         #region SerializeField
@@ -212,13 +213,23 @@ namespace Game
         /// <summary>
         /// 隠れる側のプレイヤーを保持させる処理
         /// </summary>
-        [PunRPC]
+        /*[PunRPC]
         private void RPC_AddHiderPlayer(int hiderPlayerIndex)
         {
             // インデックスからプレイヤーオブジェクトを取得
             GameObject hiderPlayer = hiderPlayerList[hiderPlayerIndex];
 
             // リストに追加
+            if (!hiderPlayerList.Contains(hiderPlayer))
+            {
+                hiderPlayerList.Add(hiderPlayer);
+            }
+        }*/
+
+        [PunRPC]
+        private void RPC_AddHiderPlayer(int hiderPlayerIndex)
+        {
+            GameObject hiderPlayer = hiderPlayerList[hiderPlayerIndex];
             if (!hiderPlayerList.Contains(hiderPlayer))
             {
                 hiderPlayerList.Add(hiderPlayer);
@@ -259,12 +270,19 @@ namespace Game
         /// <summary>
         /// プレイヤーが捕まった時の処理
         /// </summary>
-        public void OnPlayerCaught()
+        public void OnPlayerCaught(int hiderViewID)
         {
             if (gameStarted)
             {
-                gameStarted = false;
-                GameOver(true);
+                if (!capturedHiderIDs.Contains(hiderViewID))
+                {
+                    capturedHiderIDs.Add(hiderViewID);
+                    if (capturedHiderIDs.Count >= hiderPlayerList.Count)
+                    {
+                        gameStarted = false;
+                        GameOver(true);
+                    }
+                }
             }
         }
 
