@@ -189,8 +189,11 @@ namespace Game
                 SetActiveRecursively(hider, true);
                 var hiderController = hider.GetComponent<HiderController>();
 
-                hiderController.SetCamera();
-                hiderController.IsTransform();
+                if (hiderController != null)
+                {
+                    hiderController.SetCamera();
+                    hiderController.IsTransform();
+                }
             }
 
             // 自プレイヤーのSeekerControllerを有効にする
