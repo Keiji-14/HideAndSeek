@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using GameData;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,6 +42,8 @@ namespace Game
         [SerializeField] private GameObject hiderBotPrefab;
         /// <summary>上空カメラのオブジェクト</summary>
         [SerializeField] private GameObject overheadCameraPrefab;
+
+        [SerializeField] private StageData stageData;
         [Header("Component")]
         /// <summary>ゲームUI</summary>
         [SerializeField] private GameUI gameUI;
@@ -52,11 +55,33 @@ namespace Game
         /// </summary>
         public void Init()
         {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                // マスタークライアントがステージデータを生成して他のプレイヤーに共有する
+                photonView.RPC("RPC_SetStageData", RpcTarget.AllBuffered, stageData.stageID);
+            }
+
             StartCoroutine(WaitForCustomProperties());
         }
         #endregion
 
         #region PrivateMethod
+        /// <summary>
+        /// RPCでステージデータを設定する処理
+        /// </summary>
+        [PunRPC]
+        private void RPC_SetStageData(int stageID)
+        {
+            // ステージオブジェクトの生成
+            if (stageData != null && stageData.stageObj != null)
+            {
+                GameDataManager.Instance().SetStagerData(stageData);
+
+                // ネットワーク経由でインスタンス化
+                PhotonNetwork.Instantiate($"Prefabs/{stageData.stageObj.name}", Vector3.zero, Quaternion.identity);
+            }
+        }
+
         private IEnumerator WaitForCustomProperties()
         {
             while (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Role"))

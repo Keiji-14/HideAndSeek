@@ -12,6 +12,8 @@ namespace GameData
         private static GameDataManager instance = null;
         /// <summary>プレイヤー情報</summary>
         private PlayerData playerData;
+        /// <summary>ステージ情報</summary>
+        private StageData stageData;
         #endregion
 
         #region PublicMethod
@@ -54,6 +56,22 @@ namespace GameData
         public PlayerData GetPlayerData()
         {
             return playerData;
+        }
+
+        /// <summary>
+        /// ステージ情報を設定する処理
+        /// </summary>
+        public void SetStagerData(StageData stageData)
+        {
+            this.stageData = stageData;
+        }
+
+        /// <summary>
+        /// ステージ情報を返す
+        /// </summary>
+        public StageData GetStageData()
+        {
+            return stageData;
         }
         #endregion
     }

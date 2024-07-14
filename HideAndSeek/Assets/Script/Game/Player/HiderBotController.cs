@@ -1,46 +1,54 @@
+ï»¿using GameData;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HiderBotController : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> transformationOptions;
-    [SerializeField] private List<Transform> targetPositions;
-    [SerializeField] private float moveSpeed = 3f;
-
+    private List<GameObject> transformationObjList;
+    private List<Transform> targetPositionList;
     private GameObject currentForm;
+
+    [SerializeField] private float moveSpeed = 3f;
 
     void Start()
     {
-        // ƒ‰ƒ“ƒ_ƒ€‚É•Ïg‚·‚é
+        var stageData = GameDataManager.Instance().GetStageData();
+        if (stageData != null)
+        {
+            transformationObjList = stageData.transformationObjList;
+            targetPositionList = stageData.botTargetPositionList;
+        }
+
+        // ãƒ©ãƒ³ãƒ€ãƒ ã«å¤‰èº«ã™ã‚‹
         TransformRandomly();
 
-        // ƒ‰ƒ“ƒ_ƒ€‚ÈˆÊ’u‚ÉˆÚ“®‚ğŠJn
+        // ãƒ©ãƒ³ãƒ€ãƒ ãªä½ç½®ã«ç§»å‹•ã‚’é–‹å§‹
         StartCoroutine(MoveRandomly());
     }
 
     private void TransformRandomly()
     {
-        if (transformationOptions.Count == 0) return;
+        if (transformationObjList.Count == 0) return;
 
-        int randomIndex = Random.Range(0, transformationOptions.Count);
+        int randomIndex = Random.Range(0, transformationObjList.Count);
 
         if (currentForm != null)
         {
             Destroy(currentForm);
         }
 
-        currentForm = Instantiate(transformationOptions[randomIndex], transform.position, transform.rotation, transform);
+        currentForm = Instantiate(transformationObjList[randomIndex], transform.position, transform.rotation, transform);
     }
 
     private IEnumerator MoveRandomly()
     {
         while (true)
         {
-            if (targetPositions.Count == 0) yield break;
+            if (targetPositionList.Count == 0) yield break;
 
-            int randomIndex = Random.Range(0, targetPositions.Count);
-            Vector3 targetPosition = targetPositions[randomIndex].position;
+            int randomIndex = Random.Range(0, targetPositionList.Count);
+            Vector3 targetPosition = targetPositionList[randomIndex].position;
 
             while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
             {
@@ -48,7 +56,7 @@ public class HiderBotController : MonoBehaviour
                 yield return null;
             }
 
-            // ­‚µ‘Ò‹@‚µ‚Ä‚©‚çŸ‚ÌˆÚ“®‚ğŠJn
+            // å°‘ã—å¾…æ©Ÿã—ã¦ã‹ã‚‰æ¬¡ã®ç§»å‹•ã‚’é–‹å§‹
             yield return new WaitForSeconds(Random.Range(1f, 3f));
         }
     }

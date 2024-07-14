@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9424136f33c96f54188dd4af20e559ec, type: 3}
+  m_Name: StageData1
+  m_EditorClassIdentifier: 
+  stageID: 0
+  stageObj: {fileID: 4950511154702027227, guid: 55dc9fdcb4d5f5d4bacd57f2b5f9aa1d, type: 3}
+  transformationObjList:
+  - {fileID: 8958062434727102317, guid: e3a438cec5d94f64d84a1056c4c78434, type: 3}
+  - {fileID: 1065699774562215107, guid: 6fae41e4f12d28146881c6f30871f611, type: 3}
+  - {fileID: 8318791718542456950, guid: 3fa775bb83a521040a00c081ad57e783, type: 3}
+  - {fileID: 7107615929684469244, guid: 69079d5684dad9b45ada18eb1b938cb5, type: 3}
+  - {fileID: 8166709448631958598, guid: 0b29abba5f5d42743be1ac613acd287a, type: 3}
+  - {fileID: 8176529013604029491, guid: 6a0c3c76068385a4b936e3514e545e89, type: 3}
+  botTargetPositionList:
+  - {fileID: 2862473421581270687, guid: 928b333fe94b9384ea879a1645d243f5, type: 3}
+  - {fileID: 8510599130026820857, guid: a704176ce0c9c5b41acb6133060bb9d1, type: 3}
+  - {fileID: 2304615237686860999, guid: b251fe55c2ccb5442986575ef709cd00, type: 3}
+  - {fileID: 5940048073750349690, guid: cd6f0f0d3c1024144b6594b275fb69fa, type: 3}
+  - {fileID: 468306994757341399, guid: 3334b74d32be8fe48bed46568c4bde03, type: 3}
+  - {fileID: 1408041445440634439, guid: 9419aa937eaf878439093caa42a434cb, type: 3}
