@@ -78,7 +78,7 @@ namespace Game
                 GameDataManager.Instance().SetStagerData(stageData);
 
                 // ネットワーク経由でインスタンス化
-                PhotonNetwork.Instantiate($"Prefabs/{stageData.stageObj.name}", Vector3.zero, Quaternion.identity);
+                PhotonNetwork.Instantiate($"Prefabs/StageObj/{stageData.stageObj.name}/{stageData.stageObj.name}", Vector3.zero, Quaternion.identity);
             }
         }
 
