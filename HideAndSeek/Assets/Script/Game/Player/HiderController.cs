@@ -92,7 +92,10 @@ public class HiderController : MonoBehaviourPunCallbacks
     /// </summary>
     private bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 0.1f);
+        // キャラクターの中心より少し上からRayを飛ばす
+        float rayLength = 0.2f; // Rayの長さを少し余裕を持たせる
+        Vector3 origin = transform.position + Vector3.up * 0.1f; // キャラクターの位置から少し上
+        return Physics.Raycast(origin, Vector3.down, rayLength);
     }
 
     /// <summary>

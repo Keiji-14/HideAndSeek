@@ -120,7 +120,6 @@ MonoBehaviour:
   jumpHeight: 1
   gravity: -9.81
   cameraTransform: {fileID: 7786678533296474787}
-  playerModel: {fileID: 0}
   transformObjList:
   - {fileID: 8318791718542456950, guid: 3fa775bb83a521040a00c081ad57e783, type: 3}
   - {fileID: 8958062434727102317, guid: e3a438cec5d94f64d84a1056c4c78434, type: 3}

@@ -60,15 +60,17 @@ public class SeekerController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void NotifyCapture(int hiderViewID)
     {
-        PhotonView hiderPhotonView = PhotonView.Find(hiderViewID);
-        if (hiderPhotonView != null && hiderPhotonView.CompareTag("Hider"))
+        Debug.Log($"NotifyCapture: hiderViewID = {hiderViewID}");
+        PhotonView hiderView = PhotonView.Find(hiderViewID);
+        if (hiderView != null)
         {
-            GameController gameController = FindObjectOfType<GameController>();
-            if (gameController != null)
-            {
-                Debug.Log("捕まえたID"+hiderViewID);
-                gameController.OnPlayerCaught(hiderViewID);
-            }
+            GameObject hiderObject = hiderView.gameObject;
+            Debug.Log($"NotifyCapture: hiderObject = {hiderObject.name}");
+            Destroy(hiderObject); // 捕まえたプレイヤーを削除（例として）
+        }
+        else
+        {
+            Debug.LogWarning($"NotifyCapture: hiderView is null for hiderViewID = {hiderViewID}");
         }
     }
     #endregion
@@ -124,15 +126,15 @@ public class SeekerController : MonoBehaviourPunCallbacks
     private void CaptureHider(GameObject hider)
     {
         // Hiderを捕まえた時の処理
-        PhotonView hiderPhotonView = hider.GetComponent<PhotonView>();
-        if (hiderPhotonView != null)
+        PhotonView hiderView = hider.GetComponent<PhotonView>();
+        if (hiderView != null)
         {
-            Debug.Log("hiderPhotonView , null");
-            photonView.RPC("NotifyCapture", RpcTarget.All, hiderPhotonView.ViewID);
+            Debug.Log($"CaptureHider: hiderViewID = {hiderView.ViewID}");
+            photonView.RPC("NotifyCapture", RpcTarget.AllBuffered, hiderView.ViewID);
         }
         else
         {
-            Debug.Log("hiderPhotonView , null");
+            Debug.LogWarning("CaptureHider: hiderView is null");
         }
     }
     #endregion
