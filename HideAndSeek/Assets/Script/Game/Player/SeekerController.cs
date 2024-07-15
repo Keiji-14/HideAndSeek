@@ -56,23 +56,6 @@ public class SeekerController : MonoBehaviourPunCallbacks
     {
         cameraTransform.gameObject.SetActive(photonView.IsMine);
     }
-
-    [PunRPC]
-    public void NotifyCapture(int hiderViewID)
-    {
-        Debug.Log($"NotifyCapture: hiderViewID = {hiderViewID}");
-        PhotonView hiderView = PhotonView.Find(hiderViewID);
-        if (hiderView != null)
-        {
-            GameObject hiderObject = hiderView.gameObject;
-            Debug.Log($"NotifyCapture: hiderObject = {hiderObject.name}");
-            Destroy(hiderObject); // 捕まえたプレイヤーを削除（例として）
-        }
-        else
-        {
-            Debug.LogWarning($"NotifyCapture: hiderView is null for hiderViewID = {hiderViewID}");
-        }
-    }
     #endregion
 
     #region PrivateMethod
@@ -125,16 +108,22 @@ public class SeekerController : MonoBehaviourPunCallbacks
 
     private void CaptureHider(GameObject hider)
     {
+        // 親オブジェクトが存在する場合、親オブジェクトを取得
+        if (hider.transform.parent != null)
+        {
+            hider = hider.transform.parent.gameObject;
+        }
+
         // Hiderを捕まえた時の処理
         PhotonView hiderView = hider.GetComponent<PhotonView>();
         if (hiderView != null)
         {
-            Debug.Log($"CaptureHider: hiderViewID = {hiderView.ViewID}");
-            photonView.RPC("NotifyCapture", RpcTarget.AllBuffered, hiderView.ViewID);
-        }
-        else
-        {
-            Debug.LogWarning("CaptureHider: hiderView is null");
+            // GameControllerのインスタンスを取得
+            GameController gameController = FindObjectOfType<GameController>();
+            if (gameController != null)
+            {
+                gameController.OnPlayerCaught(hiderView.ViewID);
+            }
         }
     }
     #endregion

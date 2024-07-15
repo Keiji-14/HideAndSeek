@@ -119,7 +119,6 @@ namespace Game
             {
                 var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
-
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
             }
@@ -135,10 +134,8 @@ namespace Game
             {
                 var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
-
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
-
                 hiderPlayerList.Add(playerObject);
             }
         }
@@ -158,13 +155,7 @@ namespace Game
 
         private bool HasSpawnedPlayer(Player player)
         {
-            // TagObjectがnullでない場合、すでにプレイヤーが生成されていると見なす
-            if (player.TagObject != null)
-            {
-                return true;
-            }
-
-            return false;
+            return player.TagObject != null;
         }
 
         /// <summary>
