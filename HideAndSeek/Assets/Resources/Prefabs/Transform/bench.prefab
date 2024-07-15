@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3078299792506994987}
   - component: {fileID: 4006292135956240590}
   - component: {fileID: 5027260694777636342}
+  - component: {fileID: -5803614736886245453}
   m_Layer: 0
   m_Name: bench
   m_TagString: Hider
@@ -106,3 +107,24 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!65 &-5803614736886245453
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9135777422565093940}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8729486, y: 0.9934846, z: 0.58322406}
+  m_Center: {x: -0.000014811754, y: 0.4967423, z: 0.0000018924475}

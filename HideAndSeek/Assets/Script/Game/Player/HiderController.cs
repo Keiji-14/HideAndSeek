@@ -8,17 +8,11 @@ using UnityEngine;
 public class HiderController : MonoBehaviourPunCallbacks
 {
     #region PrivateField
-    /// <summary>地面についているかの判定</summary>
-    private bool isGrounded;
-    /// <summary>速度ベクトル</summary>
-    private Vector3 velocity;
     [Header("Transform Object")]
-    /// <summary>変身オブジェクトのインデックス</summary>
-    private int currentTransformIndex = 0;
-    /// <summary>変身状態</summary>
-    private bool isTransformed = false;
     /// <summary>現在の変身オブジェクト</summary>
     private GameObject currentObject;
+
+    private bool isTransformed = false;
     /// <summary>Rigidbody</summary>
     private Rigidbody rigidbody;
     #endregion
@@ -34,8 +28,6 @@ public class HiderController : MonoBehaviourPunCallbacks
     [SerializeField] private float gravity;
     /// <summary>カメラのTransform</summary>
     [SerializeField] private Transform cameraTransform;
-    /// <summary>プレイヤーモデル</summary>
-    [SerializeField] private GameObject playerModel; 
     /// <summary>変身するオブジェクトのリスト</summary>
     [SerializeField] private List<GameObject> transformObjList;
     #endregion
@@ -89,10 +81,18 @@ public class HiderController : MonoBehaviourPunCallbacks
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
         rigidbody.MovePosition(rigidbody.position + move * speed * Time.deltaTime);
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             rigidbody.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity), ForceMode.VelocityChange);
         }
+    }
+
+    /// <summary>
+    /// レイキャストで地面に設置しているかどうかの判定
+    /// </summary>
+    private bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 0.1f);
     }
 
     /// <summary>
@@ -113,8 +113,6 @@ public class HiderController : MonoBehaviourPunCallbacks
         {
             Destroy(currentObject);
         }
-
-        playerModel.SetActive(false);
 
         var position = transform.position;
         var rotation = transform.rotation;
