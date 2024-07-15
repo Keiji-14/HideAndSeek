@@ -78,7 +78,7 @@ namespace Game
                 GameDataManager.Instance().SetStagerData(stageData);
 
                 // ネットワーク経由でインスタンス化
-                PhotonNetwork.Instantiate($"Prefabs/StageObj/{stageData.stageObj.name}/{stageData.stageObj.name}", Vector3.zero, Quaternion.identity);
+                Instantiate(stageData.stageObj, Vector3.zero, Quaternion.identity);
             }
         }
 
@@ -88,6 +88,8 @@ namespace Game
             {
                 yield return null;
             }
+
+            Debug.Log(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
 
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
@@ -100,11 +102,11 @@ namespace Game
                 StartCoroutine(GracePeriodHiderCoroutine());
             }
 
-            if (PhotonNetwork.IsMasterClient)
+            /*if (PhotonNetwork.IsMasterClient)
             {
                 int numberOfBots = 3; // 生成するボットの数を指定
                 SpawnHiderBots(numberOfBots); // ボットを生成
-            }
+            }*/
         }
 
         /// <summary>
