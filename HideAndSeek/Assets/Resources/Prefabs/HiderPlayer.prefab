@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transformPath: Prefabs/Transform/
   speed: 5
-  jumpHeight: 1
+  jumpHeight: 1.5
   gravity: -9.81
   cameraTransform: {fileID: 7786678533296474787}
   transformObjList:

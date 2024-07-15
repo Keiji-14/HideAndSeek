@@ -1371,7 +1371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  jumpHeight: 2
+  jumpHeight: 1.5
   gravity: -9.81
   attackRange: 3
   cameraTransform: {fileID: 4440715352044716958}

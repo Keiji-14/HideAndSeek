@@ -301,15 +301,16 @@ namespace Game
         [PunRPC]
         private void RPC_OnPlayerCaught(int hiderViewID)
         {
-            if (PhotonNetwork.LocalPlayer.ActorNumber == PhotonView.Find(hiderViewID).Owner.ActorNumber)
+            GameObject hider = PhotonView.Find(hiderViewID).gameObject;
+            if (hider != null)
             {
-                GameObject hider = PhotonView.Find(hiderViewID).gameObject;
-                Debug.Log(hider.name);
-                if (hider != null)
+                if (PhotonNetwork.LocalPlayer.ActorNumber == hider.GetComponent<PhotonView>().Owner.ActorNumber)
                 {
-                    Destroy(hider);
                     SetSpectatorMode();
                 }
+
+                // Hiderを削除
+                PhotonNetwork.Destroy(hider);
             }
         }
 
