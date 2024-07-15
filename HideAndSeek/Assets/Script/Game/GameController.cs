@@ -299,6 +299,8 @@ namespace Game
                     capturedHiderIDs.Add(hiderViewID);
                     GameObject hider = PhotonView.Find(hiderViewID).gameObject;
 
+                    Debug.Log(hider.name);
+
                     // プレイヤーを消滅させ、観戦モードにする
                     if (hider != null)
                     {
