@@ -219,7 +219,6 @@ namespace Game
                 if (hiderController != null)
                 {
                     hiderController.SetCamera();
-                    hiderController.IsTransform();
                 }
             }
 

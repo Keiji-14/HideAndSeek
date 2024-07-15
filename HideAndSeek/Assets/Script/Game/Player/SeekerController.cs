@@ -127,7 +127,12 @@ public class SeekerController : MonoBehaviourPunCallbacks
         PhotonView hiderPhotonView = hider.GetComponent<PhotonView>();
         if (hiderPhotonView != null)
         {
+            Debug.Log("hiderPhotonView , null");
             photonView.RPC("NotifyCapture", RpcTarget.All, hiderPhotonView.ViewID);
+        }
+        else
+        {
+            Debug.Log("hiderPhotonView , null");
         }
     }
     #endregion

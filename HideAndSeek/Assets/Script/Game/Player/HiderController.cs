@@ -12,8 +12,6 @@ public class HiderController : MonoBehaviourPunCallbacks
     private bool isGrounded;
     /// <summary>速度ベクトル</summary>
     private Vector3 velocity;
-    /// <summary>キャラクターコントローラー</summary>
-    private CharacterController characterController;
     [Header("Transform Object")]
     /// <summary>変身オブジェクトのインデックス</summary>
     private int currentTransformIndex = 0;
@@ -45,12 +43,14 @@ public class HiderController : MonoBehaviourPunCallbacks
     #region UnityEvent
     private void Start()
     {
-        characterController = GetComponent<CharacterController>();
         rigidbody = GetComponent<Rigidbody>();
-
         rigidbody.isKinematic = true;
 
         SetCamera();
+
+        // ランダムなオブジェクトに変身させる
+        int randomIndex = Random.Range(0, transformObjList.Count);
+        TransformIntoObject(randomIndex);
     }
 
     private void Update()
@@ -59,29 +59,7 @@ public class HiderController : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
             return;
 
-        if (!isTransformed)
-        {
-            Move();
-        }
-        else
-        {
-            TransformMove();
-        }
-
-        // 右クリック
-        if (Input.GetMouseButtonDown(1))
-        {
-           　TransformIntoNextObject();
-        }
-
-        // 左クリック
-        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
-        {
-            if (isTransformed)
-            {
-                RevertToPlayer();
-            }
-        }
+        TransformMove();
     }
     #endregion
 
@@ -93,42 +71,9 @@ public class HiderController : MonoBehaviourPunCallbacks
     {
         cameraTransform.gameObject.SetActive(photonView.IsMine);
     }
-
-    /// <summary>
-    /// プレイヤーが物に変身しているかどうかの処理
-    /// </summary>
-    public void IsTransform()
-    {
-        playerModel.SetActive(!isTransformed);
-    }
     #endregion
 
     #region PrivateMethod
-    /// <summary>
-    /// プレイヤーの移動処理
-    /// </summary>
-    private void Move()
-    {
-        isGrounded = characterController.isGrounded;
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }
-
-        float moveX = Input.GetAxis("Horizontal");
-        float moveZ = Input.GetAxis("Vertical");
-
-        Vector3 move = transform.right * moveX + transform.forward * moveZ;
-        characterController.Move(move * speed * Time.deltaTime);
-
-        if (Input.GetButtonDown("Jump") && isGrounded)
-        {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-
-        velocity.y += gravity * Time.deltaTime;
-        characterController.Move(velocity * Time.deltaTime);
-    }
 
     /// <summary>
     /// 変身オブジェクトの移動処理
@@ -153,24 +98,9 @@ public class HiderController : MonoBehaviourPunCallbacks
     /// <summary>
     /// プレイヤーを物に変身させる処理
     /// </summary>
-    private void TransformIntoNextObject()
+    private void TransformIntoObject(int transformIndex)
     {
-        if (transformObjList == null || transformObjList.Count == 0)
-        {
-            return;
-        }
-
-        currentTransformIndex = (currentTransformIndex + 1) % transformObjList.Count;
-
-        photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, currentTransformIndex);
-    }
-
-    /// <summary>
-    /// プレイヤーの変身を解除する処理
-    /// </summary>
-    private void RevertToPlayer()
-    {
-        photonView.RPC("RPC_RevertToPlayer", RpcTarget.AllBuffered);
+        photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, transformIndex);
     }
 
     /// <summary>
@@ -193,29 +123,10 @@ public class HiderController : MonoBehaviourPunCallbacks
         currentObject.transform.localPosition = Vector3.zero;
         currentObject.transform.localRotation = Quaternion.identity;
 
-        characterController.enabled = false;
         rigidbody.isKinematic = false;
         EnableColliders(currentObject, true);
 
         isTransformed = true;
-    }
-
-    /// <summary>
-    /// プレイヤーの変身を解除する処理
-    /// </summary>
-    [PunRPC]
-    private void RPC_RevertToPlayer()
-    {
-        if (currentObject != null && currentObject != gameObject)
-        {
-            EnableColliders(currentObject, false);
-            Destroy(currentObject);
-        }
-
-        playerModel.SetActive(true);
-        characterController.enabled = true;
-        rigidbody.isKinematic = true;
-        isTransformed = false;
     }
 
     /// <summary>
