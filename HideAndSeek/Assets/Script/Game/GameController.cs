@@ -287,22 +287,28 @@ namespace Game
                 if (!capturedHiderIDs.Contains(hiderViewID))
                 {
                     capturedHiderIDs.Add(hiderViewID);
-                    GameObject hider = PhotonView.Find(hiderViewID).gameObject;
-
-                    Debug.Log(hider.name);
-
-                    // プレイヤーを消滅させ、観戦モードにする
-                    if (hider != null)
-                    {
-                        Destroy(hider);
-                        SetSpectatorMode();
-                    }
+                    photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
 
                     if (capturedHiderIDs.Count >= hiderPlayerList.Count)
                     {
                         gameStarted = false;
                         GameOver(true);
                     }
+                }
+            }
+        }
+
+        [PunRPC]
+        private void RPC_OnPlayerCaught(int hiderViewID)
+        {
+            if (PhotonNetwork.LocalPlayer.ActorNumber == PhotonView.Find(hiderViewID).Owner.ActorNumber)
+            {
+                GameObject hider = PhotonView.Find(hiderViewID).gameObject;
+                Debug.Log(hider.name);
+                if (hider != null)
+                {
+                    Destroy(hider);
+                    SetSpectatorMode();
                 }
             }
         }
