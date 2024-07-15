@@ -58,7 +58,7 @@ namespace Game
             if (PhotonNetwork.IsMasterClient)
             {
                 // マスタークライアントがステージデータを生成して他のプレイヤーに共有する
-                photonView.RPC("RPC_SetStageData", RpcTarget.AllBuffered, stageData.stageID);
+                //photonView.RPC("RPC_SetStageData", RpcTarget.AllBuffered, stageData.stageID);
             }
 
             StartCoroutine(WaitForCustomProperties());
@@ -297,6 +297,15 @@ namespace Game
                 if (!capturedHiderIDs.Contains(hiderViewID))
                 {
                     capturedHiderIDs.Add(hiderViewID);
+                    GameObject hider = PhotonView.Find(hiderViewID).gameObject;
+
+                    // プレイヤーを消滅させ、観戦モードにする
+                    if (hider != null)
+                    {
+                        Destroy(hider);
+                        SetSpectatorMode();
+                    }
+
                     if (capturedHiderIDs.Count >= hiderPlayerList.Count)
                     {
                         gameStarted = false;
@@ -304,6 +313,14 @@ namespace Game
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 観戦モードにする
+        /// </summary>
+        private void SetSpectatorMode()
+        {
+            overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
         }
 
         /// <summary>
