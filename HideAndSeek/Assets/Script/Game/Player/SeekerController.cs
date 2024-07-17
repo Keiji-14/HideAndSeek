@@ -75,15 +75,18 @@ public class SeekerController : MonoBehaviourPunCallbacks
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
         characterController.Move(move * speed * Time.deltaTime);
 
-        // 歩くモーションとアイドルモーションの切り替え
-        animator.SetBool("isRunning", move.magnitude > 0);
+        // アニメーションの設定
+        bool isRunning = move.magnitude > 0;
+        if (isRunning)
+        {
+            photonView.RPC("SetRunningAnimation", RpcTarget.All, isRunning);
+        }
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-
-            // ジャンプアニメーション
-            animator.SetTrigger("Jump");
+            // ジャンプアニメーションの設定
+            photonView.RPC("SetJumpAnimation", RpcTarget.All);
         }
 
         velocity.y += gravity * Time.deltaTime;
@@ -112,6 +115,18 @@ public class SeekerController : MonoBehaviourPunCallbacks
                 }
             }
         }
+    }
+
+    [PunRPC]
+    private void SetRunningAnimation(bool isRunning)
+    {
+        animator.SetBool("isRunning", isRunning);
+    }
+
+    [PunRPC]
+    private void SetJumpAnimation()
+    {
+        // animator.SetTrigger("Jump");
     }
 
     private void CaptureHider(GameObject hider)

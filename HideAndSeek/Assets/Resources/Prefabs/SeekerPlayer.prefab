@@ -1399,7 +1399,7 @@ MonoBehaviour:
   gravity: -9.81
   attackRange: 3
   cameraTransform: {fileID: 4440715352044716958}
-  animatorTransform: {fileID: 8351149521438913649}
+  animator: {fileID: 4077519697417859490}
 --- !u!1 &9210137770468771669
 GameObject:
   m_ObjectHideFlags: 0
