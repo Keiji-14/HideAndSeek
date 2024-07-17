@@ -57,8 +57,13 @@ namespace Game
         {
             if (PhotonNetwork.IsMasterClient)
             {
+                Debug.Log("PhotonNetwork.IsMasterClient");
                 // マスタークライアントがステージデータを生成して他のプレイヤーに共有する
                 //photonView.RPC("RPC_SetStageData", RpcTarget.AllBuffered, stageData.stageID);
+            }
+            else
+            {
+                Debug.Log("PhotonNetwork.IsMasterClient not");
             }
 
             StartCoroutine(WaitForCustomProperties());

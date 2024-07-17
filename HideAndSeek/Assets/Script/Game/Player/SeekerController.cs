@@ -26,6 +26,8 @@ public class SeekerController : MonoBehaviourPunCallbacks
     [SerializeField] private float attackRange;
     /// <summary>カメラのTransform</summary>
     [SerializeField] private Transform cameraTransform;
+    /// <summary>アニメーター</summary>
+    [SerializeField] private Animator animator;
     #endregion
 
     #region UnityEvent
@@ -73,9 +75,15 @@ public class SeekerController : MonoBehaviourPunCallbacks
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
         characterController.Move(move * speed * Time.deltaTime);
 
+        // 歩くモーションとアイドルモーションの切り替え
+        animator.SetBool("isRunning", move.magnitude > 0);
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+
+            // ジャンプアニメーション
+            animator.SetTrigger("Jump");
         }
 
         velocity.y += gravity * Time.deltaTime;
