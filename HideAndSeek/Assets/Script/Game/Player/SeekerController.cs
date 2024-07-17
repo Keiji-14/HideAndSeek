@@ -2,11 +2,14 @@
 using Photon.Pun;
 using UnityEngine;
 
-public class SeekerController : MonoBehaviourPunCallbacks
+public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region PrivateField
     /// <summary>地面についているかの判定</summary>
     private bool isGrounded;
+    /// <summary>現在のアニメーション状態</summary>
+    private bool isRunning;
+    private bool isJumping;
     /// <summary>速度ベクトル</summary>
     private Vector3 velocity;
     /// <summary>カメラ</summary>
@@ -58,6 +61,20 @@ public class SeekerController : MonoBehaviourPunCallbacks
     {
         cameraTransform.gameObject.SetActive(photonView.IsMine);
     }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(isRunning);
+            stream.SendNext(isJumping);
+        }
+        else
+        {
+            isRunning = (bool)stream.ReceiveNext();
+            isJumping = (bool)stream.ReceiveNext();
+        }
+    }
     #endregion
 
     #region PrivateMethod
@@ -76,9 +93,10 @@ public class SeekerController : MonoBehaviourPunCallbacks
         characterController.Move(move * speed * Time.deltaTime);
 
         // アニメーションの設定
-        bool isRunning = move.magnitude > 0;
-        if (isRunning)
+        bool newIsRunning = move.magnitude > 0;
+        if (newIsRunning != isRunning)
         {
+            isRunning = newIsRunning;
             photonView.RPC("SetRunningAnimation", RpcTarget.All, isRunning);
         }
 
