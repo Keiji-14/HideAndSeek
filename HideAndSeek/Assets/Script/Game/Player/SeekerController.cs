@@ -67,12 +67,14 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(isRunning);
-            stream.SendNext(isJumping);
+            stream.SendNext(isGrounded);
         }
         else
         {
             isRunning = (bool)stream.ReceiveNext();
-            isJumping = (bool)stream.ReceiveNext();
+            isGrounded = (bool)stream.ReceiveNext();
+            animator.SetBool("isRunning", isRunning);
+            animator.SetBool("isGrounded", isGrounded);
         }
     }
     #endregion
@@ -136,18 +138,6 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    [PunRPC]
-    private void RPC_SetRunningAnimation(bool isRunning)
-    {
-        animator.SetBool("isRunning", isRunning);
-    }
-
-    [PunRPC]
-    private void RPC_SetJumpAnimation()
-    {
-        animator.SetTrigger("Jump");
-    }
-
     private void CaptureHider(GameObject hider)
     {
         // 親オブジェクトが存在する場合、親オブジェクトを取得
@@ -167,6 +157,18 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
                 gameController.OnPlayerCaught(hiderView.ViewID);
             }
         }
+    }
+
+    [PunRPC]
+    private void RPC_SetRunningAnimation(bool isRunning)
+    {
+        animator.SetBool("isRunning", isRunning);
+    }
+
+    [PunRPC]
+    private void RPC_SetJumpAnimation()
+    {
+        animator.SetTrigger("Jump");
     }
     #endregion
 }
