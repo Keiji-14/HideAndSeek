@@ -124,6 +124,9 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 
         velocity.y += gravity * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
+
+        // isGroundedの状態を定期的に同期する
+        photonView.RPC("UpdateGroundedState", RpcTarget.All, isGrounded);
     }
 
     private void HandleAttack()
@@ -181,6 +184,13 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     private void RPC_SetJumpAnimation()
     {
         animator.SetTrigger("Jump");
+    }
+
+    [PunRPC]
+    private void RPC_UpdateGroundedState(bool groundedState)
+    {
+        isGrounded = groundedState;
+        animator.SetBool("isGrounded", isGrounded);
     }
     #endregion
 }
