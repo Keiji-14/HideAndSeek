@@ -71,13 +71,15 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             stream.SendNext(isRunning);
             stream.SendNext(isGrounded);
-            stream.SendNext(isJumping); // ジャンプフラグを送信
+            stream.SendNext(isJumping);
+            stream.SendNext(isAttack);
         }
         else
         {
             isRunning = (bool)stream.ReceiveNext();
             isGrounded = (bool)stream.ReceiveNext();
-            isJumping = (bool)stream.ReceiveNext(); // ジャンプフラグを受信
+            isJumping = (bool)stream.ReceiveNext();
+            isAttack = (bool)stream.ReceiveNext();
             animator.SetBool("isRunning", isRunning);
             animator.SetBool("isGrounded", isGrounded);
 
@@ -85,6 +87,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
             {
                 animator.SetTrigger("Jump"); // ジャンプフラグが立っていたらジャンプアニメーションをトリガー
             }
+
+            animator.SetTrigger("Attack");
         }
     }
     #endregion
