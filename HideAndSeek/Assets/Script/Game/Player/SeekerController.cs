@@ -1,5 +1,6 @@
 ﻿using Game;
 using Photon.Pun;
+using System.Collections;
 using UnityEngine;
 
 public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
@@ -13,6 +14,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     private bool isJumping;
     /// <summary>攻撃アニメーションの状態</summary>
     private bool isAttack;
+    /// <summary>攻撃モーション中の状態</summary>
+    private bool isAttacking;
     /// <summary>速度ベクトル</summary>
     private Vector3 velocity;
     /// <summary>カメラ</summary>
@@ -34,6 +37,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private Transform cameraTransform;
     /// <summary>アニメーター</summary>
     [SerializeField] private Animator animator;
+    /// <summary>攻撃モーションのクリップ</summary>
+    [SerializeField] private AnimationClip attackAnimationClip;
     #endregion
 
     #region UnityEvent
@@ -88,7 +93,11 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
                 animator.SetTrigger("Jump"); // ジャンプフラグが立っていたらジャンプアニメーションをトリガー
             }
 
-            animator.SetTrigger("Attack");
+            if (isAttack)
+            {
+                animator.SetTrigger("Attack");
+                isAttack = false; // 攻撃フラグをリセット
+            }
         }
     }
     #endregion
@@ -139,8 +148,11 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     private void HandleAttack()
     {
         // 左クリックで攻撃
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
+            isAttacking = true;
+            StartCoroutine(AttackCoroutine());
+
             RaycastHit hit;
             Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
 
@@ -161,6 +173,33 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
                 }
             }
         }
+    }
+
+    private IEnumerator AttackCoroutine()
+    {
+        isAttack = true;
+        photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
+
+        RaycastHit hit;
+        Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
+
+        if (Physics.Raycast(camera.transform.position, forward, out hit, attackRange))
+        {
+            if (hit.collider.CompareTag("Hider"))
+            {
+                Debug.Log("Hider hit: " + hit.collider.name);
+                CaptureHider(hit.collider.gameObject);
+            }
+            else
+            {
+                Debug.Log("Hit something else: " + hit.collider.name);
+            }
+        }
+
+        // 攻撃モーションの長さ分待機
+        yield return new WaitForSeconds(attackAnimationClip.length);
+        isAttacking = false;
+        isAttack = false;
     }
 
     private void CaptureHider(GameObject hider)

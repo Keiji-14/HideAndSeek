@@ -678,7 +678,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: b36e68377ba618c47bbb60d4ac0870a3, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1401,6 +1401,7 @@ MonoBehaviour:
   attackRange: 3
   cameraTransform: {fileID: 4440715352044716958}
   animator: {fileID: 4077519697417859490}
+  attackAnimationClip: {fileID: 7400000, guid: 48618d32ac3131b49bc9c375da32d668, type: 2}
 --- !u!1 &9210137770468771669
 GameObject:
   m_ObjectHideFlags: 0
