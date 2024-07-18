@@ -7,9 +7,12 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     #region PrivateField
     /// <summary>地面についているかの判定</summary>
     private bool isGrounded;
-    /// <summary>現在のアニメーション状態</summary>
+    /// <summary>走るアニメーションの状態</summary>
     private bool isRunning;
+    /// <summary>ジャンプアニメーションの状態</summary>
     private bool isJumping;
+    /// <summary>攻撃アニメーションの状態</summary>
+    private bool isAttack;
     /// <summary>速度ベクトル</summary>
     private Vector3 velocity;
     /// <summary>カメラ</summary>
@@ -112,9 +115,9 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
+            isJumping = true;
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             photonView.RPC("RPC_SetJumpAnimation", RpcTarget.All);
-            isJumping = true;
         }
 
         if (isGrounded)
@@ -126,7 +129,7 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         characterController.Move(velocity * Time.deltaTime);
 
         // isGroundedの状態を定期的に同期する
-        photonView.RPC("UpdateGroundedState", RpcTarget.All, isGrounded);
+        photonView.RPC("RPC_UpdateGroundedState", RpcTarget.All, isGrounded);
     }
 
     private void HandleAttack()
@@ -136,6 +139,9 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             RaycastHit hit;
             Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
+
+            isAttack = true;
+            photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
 
             if (Physics.Raycast(camera.transform.position, forward, out hit, attackRange))
             {
@@ -184,6 +190,12 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     private void RPC_SetJumpAnimation()
     {
         animator.SetTrigger("Jump");
+    }
+
+    [PunRPC]
+    private void RPC_SetAttackAnimation()
+    {
+        animator.SetTrigger("Attack");
     }
 
     [PunRPC]

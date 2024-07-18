@@ -49,6 +49,10 @@ MonoBehaviour:
   - RPC_OnPlayerCaught
   - SetJumpAnimation
   - SetRunningAnimation
+  - RPC_SetJumpAnimation
+  - RPC_SetRunningAnimation
+  - RPC_UpdateGroundedState
+  - RPC_SetAttackAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
