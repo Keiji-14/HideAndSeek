@@ -81,6 +81,7 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     private void Move()
     {
         isGrounded = characterController.isGrounded;
+        animator.SetBool("isGrounded", isGrounded);
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
@@ -97,14 +98,14 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         if (newIsRunning != isRunning)
         {
             isRunning = newIsRunning;
-            photonView.RPC("SetRunningAnimation", RpcTarget.All, isRunning);
+            photonView.RPC("RPC_SetRunningAnimation", RpcTarget.All, isRunning);
         }
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             // ジャンプアニメーションの設定
-            photonView.RPC("SetJumpAnimation", RpcTarget.All);
+            photonView.RPC("RPC_SetJumpAnimation", RpcTarget.All);
         }
 
         velocity.y += gravity * Time.deltaTime;
@@ -136,15 +137,15 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     }
 
     [PunRPC]
-    private void SetRunningAnimation(bool isRunning)
+    private void RPC_SetRunningAnimation(bool isRunning)
     {
         animator.SetBool("isRunning", isRunning);
     }
 
     [PunRPC]
-    private void SetJumpAnimation()
+    private void RPC_SetJumpAnimation()
     {
-        // animator.SetTrigger("Jump");
+        animator.SetTrigger("Jump");
     }
 
     private void CaptureHider(GameObject hider)

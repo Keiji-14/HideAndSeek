@@ -47,6 +47,8 @@ MonoBehaviour:
   - RPC_AddHiderPlayer
   - RPC_SetStageData
   - RPC_OnPlayerCaught
+  - SetJumpAnimation
+  - SetRunningAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
