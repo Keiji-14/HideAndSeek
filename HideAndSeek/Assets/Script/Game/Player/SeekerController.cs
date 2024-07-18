@@ -68,13 +68,20 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             stream.SendNext(isRunning);
             stream.SendNext(isGrounded);
+            stream.SendNext(isJumping); // ジャンプフラグを送信
         }
         else
         {
             isRunning = (bool)stream.ReceiveNext();
             isGrounded = (bool)stream.ReceiveNext();
+            isJumping = (bool)stream.ReceiveNext(); // ジャンプフラグを受信
             animator.SetBool("isRunning", isRunning);
             animator.SetBool("isGrounded", isGrounded);
+
+            if (isJumping)
+            {
+                animator.SetTrigger("Jump"); // ジャンプフラグが立っていたらジャンプアニメーションをトリガー
+            }
         }
     }
     #endregion
@@ -106,8 +113,13 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            // ジャンプアニメーションの設定
             photonView.RPC("RPC_SetJumpAnimation", RpcTarget.All);
+            isJumping = true;
+        }
+
+        if (isGrounded)
+        {
+            isJumping = false;
         }
 
         velocity.y += gravity * Time.deltaTime;
