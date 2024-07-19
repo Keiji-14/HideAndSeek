@@ -149,10 +149,10 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     private void HandleAttack()
     {
         // 左クリックで攻撃
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        if (Input.GetMouseButtonDown(0) && !isAttacking && isGrounded)
         {
             isAttacking = true;
-
+            Debug.Log("Attack initiated");
             photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
             StartCoroutine(AttackCoroutine());
         }
@@ -160,7 +160,10 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private IEnumerator AttackCoroutine()
     {
+        Debug.Log("Attack coroutine started");
         animator.SetTrigger("Attack");
+
+        Debug.Log("Attack trigger set");
 
         RaycastHit hit;
         Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
@@ -179,8 +182,12 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         }
 
         // 攻撃モーションの長さ分待機
-        yield return new WaitForSeconds(1.0f);
+        Debug.Log("Waiting for animation to finish");
+        yield return new WaitForSeconds(attackAnimationClip.length);
+        Debug.Log("Wait finished");
         isAttacking = false;
+
+        Debug.Log($"isAttacking:{isAttacking}");
     }
 
     private void CaptureHider(GameObject hider)
