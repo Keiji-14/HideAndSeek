@@ -11,6 +11,8 @@ namespace Game
         #region SerializeField
         /// <summary>ゲームの制限時間テキスト</summary>
         [SerializeField] private Text timerText;
+        /// <summary>ゲーム開始の猶予時間テキスト</summary>
+        [SerializeField] private Text countTimerText;
         #endregion
 
         #region PublicMethod

@@ -56,7 +56,11 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         if (!photonView.IsMine)
             return;
 
-        Move();
+        if (!isAttacking)
+        {
+            Move();
+        }
+
         HandleAttack();
     }
     #endregion
@@ -150,35 +154,17 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         // 左クリックで攻撃
         if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
-            isAttacking = true;
-            StartCoroutine(AttackCoroutine());
-
-            RaycastHit hit;
-            Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
-
             isAttack = true;
-            photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
+            isAttacking = true;
 
-            if (Physics.Raycast(camera.transform.position, forward, out hit, attackRange))
-            {
-                if (hit.collider.CompareTag("Hider"))
-                {
-                    Debug.Log("Hider hit: " + hit.collider.name);
-                    // Hiderを捕まえた時の処理を追加
-                    CaptureHider(hit.collider.gameObject);
-                }
-                else
-                {
-                    Debug.Log("Hit something else: " + hit.collider.name);
-                }
-            }
+            photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
+            StartCoroutine(AttackCoroutine());
         }
     }
 
     private IEnumerator AttackCoroutine()
     {
-        isAttack = true;
-        photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
+        animator.SetTrigger("Attack");
 
         RaycastHit hit;
         Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
