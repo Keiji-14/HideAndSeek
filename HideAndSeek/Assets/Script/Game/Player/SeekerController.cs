@@ -12,8 +12,6 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     private bool isRunning;
     /// <summary>ジャンプアニメーションの状態</summary>
     private bool isJumping;
-    /// <summary>攻撃アニメーションの状態</summary>
-    private bool isAttack;
     /// <summary>攻撃モーション中の状態</summary>
     private bool isAttacking;
     /// <summary>速度ベクトル</summary>
@@ -81,14 +79,14 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(isRunning);
             stream.SendNext(isGrounded);
             stream.SendNext(isJumping);
-            stream.SendNext(isAttack);
+            stream.SendNext(isAttacking);
         }
         else
         {
             isRunning = (bool)stream.ReceiveNext();
             isGrounded = (bool)stream.ReceiveNext();
             isJumping = (bool)stream.ReceiveNext();
-            isAttack = (bool)stream.ReceiveNext();
+            isAttacking = (bool)stream.ReceiveNext();
             animator.SetBool("isRunning", isRunning);
             animator.SetBool("isGrounded", isGrounded);
 
@@ -97,10 +95,9 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
                 animator.SetTrigger("Jump"); // ジャンプフラグが立っていたらジャンプアニメーションをトリガー
             }
 
-            if (isAttack)
+            if (isAttacking)
             {
                 animator.SetTrigger("Attack");
-                isAttack = false; // 攻撃フラグをリセット
             }
         }
     }
@@ -154,7 +151,6 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         // 左クリックで攻撃
         if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
-            isAttack = true;
             isAttacking = true;
 
             photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
@@ -183,9 +179,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         }
 
         // 攻撃モーションの長さ分待機
-        yield return new WaitForSeconds(attackAnimationClip.length);
+        yield return new WaitForSeconds(1.0f);
         isAttacking = false;
-        isAttack = false;
     }
 
     private void CaptureHider(GameObject hider)
