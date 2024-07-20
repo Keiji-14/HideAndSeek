@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Game
@@ -9,6 +11,12 @@ namespace Game
     public class GameUI : MonoBehaviour
     {
         #region SerializeField
+        /// <summary>鬼側のCanvas</summary>
+        [SerializeField] private GameObject seekerCanvasObj;
+        /// <summary>隠れる側のCanvas</summary>
+        [SerializeField] private GameObject hiderCanvasObj;
+        /// <summary>隠れる側のCanvas</summary>
+        [SerializeField] private List<GameObject> lifeIconList;
         /// <summary>ゲームの制限時間テキスト</summary>
         [SerializeField] private Text timerText;
         /// <summary>ゲーム開始の猶予時間テキスト</summary>
@@ -16,6 +24,29 @@ namespace Game
         #endregion
 
         #region PublicMethod
+        public void ToggleCanvas(string role)
+        {
+            if (role == "Seeker")
+            {
+                seekerCanvasObj.gameObject.SetActive(true);
+                hiderCanvasObj.gameObject.SetActive(false);
+            }
+            else if (role == "Hider")
+            {
+                seekerCanvasObj.gameObject.SetActive(false);
+                hiderCanvasObj.gameObject.SetActive(true);
+            }
+        }
+
+        /// <summary>
+        /// 残り時間を更新する
+        /// </summary>
+        /// <param name="time">残り時間</param>
+        public void UpdateCountTimer(float time)
+        {
+            countTimerText.text = $"{Mathf.Ceil(time)}";
+        }
+
         /// <summary>
         /// 残り時間を更新する
         /// </summary>
@@ -23,6 +54,18 @@ namespace Game
         public void UpdateTimer(float time)
         {
             timerText.text = $"{Mathf.Ceil(time)}";
+        }
+
+        /// <summary>
+        /// 残り時間を更新する
+        /// </summary>
+        /// <param name="time">残り時間</param>
+        public void Updatelife(float life)
+        {
+            for (int i = 0; i < lifeIconList.Count; i++)
+            {
+                lifeIconList[i].SetActive(i < life);
+            }
         }
         #endregion
     }

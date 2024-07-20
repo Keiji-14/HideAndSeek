@@ -11,7 +11,7 @@ public class HiderController : MonoBehaviourPunCallbacks
     [Header("Transform Object")]
     /// <summary>現在の変身オブジェクト</summary>
     private GameObject currentObject;
-
+    /// <summary>変身中かどうか</summary>
     private bool isTransformed = false;
     /// <summary>Rigidbody</summary>
     private Rigidbody rigidbody;

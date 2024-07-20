@@ -6,6 +6,8 @@ using UnityEngine;
 public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region PrivateField
+    /// <summary>ライフ</summary>
+    private int life;
     /// <summary>地面についているかの判定</summary>
     private bool isGrounded;
     /// <summary>走るアニメーションの状態</summary>
@@ -20,6 +22,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     private Camera camera;
     /// <summary>キャラクターコントローラー</summary>
     private CharacterController characterController;
+    /// <summary>攻撃モーションのクリップ</summary>
+    private GameUI gameUI;
     #endregion
 
     #region SerializeField
@@ -40,14 +44,6 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     #endregion
 
     #region UnityEvent
-    private void Start()
-    {
-        characterController = GetComponent<CharacterController>();
-        camera = Camera.main;
-
-        SetCamera();
-    }
-
     private void Update()
     {
         // 自分のキャラクターかどうかを確認
@@ -64,6 +60,18 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     #endregion
 
     #region PublicMethod
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    public void Init()
+    {
+        characterController = GetComponent<CharacterController>();
+        gameUI = FindObjectOfType<GameUI>();
+        camera = Camera.main;
+
+        SetCamera();
+    }
+
     /// <summary>
     /// カメラの有効を切り替える処理
     /// </summary>
@@ -160,10 +168,7 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private IEnumerator AttackCoroutine()
     {
-        Debug.Log("Attack coroutine started");
         animator.SetTrigger("Attack");
-
-        Debug.Log("Attack trigger set");
 
         RaycastHit hit;
         Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
@@ -172,22 +177,17 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (hit.collider.CompareTag("Hider"))
             {
-                Debug.Log("Hider hit: " + hit.collider.name);
                 CaptureHider(hit.collider.gameObject);
             }
             else
             {
-                Debug.Log("Hit something else: " + hit.collider.name);
+                HandleWrongAttack(hit.collider.gameObject);
             }
         }
 
         // 攻撃モーションの長さ分待機
-        Debug.Log("Waiting for animation to finish");
         yield return new WaitForSeconds(attackAnimationClip.length);
-        Debug.Log("Wait finished");
         isAttacking = false;
-
-        Debug.Log($"isAttacking:{isAttacking}");
     }
 
     private void CaptureHider(GameObject hider)
@@ -208,6 +208,20 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
             {
                 gameController.OnPlayerCaught(hiderView.ViewID);
             }
+        }
+    }
+
+    private void HandleWrongAttack(GameObject target)
+    {
+        Debug.Log("Wrong target hit: " + target.name);
+        life--;
+        gameUI.Updatelife(life);
+
+        if (life <= 0)
+        {
+            Debug.Log("Seeker life depleted");
+            // 鬼側のライフが尽きた場合の処理
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 
