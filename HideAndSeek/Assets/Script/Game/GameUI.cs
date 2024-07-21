@@ -61,7 +61,7 @@ namespace Game
         /// 残り時間を更新する
         /// </summary>
         /// <param name="time">残り時間</param>
-        public void Updatelife(float life)
+        public void UpdateLife(float life)
         {
             for (int i = 0; i < lifeIconList.Count; i++)
             {

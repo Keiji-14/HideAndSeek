@@ -6,8 +6,6 @@ using UnityEngine;
 public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region PrivateField
-    /// <summary>ライフ</summary>
-    private int life;
     /// <summary>地面についているかの判定</summary>
     private bool isGrounded;
     /// <summary>走るアニメーションの状態</summary>
@@ -27,6 +25,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     #endregion
 
     #region SerializeField
+    /// <summary>ライフ</summary>
+    [SerializeField] private int life;
     /// <summary>移動速度</summary>
     [SerializeField] private float speed;
     /// <summary>ジャンプの高さ</summary>
@@ -51,6 +51,7 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         camera = Camera.main;
 
         SetCamera();
+        gameUI.UpdateLife(life);
     }
 
     private void Update()
@@ -212,7 +213,7 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     {
         Debug.Log("Wrong target hit: " + target.name);
         life--;
-        gameUI.Updatelife(life);
+        gameUI.UpdateLife(life);
 
         if (life <= 0)
         {
