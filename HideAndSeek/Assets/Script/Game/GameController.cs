@@ -126,8 +126,6 @@ namespace Game
             {
                 var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
-                var seeker = playerObject.GetComponent<SeekerController>();
-                seeker.Init();
 
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;

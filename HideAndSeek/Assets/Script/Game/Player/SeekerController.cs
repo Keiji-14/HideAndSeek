@@ -44,6 +44,15 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     #endregion
 
     #region UnityEvent
+    private void Start()
+    {
+        characterController = GetComponent<CharacterController>();
+        gameUI = FindObjectOfType<GameUI>();
+        camera = Camera.main;
+
+        SetCamera();
+    }
+
     private void Update()
     {
         // 自分のキャラクターかどうかを確認
@@ -60,18 +69,6 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     #endregion
 
     #region PublicMethod
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    public void Init()
-    {
-        characterController = GetComponent<CharacterController>();
-        gameUI = FindObjectOfType<GameUI>();
-        camera = Camera.main;
-
-        SetCamera();
-    }
-
     /// <summary>
     /// カメラの有効を切り替える処理
     /// </summary>

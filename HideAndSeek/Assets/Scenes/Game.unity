@@ -345,7 +345,7 @@ MonoBehaviour:
   - {fileID: 824445037}
   - {fileID: 1596135461}
   timerText: {fileID: 1305162931}
-  countTimerText: {fileID: 554474831}
+  graceTimerText: {fileID: 554474831}
 --- !u!4 &521101040
 Transform:
   m_ObjectHideFlags: 0
