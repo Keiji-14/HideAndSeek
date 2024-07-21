@@ -265,21 +265,14 @@ namespace Game
         /// <returns></returns>
         private IEnumerator GracePeriodHiderCoroutine()
         {
-            startTime = PhotonNetwork.Time;
-            graceRemainingTime = gracePeriodSeconds;
-            while (graceRemainingTime > 0)
-            {
-                graceRemainingTime = (float)(gracePeriodSeconds - (PhotonNetwork.Time - startTime));
-                gameUI.UpdateGraceTimer(graceRemainingTime);
-                yield return null;
-            }
-
             // MasterClientが基準時間を送信
             if (PhotonNetwork.IsMasterClient)
             {
                 double masterStartTime = PhotonNetwork.Time;
                 photonView.RPC("RPC_StartGracePeriod", RpcTarget.All, masterStartTime);
             }
+
+            yield return null;
         }
 
         private void SetActiveRecursively(GameObject obj, bool state)
