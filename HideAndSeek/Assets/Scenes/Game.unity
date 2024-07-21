@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 361811139}
   - component: {fileID: 361811138}
   m_Layer: 5
-  m_Name: Image
+  m_Name: HiderCountWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -346,6 +346,7 @@ MonoBehaviour:
   - {fileID: 1596135461}
   timerText: {fileID: 1305162931}
   graceTimerText: {fileID: 554474831}
+  hiderCountText: {fileID: 1492196803}
 --- !u!4 &521101040
 Transform:
   m_ObjectHideFlags: 0
@@ -1257,7 +1258,7 @@ GameObject:
   - component: {fileID: 1492196804}
   - component: {fileID: 1492196803}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: CountText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

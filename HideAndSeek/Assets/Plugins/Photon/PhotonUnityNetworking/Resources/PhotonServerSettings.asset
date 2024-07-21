@@ -55,6 +55,7 @@ MonoBehaviour:
   - RPC_SetAttackAnimation
   - RPC_StartGame
   - RPC_StartGracePeriod
+  - RPC_UpdateHiderCount
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
