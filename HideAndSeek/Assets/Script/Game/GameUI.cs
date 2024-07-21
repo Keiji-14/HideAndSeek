@@ -45,7 +45,7 @@ namespace Game
         public void UpdateGraceTimer(float time)
         {
             graceTimerText.text = $"{Mathf.Ceil(time)}";
-            graceTimerText.gameObject.SetActive(time <= 0);
+            graceTimerText.gameObject.SetActive(time >= 0);
         }
 
         /// <summary>

@@ -196,10 +196,6 @@ namespace Game
                 SetActiveRecursively(hider, false);
             }
 
-            // 猶予時間中のカウントダウン表示
-            startTime = PhotonNetwork.Time;
-            graceRemainingTime = gracePeriodSeconds;
-
             // MasterClientが基準時間を送信
             if (PhotonNetwork.IsMasterClient)
             {
@@ -208,32 +204,6 @@ namespace Game
             }
 
             yield return null;
-            // 上空視点カメラを削除し、隠れる側のプレイヤーを見えるようにする
-            /*Destroy(overheadCamera.gameObject);
-            foreach (var hider in hiders)
-            {
-                // オブジェクトを再表示
-                SetActiveRecursively(hider, true);
-                var hiderController = hider.GetComponent<HiderController>();
-
-                if (hiderController != null)
-                {
-                    hiderController.SetCamera();
-                }
-            }
-
-            // 自プレイヤーのSeekerControllerを有効にする
-            if (playerObject != null)
-            {
-                SeekerController seekerController = playerObject.GetComponent<SeekerController>();
-                if (seekerController != null)
-                {
-                    seekerController.enabled = true;
-                }
-            }
-
-            // ゲーム開始
-            StartGameTimer();*/
         }
 
         [PunRPC]
@@ -303,10 +273,6 @@ namespace Game
                 gameUI.UpdateGraceTimer(graceRemainingTime);
                 yield return null;
             }
-
-            // 猶予時間中のカウントダウン表示
-            startTime = PhotonNetwork.Time;
-            graceRemainingTime = gracePeriodSeconds;
 
             // MasterClientが基準時間を送信
             if (PhotonNetwork.IsMasterClient)
