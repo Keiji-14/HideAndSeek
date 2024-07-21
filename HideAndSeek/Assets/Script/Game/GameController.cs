@@ -210,6 +210,7 @@ namespace Game
         private void RPC_StartGracePeriod(double masterStartTime)
         {
             startTime = masterStartTime;
+            gameRemainingTime = gameTimeSeconds;
             graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - masterStartTime);
             gameUI.UpdateGraceTimer(graceRemainingTime);
 
@@ -241,17 +242,6 @@ namespace Game
                 if (hiderController != null)
                 {
                     hiderController.SetCamera();
-                }
-            }
-
-            // 自プレイヤーのSeekerControllerを有効にする
-            GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
-            if (playerObject != null)
-            {
-                SeekerController seekerController = playerObject.GetComponent<SeekerController>();
-                if (seekerController != null)
-                {
-                    seekerController.enabled = true;
                 }
             }
 
@@ -289,15 +279,43 @@ namespace Game
         /// </summary>
         private void StartGameTimer(double masterStartTime)
         {
+            if (overheadCamera != null)
+            {
+                Destroy(overheadCamera.gameObject);
+                var hiders = GameObject.FindGameObjectsWithTag("Hider");
+
+                foreach (var hider in hiders)
+                {
+                    // オブジェクトを再表示
+                    SetActiveRecursively(hider, true);
+                    var hiderController = hider.GetComponent<HiderController>();
+
+                    if (hiderController != null)
+                    {
+                        hiderController.SetCamera();
+                    }
+                }
+
+                // 自プレイヤーのSeekerControllerを有効にする
+                GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
+                if (playerObject != null)
+                {
+                    SeekerController seekerController = playerObject.GetComponent<SeekerController>();
+                    if (seekerController != null)
+                    {
+                        seekerController.enabled = true;
+                    }
+                }
+            }
+
             gameStarted = true;
-            gameRemainingTime = gameTimeSeconds;
             startTime = masterStartTime;
 
             Observable.EveryUpdate().Subscribe(_ =>
             {
                 if (gameStarted)
                 {
-                    gameRemainingTime = gameTimeSeconds - (float)(PhotonNetwork.Time - startTime);
+                    gameRemainingTime = gameTimeSeconds - (float)(PhotonNetwork.Time);
                     gameUI.UpdateGameTimer(gameRemainingTime);
                     if (gameRemainingTime <= 0)
                     {
