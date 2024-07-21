@@ -304,8 +304,16 @@ namespace Game
                 yield return null;
             }
 
-            // ゲーム開始
-            StartGameTimer(startTime);
+            // 猶予時間中のカウントダウン表示
+            startTime = PhotonNetwork.Time;
+            graceRemainingTime = gracePeriodSeconds;
+
+            // MasterClientが基準時間を送信
+            if (PhotonNetwork.IsMasterClient)
+            {
+                double masterStartTime = PhotonNetwork.Time;
+                photonView.RPC("RPC_StartGracePeriod", RpcTarget.All, masterStartTime);
+            }
         }
 
         private void SetActiveRecursively(GameObject obj, bool state)
