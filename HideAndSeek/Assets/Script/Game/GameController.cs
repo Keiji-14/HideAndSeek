@@ -98,6 +98,8 @@ namespace Game
 
             Debug.Log(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
 
+            gameUI.ToggleCanvas(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
+
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
                 SpawnSeekerPlayer(seekerPrefab);
@@ -108,6 +110,8 @@ namespace Game
                 SpawnHiderPlayer(hiderPrefab);
                 StartCoroutine(GracePeriodHiderCoroutine());
             }
+
+            
 
             /*if (PhotonNetwork.IsMasterClient)
             {
@@ -196,6 +200,9 @@ namespace Game
                 SetActiveRecursively(hider, false);
             }
 
+            graceRemainingTime = gracePeriodSeconds;
+            gameRemainingTime = gameTimeSeconds;
+
             // MasterClientが基準時間を送信
             if (PhotonNetwork.IsMasterClient)
             {
@@ -210,7 +217,6 @@ namespace Game
         private void RPC_StartGracePeriod(double masterStartTime)
         {
             startTime = masterStartTime;
-            gameRemainingTime = gameTimeSeconds;
             graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - masterStartTime);
             gameUI.UpdateGraceTimer(graceRemainingTime);
 
@@ -315,7 +321,7 @@ namespace Game
             {
                 if (gameStarted)
                 {
-                    gameRemainingTime = gameTimeSeconds - (float)(PhotonNetwork.Time);
+                    gameRemainingTime = gameTimeSeconds - (float)(PhotonNetwork.Time - startTime);
                     gameUI.UpdateGameTimer(gameRemainingTime);
                     if (gameRemainingTime <= 0)
                     {
