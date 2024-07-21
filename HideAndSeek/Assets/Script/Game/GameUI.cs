@@ -20,7 +20,7 @@ namespace Game
         /// <summary>ゲームの制限時間テキスト</summary>
         [SerializeField] private Text timerText;
         /// <summary>ゲーム開始の猶予時間テキスト</summary>
-        [SerializeField] private Text countTimerText;
+        [SerializeField] private Text graceTimerText;
         #endregion
 
         #region PublicMethod
@@ -39,19 +39,20 @@ namespace Game
         }
 
         /// <summary>
-        /// 残り時間を更新する
+        /// 残りの猶予時間を更新する
         /// </summary>
         /// <param name="time">残り時間</param>
-        public void UpdateCountTimer(float time)
+        public void UpdateGraceTimer(float time)
         {
-            countTimerText.text = $"{Mathf.Ceil(time)}";
+            graceTimerText.text = $"{Mathf.Ceil(time)}";
+            graceTimerText.gameObject.SetActive(time <= 0);
         }
 
         /// <summary>
-        /// 残り時間を更新する
+        /// 残りのゲーム時間を更新する
         /// </summary>
         /// <param name="time">残り時間</param>
-        public void UpdateTimer(float time)
+        public void UpdateGameTimer(float time)
         {
             timerText.text = $"{Mathf.Ceil(time)}";
         }

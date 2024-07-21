@@ -18,8 +18,10 @@ namespace Game
         private bool gameStarted = false;
         /// <summary>サーバー時間を保持する変数</summary>
         private double startTime;
-        /// <summary>残り時間</summary>
-        private float remainingTime;
+        /// <summary>残りの猶予時間</summary>
+        private float graceRemainingTime;
+        /// <summary>ゲームの残り時間</summary>
+        private float gameRemainingTime;
         /// <summary>上空視点カメラ</summary>
         private Camera overheadCamera;
         /// <summary>隠れる側のIDリスト</summary>
@@ -42,7 +44,7 @@ namespace Game
         [SerializeField] private GameObject hiderBotPrefab;
         /// <summary>上空カメラのオブジェクト</summary>
         [SerializeField] private GameObject overheadCameraPrefab;
-
+        /// <summary>上空カメラのオブジェクトステージ情報</summary>
         [SerializeField] private StageData stageData;
         [Header("Component")]
         /// <summary>ゲームUI</summary>
@@ -198,17 +200,18 @@ namespace Game
 
             // 猶予時間中のカウントダウン表示
             startTime = PhotonNetwork.Time;
-            remainingTime = gracePeriodSeconds;
-            
-            while (remainingTime > 0)
+            graceRemainingTime = gracePeriodSeconds;
+
+            // MasterClientが基準時間を送信
+            if (PhotonNetwork.IsMasterClient)
             {
-                remainingTime = (float)(gracePeriodSeconds - (PhotonNetwork.Time - startTime));
-                gameUI.UpdateTimer(remainingTime);
-                yield return null;
+                double masterStartTime = PhotonNetwork.Time;
+                photonView.RPC("RPC_StartGracePeriod", RpcTarget.All, masterStartTime);
             }
 
+            yield return null;
             // 上空視点カメラを削除し、隠れる側のプレイヤーを見えるようにする
-            Destroy(overheadCamera.gameObject);
+            /*Destroy(overheadCamera.gameObject);
             foreach (var hider in hiders)
             {
                 // オブジェクトを再表示
@@ -232,7 +235,60 @@ namespace Game
             }
 
             // ゲーム開始
-            StartGameTimer();
+            StartGameTimer();*/
+        }
+
+        [PunRPC]
+        private void RPC_StartGracePeriod(double masterStartTime)
+        {
+            startTime = masterStartTime;
+            graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - masterStartTime);
+            gameUI.UpdateGraceTimer(graceRemainingTime);
+
+            Observable.EveryUpdate().Subscribe(_ =>
+            {
+                graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - startTime);
+                gameUI.UpdateGraceTimer(graceRemainingTime);
+                if (graceRemainingTime <= 0)
+                {
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        photonView.RPC("RPC_StartGame", RpcTarget.All, startTime);
+                    }
+                }
+            }).AddTo(this);
+        }
+
+        [PunRPC]
+        private void RPC_StartGame(double masterStartTime)
+        {
+            // 猶予時間終了後の処理
+            var hiders = GameObject.FindGameObjectsWithTag("Hider");
+            foreach (var hider in hiders)
+            {
+                // オブジェクトを再表示
+                SetActiveRecursively(hider, true);
+                var hiderController = hider.GetComponent<HiderController>();
+
+                if (hiderController != null)
+                {
+                    hiderController.SetCamera();
+                }
+            }
+
+            // 自プレイヤーのSeekerControllerを有効にする
+            GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
+            if (playerObject != null)
+            {
+                SeekerController seekerController = playerObject.GetComponent<SeekerController>();
+                if (seekerController != null)
+                {
+                    seekerController.enabled = true;
+                }
+            }
+
+            // ゲーム開始
+            StartGameTimer(masterStartTime);
         }
 
         /// <summary>
@@ -242,16 +298,16 @@ namespace Game
         private IEnumerator GracePeriodHiderCoroutine()
         {
             startTime = PhotonNetwork.Time;
-            remainingTime = gracePeriodSeconds;
-            while (remainingTime > 0)
+            graceRemainingTime = gracePeriodSeconds;
+            while (graceRemainingTime > 0)
             {
-                remainingTime = (float)(gracePeriodSeconds - (PhotonNetwork.Time - startTime));
-                gameUI.UpdateTimer(remainingTime);
+                graceRemainingTime = (float)(gracePeriodSeconds - (PhotonNetwork.Time - startTime));
+                gameUI.UpdateGraceTimer(graceRemainingTime);
                 yield return null;
             }
 
             // ゲーム開始
-            StartGameTimer();
+            StartGameTimer(startTime);
         }
 
         private void SetActiveRecursively(GameObject obj, bool state)
@@ -266,17 +322,19 @@ namespace Game
         /// <summary>
         /// ゲーム開始後のタイマー処理を行う
         /// </summary>
-        private void StartGameTimer()
+        private void StartGameTimer(double masterStartTime)
         {
             gameStarted = true;
-            remainingTime = gameTimeSeconds;
+            gameRemainingTime = gameTimeSeconds;
+            startTime = masterStartTime;
+
             Observable.EveryUpdate().Subscribe(_ =>
             {
                 if (gameStarted)
                 {
-                    remainingTime -= Time.deltaTime;
-                    gameUI.UpdateTimer(remainingTime);
-                    if (remainingTime <= 0)
+                    gameRemainingTime = gameTimeSeconds - (float)(PhotonNetwork.Time - startTime);
+                    gameUI.UpdateGameTimer(gameRemainingTime);
+                    if (gameRemainingTime <= 0)
                     {
                         gameStarted = false;
                         GameOver(false);

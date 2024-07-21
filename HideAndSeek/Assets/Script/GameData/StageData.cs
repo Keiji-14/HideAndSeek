@@ -1,17 +1,20 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "StageData", menuName = "Create Stage Data")]
-public class StageData : ScriptableObject
+namespace GameData
 {
-    #region PublicField
-    /// <summary>ƒXƒe[ƒWID</summary>
-    public int stageID;
-    /// <summary>ƒXƒe[ƒWIƒIƒuƒWƒFƒNƒgD</summary>
-    public GameObject stageObj;
-    /// <summary>•Ïg‚·‚éƒIƒuƒWƒFƒNƒgƒŠƒXƒg</summary>
-    public List<GameObject> transformationObjList = new List<GameObject>();
-    /// <summary>bot‚ÌˆÚ“®æƒŠƒXƒg</summary>
-    public List<Transform> botTargetPositionList = new List<Transform>();
-    #endregion
+    [CreateAssetMenu(fileName = "StageData", menuName = "Create Stage Data")]
+    public class StageData : ScriptableObject
+    {
+        #region PublicField
+        /// <summary>ã‚¹ãƒ†ãƒ¼ã‚¸ID</summary>
+        public int stageID;
+        /// <summary>ã‚¹ãƒ†ãƒ¼ã‚¸Iã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆD</summary>
+        public GameObject stageObj;
+        /// <summary>å¤‰èº«ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªã‚¹ãƒˆ</summary>
+        public List<GameObject> transformationObjList = new List<GameObject>();
+        /// <summary>botã®ç§»å‹•å…ˆãƒªã‚¹ãƒˆ</summary>
+        public List<Transform> botTargetPositionList = new List<Transform>();
+        #endregion
+    }
 }
