@@ -21,6 +21,8 @@ namespace Game
         [SerializeField] private Text timerText;
         /// <summary>ゲーム開始の猶予時間テキスト</summary>
         [SerializeField] private Text graceTimerText;
+        /// <summary>テキスト</summary>
+        [SerializeField] private Text hiderCountText;
         #endregion
 
         #region PublicMethod
@@ -58,15 +60,24 @@ namespace Game
         }
 
         /// <summary>
-        /// 残り時間を更新する
+        /// 残り体力を更新する
         /// </summary>
-        /// <param name="time">残り時間</param>
+        /// <param name="life">残り体力</param>
         public void UpdateLife(float life)
         {
             for (int i = 0; i < lifeIconList.Count; i++)
             {
                 lifeIconList[i].SetActive(i < life);
             }
+        }
+
+        /// <summary>
+        /// 隠れる側のプレイヤー数を更新する
+        /// </summary>
+        /// <param name="value">プレイヤー数</param>
+        public void UpdateHider(int value)
+        {
+            hiderCountText.text = $"{value}";
         }
         #endregion
     }

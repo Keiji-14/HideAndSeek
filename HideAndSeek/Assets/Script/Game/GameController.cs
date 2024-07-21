@@ -14,6 +14,8 @@ namespace Game
     public class GameController : MonoBehaviourPunCallbacks
     {
         #region PrivateField
+        /// <summary>隠れる側のプレイヤー数</summary>
+        private int hiderPlayerCount;
         /// <summary>ゲームが開始されたかどうかのフラグ</summary>
         private bool gameStarted = false;
         /// <summary>サーバー時間を保持する変数</summary>
@@ -26,8 +28,6 @@ namespace Game
         private Camera overheadCamera;
         /// <summary>隠れる側のIDリスト</summary>
         private List<int> capturedHiderIDs = new List<int>();
-        /// <summary>生成した隠れる側のプレイヤーリスト</summary>
-        private List<GameObject> hiderPlayerList = new List<GameObject>();
         #endregion
 
         #region SerializeField
@@ -111,8 +111,6 @@ namespace Game
                 StartCoroutine(GracePeriodHiderCoroutine());
             }
 
-            
-
             /*if (PhotonNetwork.IsMasterClient)
             {
                 int numberOfBots = 3; // 生成するボットの数を指定
@@ -148,8 +146,17 @@ namespace Game
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
-                hiderPlayerList.Add(playerObject);
+                hiderPlayerCount++;
+
+                photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
             }
+        }
+
+        [PunRPC]
+        private void RPC_UpdateHiderCount(int hiderCount)
+        {
+            hiderPlayerCount = hiderCount;
+            gameUI.UpdateHider(hiderCount);
         }
 
         /// <summary>
@@ -161,8 +168,9 @@ namespace Game
             {
                 var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
                 var botObject = PhotonNetwork.Instantiate($"Prefabs/{hiderBotPrefab.name}", position, Quaternion.identity);
-                hiderPlayerList.Add(botObject);
+                hiderPlayerCount++;
             }
+            photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
         }
 
         private bool HasSpawnedPlayer(Player player)
@@ -344,7 +352,7 @@ namespace Game
                     capturedHiderIDs.Add(hiderViewID);
                     photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
 
-                    if (capturedHiderIDs.Count >= hiderPlayerList.Count)
+                    if (capturedHiderIDs.Count >= hiderPlayerCount)
                     {
                         gameStarted = false;
                         GameOver(true);
@@ -363,8 +371,6 @@ namespace Game
                 {
                     SetSpectatorMode();
                 }
-
-                // Hiderを削除
                 PhotonNetwork.Destroy(hider);
             }
         }
