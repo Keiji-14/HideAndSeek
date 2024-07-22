@@ -95,12 +95,12 @@ namespace Game
         /// <summary>
         /// 鬼プレイヤーのライフが0になった時の処理
         /// </summary>
-        /// <param name="seekerPlayer">鬼プレイヤー</param>
-        public void SeekerFailed(GameObject seekerPlayer)
+        /// <param name="seekerViewID">鬼プレイヤーのPhotonViewID</param>
+        public void SeekerFailed(int seekerViewID)
         {
             if (gameStarted)
             {
-                photonView.RPC("RPC_DestroySeeker", RpcTarget.All, gameObject);
+                photonView.RPC("RPC_DestroySeeker", RpcTarget.All, seekerViewID);
             }
         }
         #endregion
@@ -395,10 +395,11 @@ namespace Game
         /// <summary>
         /// RPCで鬼側が消滅したことを処理する
         /// </summary>
-        /// <param name="seekerPlayer">鬼のプレイヤー</param>
+        /// <param name="seekerPlayer">鬼のプレイヤーの</param>
         [PunRPC]
-        private void RPC_DestroySeeker(GameObject seekerPlayer)
+        private void RPC_DestroySeeker(int seekerViewID)
         {
+            GameObject seekerPlayer = PhotonView.Find(seekerViewID).gameObject;
             if (seekerPlayer != null)
             {
                 if (PhotonNetwork.LocalPlayer.ActorNumber == seekerPlayer.GetComponent<PhotonView>().Owner.ActorNumber)
@@ -419,13 +420,13 @@ namespace Game
         [PunRPC]
         private void RPC_OnPlayerCaught(int hiderViewID)
         {
-            GameObject hider = PhotonView.Find(hiderViewID).gameObject;
-            if (hider != null)
+            GameObject hiderPlayer = PhotonView.Find(hiderViewID).gameObject;
+            if (hiderPlayer != null)
             {
-                if (PhotonNetwork.LocalPlayer.ActorNumber == hider.GetComponent<PhotonView>().Owner.ActorNumber)
+                if (PhotonNetwork.LocalPlayer.ActorNumber == hiderPlayer.GetComponent<PhotonView>().Owner.ActorNumber)
                 {
                     SetSpectatorMode();
-                    PhotonNetwork.Destroy(hider);
+                    PhotonNetwork.Destroy(hiderPlayer);
                 }
 
                 // 隠れる側のプレイヤーが全て捕まった場合
