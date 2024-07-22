@@ -299,7 +299,7 @@ namespace Game
         {
             startTime = masterStartTime;
             graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - masterStartTime);
-            gameUI.UpdateGameTimer(graceRemainingTime);
+            gameUI.UpdateGameTimer(gameTimeSeconds);
 
             Observable.EveryUpdate().Subscribe(_ =>
             {

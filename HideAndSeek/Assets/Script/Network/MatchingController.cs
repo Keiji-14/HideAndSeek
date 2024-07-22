@@ -33,6 +33,7 @@ namespace NetWork
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 isGameStarted = true;
+                Debug.Log("Start");
                 StartCoroutine(MoveGameRoom());
             }
         }
@@ -53,6 +54,7 @@ namespace NetWork
         public void MatchingFinish()
         {
             isMatching = false;
+            isGameStarted = false;
         }
         #endregion
 
