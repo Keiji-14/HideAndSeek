@@ -246,22 +246,6 @@ namespace Game
         [PunRPC]
         private void RPC_StartGame(double masterStartTime)
         {
-            Debug.Log("RPC_StartGame called");
-            // 猶予時間終了後の処理
-            var hiders = GameObject.FindGameObjectsWithTag("Hider");
-            foreach (var hider in hiders)
-            {
-                Debug.Log($"Reactivating hider: {hider.name}");
-                // オブジェクトを再表示
-                SetActiveRecursively(hider, true);
-                var hiderController = hider.GetComponent<HiderController>();
-
-                if (hiderController != null)
-                {
-                    hiderController.SetCamera();
-                }
-            }
-
             // ゲーム開始
             StartGameTimer(masterStartTime);
         }
@@ -299,6 +283,21 @@ namespace Game
             if (overheadCamera != null)
             {
                 Destroy(overheadCamera.gameObject);
+
+                // 猶予時間終了後の処理
+                var hiders = GameObject.FindGameObjectsWithTag("Hider");
+                foreach (var hider in hiders)
+                {
+                    Debug.Log($"Reactivating hider: {hider.name}");
+                    // オブジェクトを再表示
+                    SetActiveRecursively(hider, true);
+                    var hiderController = hider.GetComponent<HiderController>();
+
+                    if (hiderController != null)
+                    {
+                        hiderController.SetCamera();
+                    }
+                }
 
                 // 自プレイヤーのSeekerControllerを有効にする
                 GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
@@ -340,8 +339,10 @@ namespace Game
                 if (!capturedHiderIDs.Contains(hiderViewID))
                 {
                     capturedHiderIDs.Add(hiderViewID);
-                    photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
                     hiderPlayerCount--;
+
+                    photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
+                    photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
 
                     Debug.Log($"Hider player count: {hiderPlayerCount}");
 
