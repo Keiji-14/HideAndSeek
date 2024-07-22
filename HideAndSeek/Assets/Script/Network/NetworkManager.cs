@@ -12,7 +12,7 @@ namespace NetWork
         public static NetworkManager instance = null;
         #endregion
 
-        private bool isSceneTransitioning = false;
+        private bool isMatchingStart = false;
 
         #region SerializeField
         [SerializeField] private MatchingController matchingController;
@@ -56,6 +56,8 @@ namespace NetWork
         /// </summary>
         public override void OnJoinedRoom()
         {
+            isMatchingStart = true;
+
             matchingController.MatchingStart();
         }
 
@@ -74,7 +76,7 @@ namespace NetWork
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
         {
             // プレイヤーの役割が割り当てられたかどうかを確認
-            if (PhotonNetwork.IsMasterClient && !isSceneTransitioning)
+            if (PhotonNetwork.IsMasterClient && isMatchingStart)
             {
                 bool allRolesAssigned = true;
                 foreach (var player in PhotonNetwork.PlayerList)
@@ -88,7 +90,7 @@ namespace NetWork
 
                 if (allRolesAssigned)
                 {
-                    isSceneTransitioning = true;
+                    isMatchingStart = false;
                     SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
                 }
             }
