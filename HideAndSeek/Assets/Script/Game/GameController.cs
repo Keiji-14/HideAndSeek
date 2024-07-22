@@ -296,19 +296,6 @@ namespace Game
             if (overheadCamera != null)
             {
                 Destroy(overheadCamera.gameObject);
-                var hiders = GameObject.FindGameObjectsWithTag("Hider");
-
-                foreach (var hider in hiders)
-                {
-                    // オブジェクトを再表示
-                    SetActiveRecursively(hider, true);
-                    var hiderController = hider.GetComponent<HiderController>();
-
-                    if (hiderController != null)
-                    {
-                        hiderController.SetCamera();
-                    }
-                }
 
                 // 自プレイヤーのSeekerControllerを有効にする
                 GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;

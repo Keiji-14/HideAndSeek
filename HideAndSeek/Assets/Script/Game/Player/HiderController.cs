@@ -103,7 +103,23 @@ public class HiderController : MonoBehaviourPunCallbacks
     /// </summary>
     private void TransformIntoObject(int transformIndex)
     {
-        photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, transformIndex);
+        if (currentObject != null && currentObject != gameObject)
+        {
+            Destroy(currentObject);
+        }
+
+        var position = transform.position;
+        var rotation = transform.rotation;
+        currentObject = Instantiate(transformObjList[transformIndex], position, rotation);
+        currentObject.transform.SetParent(this.transform);
+        currentObject.transform.localPosition = Vector3.zero;
+        currentObject.transform.localRotation = Quaternion.identity;
+
+        rigidbody.isKinematic = false;
+        EnableColliders(currentObject, true);
+
+        isTransformed = true;
+        //photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, transformIndex);
     }
 
     /// <summary>
