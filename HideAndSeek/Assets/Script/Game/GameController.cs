@@ -61,13 +61,8 @@ namespace Game
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                Debug.Log("PhotonNetwork.IsMasterClient");
                 // マスタークライアントがステージデータを生成して他のプレイヤーに共有する
                 //photonView.RPC("RPC_SetStageData", RpcTarget.AllBuffered, stageData.stageID);
-            }
-            else
-            {
-                Debug.Log("PhotonNetwork.IsMasterClient not");
             }
 
             StartCoroutine(WaitForCustomProperties());
@@ -78,6 +73,7 @@ namespace Game
         /// <summary>
         /// RPCでステージデータを設定する処理
         /// </summary>
+        /// <param name="stageID">ステージID</param>
         [PunRPC]
         private void RPC_SetStageData(int stageID)
         {
@@ -91,6 +87,10 @@ namespace Game
             }
         }
 
+        /// <summary>
+        /// カスタムプロパティを待つコルーチン
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator WaitForCustomProperties()
         {
             while (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Role"))
@@ -109,6 +109,7 @@ namespace Game
                 SpawnHiderBots(numberOfBots); // ボットを生成
             }*/
 
+            // 鬼側か隠れる側かを判定する処理
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
                 SpawnSeekerPlayer(seekerPrefab);
@@ -155,6 +156,10 @@ namespace Game
             }
         }
 
+        /// <summary>
+        /// 隠れる側のプレイヤー数を更新する処理
+        /// </summary>
+        /// <param name="hiderCount">現在の隠れる側のプレイヤー数</param>
         [PunRPC]
         private void RPC_UpdateHiderCount(int hiderCount)
         {
@@ -165,9 +170,10 @@ namespace Game
         /// <summary>
         /// ボットを生成する処理
         /// </summary>
-        private void SpawnHiderBots(int numberOfBots)
+        /// <param name="botNum">生成するボットの数</param>
+        private void SpawnHiderBots(int botNum)
         {
-            for (int i = 0; i < numberOfBots; i++)
+            for (int i = 0; i < botNum; i++)
             {
                 var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
                 var botObject = PhotonNetwork.Instantiate($"Prefabs/{hiderBotPrefab.name}", position, Quaternion.identity);
@@ -176,6 +182,11 @@ namespace Game
             photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
         }
 
+        /// <summary>
+        /// プレイヤーが既に生成されているかを判定する処理
+        /// </summary>
+        /// <param name="player">チェックするプレイヤー</param>
+        /// <returns>生成されている場合はtrue</returns>
         private bool HasSpawnedPlayer(Player player)
         {
             return player.TagObject != null;
@@ -242,6 +253,10 @@ namespace Game
             yield return null;
         }
 
+        /// <summary>
+        /// RPCで猶予時間を開始する
+        /// </summary>
+        /// <param name="masterStartTime">マスタークライアントの開始時間</param>
         [PunRPC]
         private void RPC_StartGracePeriod(double masterStartTime)
         {
@@ -263,6 +278,10 @@ namespace Game
             }).AddTo(this);
         }
 
+        /// <summary>
+        /// RPCでゲームを開始する
+        /// </summary>
+        /// <param name="masterStartTime">マスタークライアントの開始時間</param>
         [PunRPC]
         private void RPC_StartGame(double masterStartTime)
         {
@@ -273,6 +292,7 @@ namespace Game
         /// <summary>
         /// ゲーム開始後のタイマー処理を行う
         /// </summary>
+        /// <param name="masterStartTime">マスタークライアントの開始時間</param>
         private void StartGameTimer(double masterStartTime)
         {
             if (overheadCamera != null)
@@ -290,7 +310,7 @@ namespace Game
                     }
                 }
 
-                                // 猶予時間終了後の処理
+                // 猶予時間終了後の処理
                 foreach (var hider in hiderPlayerObjectList)
                 {
                     // オブジェクトを再表示
@@ -322,6 +342,11 @@ namespace Game
             }).AddTo(this);
         }
 
+        /// <summary>
+        /// オブジェクトのアクティブを切り替える処理
+        /// </summary>
+        /// <param name="obj">対象のオブジェクト</param>
+        /// <param name="state">アクティブにするかどうかの判定</param>
         private void SetActiveRecursively(GameObject obj, bool state)
         {
             obj.SetActive(state);
@@ -334,6 +359,7 @@ namespace Game
         /// <summary>
         /// プレイヤーが捕まった時の処理
         /// </summary>
+        /// <param name="hiderViewID">捕まったプレイヤーのPhotonViewID</param>
         public void OnPlayerCaught(int hiderViewID)
         {
             if (gameStarted)
@@ -343,7 +369,9 @@ namespace Game
                     capturedHiderIDs.Add(hiderViewID);
                     hiderPlayerCount--;
 
+                    // 全プレイヤーに捕まったことを通知
                     photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
+                    // 全プレイヤーに隠れ側の数を更新
                     photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
 
                     Debug.Log($"Hider player count: {hiderPlayerCount}");
@@ -357,6 +385,10 @@ namespace Game
             }
         }
 
+        /// <summary>
+        /// RPCでプレイヤーが捕まったことを処理する
+        /// </summary>
+        /// <param name="hiderViewID">捕まったプレイヤーのPhotonViewID</param>
         [PunRPC]
         private void RPC_OnPlayerCaught(int hiderViewID)
         {
@@ -399,7 +431,7 @@ namespace Game
         /// <summary>
         /// ゲームオーバー時の処理
         /// </summary>
-        /// <param name="isSeekerWin">鬼の勝利かどうかのフラグ</param>
+        /// <param name="isSeekerWin">鬼の勝利かどうかの判定</param>
         private void GameOver(bool isSeekerWin)
         {
             // ゲーム終了処理
