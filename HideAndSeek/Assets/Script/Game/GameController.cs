@@ -100,6 +100,13 @@ namespace Game
 
             gameUI.ToggleCanvas(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
 
+
+            /*if (PhotonNetwork.IsMasterClient)
+            {
+                int numberOfBots = 3; // 生成するボットの数を指定
+                SpawnHiderBots(numberOfBots); // ボットを生成
+            }*/
+
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
                 SpawnSeekerPlayer(seekerPrefab);
@@ -110,12 +117,6 @@ namespace Game
                 SpawnHiderPlayer(hiderPrefab);
                 StartCoroutine(GracePeriodHiderCoroutine());
             }
-
-            /*if (PhotonNetwork.IsMasterClient)
-            {
-                int numberOfBots = 3; // 生成するボットの数を指定
-                SpawnHiderBots(numberOfBots); // ボットを生成
-            }*/
         }
 
         /// <summary>
@@ -245,10 +246,12 @@ namespace Game
         [PunRPC]
         private void RPC_StartGame(double masterStartTime)
         {
+            Debug.Log("RPC_StartGame called");
             // 猶予時間終了後の処理
             var hiders = GameObject.FindGameObjectsWithTag("Hider");
             foreach (var hider in hiders)
             {
+                Debug.Log($"Reactivating hider: {hider.name}");
                 // オブジェクトを再表示
                 SetActiveRecursively(hider, true);
                 var hiderController = hider.GetComponent<HiderController>();
@@ -372,7 +375,22 @@ namespace Game
         private void SetSpectatorMode()
         {
             Debug.Log("Entering spectator mode.");
-            overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
+            if (overheadCameraPrefab != null)
+            {
+                overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
+                if (overheadCamera != null)
+                {
+                    Debug.Log("Spectator camera instantiated successfully.");
+                }
+                else
+                {
+                    Debug.LogError("Failed to get Camera component from instantiated overheadCameraPrefab.");
+                }
+            }
+            else
+            {
+                Debug.LogError("overheadCameraPrefab is not set in the inspector.");
+            }
         }
 
         /// <summary>
