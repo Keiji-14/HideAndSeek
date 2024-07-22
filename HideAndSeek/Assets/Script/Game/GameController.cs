@@ -247,7 +247,7 @@ namespace Game
         {
             startTime = masterStartTime;
             graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - masterStartTime);
-            gameUI.UpdateGraceTimer(graceRemainingTime);
+            gameUI.UpdateGameTimer(graceRemainingTime);
 
             Observable.EveryUpdate().Subscribe(_ =>
             {
@@ -290,7 +290,7 @@ namespace Game
                     }
                 }
 
-                // 猶予時間終了後の処理
+                                // 猶予時間終了後の処理
                 foreach (var hider in hiderPlayerObjectList)
                 {
                     // オブジェクトを再表示
@@ -311,7 +311,7 @@ namespace Game
             {
                 if (gameStarted)
                 {
-                    gameRemainingTime = gameTimeSeconds - (float)(PhotonNetwork.Time - startTime);
+                    gameRemainingTime = gameTimeSeconds - (float)(PhotonNetwork.Time - (startTime + gracePeriodSeconds));
                     gameUI.UpdateGameTimer(gameRemainingTime);
                     if (gameRemainingTime <= 0)
                     {
