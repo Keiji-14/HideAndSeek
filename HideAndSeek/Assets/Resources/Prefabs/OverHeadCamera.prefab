@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4996083867653287403}
   - component: {fileID: 6826506328263151627}
   - component: {fileID: 6502247865302015894}
+  - component: {fileID: 7717052468673289284}
   m_Layer: 0
   m_Name: OverHeadCamera
   m_TagString: Untagged
@@ -96,3 +97,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3547a9651eb72594da56f8f97913be85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!81 &7717052468673289284
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9174065159109127017}
+  m_Enabled: 1

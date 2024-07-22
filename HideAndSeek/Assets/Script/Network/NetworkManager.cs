@@ -12,6 +12,9 @@ namespace NetWork
         public static NetworkManager instance = null;
         #endregion
 
+        // isGameStartedフラグの初期化
+        private bool isGameStarted = false;
+
         #region SerializeField
         [SerializeField] private MatchingController matchingController;
         #endregion
@@ -22,7 +25,7 @@ namespace NetWork
             if (instance == null)
             {
                 instance = this;
-                //DontDestroyOnLoad(gameObject);
+                DontDestroyOnLoad(gameObject);
 
                 Init();
             }
@@ -72,7 +75,10 @@ namespace NetWork
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
         {
-            // Ensure that all players have their role assigned before starting the game
+            // デバッグログを追加
+            Debug.Log("OnPlayerPropertiesUpdate called");
+
+            // プレイヤーの役割が割り当てられたかどうかを確認
             if (PhotonNetwork.IsMasterClient)
             {
                 bool allRolesAssigned = true;
@@ -85,9 +91,17 @@ namespace NetWork
                     }
                 }
 
+                // すべてのプレイヤーに役割が割り当てられている場合
                 if (allRolesAssigned)
                 {
-                    photonView.RPC("LoadGameScene", RpcTarget.All);
+                    Debug.Log("All roles assigned, loading game scene");
+
+                    // シーン遷移が多重に呼ばれないようにするためのフラグを追加
+                    if (!isGameStarted)
+                    {
+                        isGameStarted = true;
+                        photonView.RPC("LoadGameScene", RpcTarget.All);
+                    }
                 }
             }
         }

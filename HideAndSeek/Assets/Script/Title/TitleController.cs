@@ -3,6 +3,7 @@ using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+
 namespace Title
 {
     /// <summary>
@@ -79,12 +80,6 @@ namespace Title
             
             titleUI.MatchingTimeUI(minutes, seconds);
 
-            // 3分経過した場合は対戦相手が見つからなかったと表示する
-            /*if (minuteCount >= 3.0f)
-            {
-                IsMatching(false);
-                titleUI.NoMatchingUI(true);
-            }*/
         }
 
         /// <summary>
