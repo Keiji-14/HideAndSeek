@@ -56,6 +56,7 @@ MonoBehaviour:
   - RPC_StartGame
   - RPC_StartGracePeriod
   - RPC_UpdateHiderCount
+  - RPC_DestroySeeker
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

@@ -1,4 +1,5 @@
 ﻿using GameData;
+using Scene;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
@@ -459,14 +460,31 @@ namespace Game
             // ゲーム終了処理
             if (isSeekerWin)
             {
-                Debug.Log("Seeker Wins!");
+                gameUI.ViewSeekerWin();
             }
             else
             {
+                gameUI.ViewHiderWin();
                 Debug.Log("Hiders Win!");
             }
+            // タイトル画面に戻る
+            StartCoroutine(ReturnToTitle());
+        }
+
+        /// <summary>
+        /// タイトル画面に戻るコルーチン
+        /// </summary>
+        private IEnumerator ReturnToTitle()
+        {
+            // 数秒待機
+            yield return new WaitForSeconds(3f);
+
+            // PhotonNetworkを離脱
+            PhotonNetwork.LeaveRoom();
+
+            // シーンをロード
+            SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Title);
         }
         #endregion
-
     }
 }

@@ -54,6 +54,7 @@ namespace NetWork
         /// </summary>
         public override void OnJoinedRoom()
         {
+            var matchingController = FindObjectOfType<MatchingController>();
             matchingController.MatchingStart();
         }
 
@@ -63,7 +64,11 @@ namespace NetWork
         public void LeaveRoom()
         {
             // PhotonのLeaveRoomメソッドを使用してゲームサーバーから退出する
-            matchingController.MatchingFinish();
+            var matchingController = FindObjectOfType<MatchingController>();
+            if (matchingController != null)
+            {
+                matchingController.MatchingFinish();
+            }
             PhotonNetwork.LeaveRoom();
         }
 

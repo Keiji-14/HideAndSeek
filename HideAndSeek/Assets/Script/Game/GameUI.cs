@@ -15,6 +15,10 @@ namespace Game
         [SerializeField] private GameObject seekerCanvasObj;
         /// <summary>隠れる側のCanvas</summary>
         [SerializeField] private GameObject hiderCanvasObj;
+        /// <summary>鬼側の勝利バー</summary>
+        [SerializeField] private GameObject seekerWinBar;
+        /// <summary>隠れる側の勝利バー</summary>
+        [SerializeField] private GameObject hiderWinBar;
         /// <summary>隠れる側のCanvas</summary>
         [SerializeField] private List<GameObject> lifeIconList;
         /// <summary>ゲームの制限時間テキスト</summary>
@@ -38,6 +42,17 @@ namespace Game
                 seekerCanvasObj.gameObject.SetActive(false);
                 hiderCanvasObj.gameObject.SetActive(true);
             }
+        }
+
+        public void ViewSeekerWin()
+        {
+            seekerWinBar.SetActive(true);
+        }
+
+
+        public void ViewHiderWin()
+        {
+            hiderWinBar.SetActive(true);
         }
 
         /// <summary>
