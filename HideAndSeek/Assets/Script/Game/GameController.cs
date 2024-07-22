@@ -67,6 +67,42 @@ namespace Game
 
             StartCoroutine(WaitForCustomProperties());
         }
+
+
+        /// <summary>
+        /// プレイヤーが捕まった時の処理
+        /// </summary>
+        /// <param name="hiderViewID">捕まったプレイヤーのPhotonViewID</param>
+        public void OnPlayerCaught(int hiderViewID)
+        {
+            if (gameStarted)
+            {
+                if (!capturedHiderIDs.Contains(hiderViewID))
+                {
+                    capturedHiderIDs.Add(hiderViewID);
+                    hiderPlayerCount--;
+
+                    // 全プレイヤーに捕まったことを通知
+                    photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
+                    // 全プレイヤーに隠れ側の数を更新
+                    photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
+
+                    Debug.Log($"Hider player count: {hiderPlayerCount}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 鬼プレイヤーのライフが0になった時の処理
+        /// </summary>
+        /// <param name="seekerPlayer">鬼プレイヤー</param>
+        public void SeekerFailed(GameObject seekerPlayer)
+        {
+            if (gameStarted)
+            {
+                photonView.RPC("RPC_DestroySeeker", RpcTarget.All, gameObject);
+            }
+        }
         #endregion
 
         #region PrivateMethod
@@ -357,31 +393,22 @@ namespace Game
         }
 
         /// <summary>
-        /// プレイヤーが捕まった時の処理
+        /// RPCで鬼側が消滅したことを処理する
         /// </summary>
-        /// <param name="hiderViewID">捕まったプレイヤーのPhotonViewID</param>
-        public void OnPlayerCaught(int hiderViewID)
+        /// <param name="seekerPlayer">鬼のプレイヤー</param>
+        [PunRPC]
+        private void RPC_DestroySeeker(GameObject seekerPlayer)
         {
-            if (gameStarted)
+            if (seekerPlayer != null)
             {
-                if (!capturedHiderIDs.Contains(hiderViewID))
+                if (PhotonNetwork.LocalPlayer.ActorNumber == seekerPlayer.GetComponent<PhotonView>().Owner.ActorNumber)
                 {
-                    capturedHiderIDs.Add(hiderViewID);
-                    hiderPlayerCount--;
-
-                    // 全プレイヤーに捕まったことを通知
-                    photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
-                    // 全プレイヤーに隠れ側の数を更新
-                    photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
-
-                    Debug.Log($"Hider player count: {hiderPlayerCount}");
-
-                    if (hiderPlayerCount <= 0)
-                    {
-                        gameStarted = false;
-                        GameOver(true);
-                    }
+                    SetSpectatorMode();
+                    PhotonNetwork.Destroy(seekerPlayer);
                 }
+
+                gameStarted = false;
+                GameOver(false);
             }
         }
 
@@ -399,6 +426,13 @@ namespace Game
                 {
                     SetSpectatorMode();
                     PhotonNetwork.Destroy(hider);
+                }
+
+                // 隠れる側のプレイヤーが全て捕まった場合
+                if (hiderPlayerCount <= 0)
+                {
+                    gameStarted = false;
+                    GameOver(true);
                 }
             }
         }

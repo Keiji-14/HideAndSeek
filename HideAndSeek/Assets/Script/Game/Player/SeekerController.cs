@@ -219,7 +219,13 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             Debug.Log("Seeker life depleted");
             // 鬼側のライフが尽きた場合の処理
-            PhotonNetwork.Destroy(gameObject);
+            //PhotonNetwork.Destroy(gameObject);
+
+            GameController gameController = FindAnyObjectByType<GameController>();
+            if (gameController != null)
+            {
+                gameController.SeekerFailed(gameObject);
+            }
         }
     }
 
