@@ -222,6 +222,22 @@ namespace Game
             yield return null;
         }
 
+        /// <summary>
+        /// 猶予時間中の隠れる側の処理
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator GracePeriodHiderCoroutine()
+        {
+            // MasterClientが基準時間を送信
+            if (PhotonNetwork.IsMasterClient)
+            {
+                double masterStartTime = PhotonNetwork.Time;
+                photonView.RPC("RPC_StartGracePeriod", RpcTarget.All, masterStartTime);
+            }
+
+            yield return null;
+        }
+
         [PunRPC]
         private void RPC_StartGracePeriod(double masterStartTime)
         {
@@ -246,24 +262,23 @@ namespace Game
         [PunRPC]
         private void RPC_StartGame(double masterStartTime)
         {
-            // ゲーム開始
-            StartGameTimer(masterStartTime);
-        }
-
-        /// <summary>
-        /// 猶予時間中の隠れる側の処理
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator GracePeriodHiderCoroutine()
-        {
-            // MasterClientが基準時間を送信
-            if (PhotonNetwork.IsMasterClient)
+            // 猶予時間終了後の処理
+            var hiders = GameObject.FindGameObjectsWithTag("Hider");
+            foreach (var hider in hiders)
             {
-                double masterStartTime = PhotonNetwork.Time;
-                photonView.RPC("RPC_StartGracePeriod", RpcTarget.All, masterStartTime);
+                Debug.Log($"Reactivating hider: {hider.name}");
+                // オブジェクトを再表示
+                SetActiveRecursively(hider, true);
+                var hiderController = hider.GetComponent<HiderController>();
+
+                if (hiderController != null)
+                {
+                    hiderController.SetCamera();
+                }
             }
 
-            yield return null;
+            // ゲーム開始
+            StartGameTimer(masterStartTime);
         }
 
         private void SetActiveRecursively(GameObject obj, bool state)
@@ -283,21 +298,6 @@ namespace Game
             if (overheadCamera != null)
             {
                 Destroy(overheadCamera.gameObject);
-
-                // 猶予時間終了後の処理
-                var hiders = GameObject.FindGameObjectsWithTag("Hider");
-                foreach (var hider in hiders)
-                {
-                    Debug.Log($"Reactivating hider: {hider.name}");
-                    // オブジェクトを再表示
-                    SetActiveRecursively(hider, true);
-                    var hiderController = hider.GetComponent<HiderController>();
-
-                    if (hiderController != null)
-                    {
-                        hiderController.SetCamera();
-                    }
-                }
 
                 // 自プレイヤーのSeekerControllerを有効にする
                 GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
