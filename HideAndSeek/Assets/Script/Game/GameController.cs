@@ -28,6 +28,8 @@ namespace Game
         private Camera overheadCamera;
         /// <summary>隠れる側のIDリスト</summary>
         private List<int> capturedHiderIDs = new List<int>();
+        /// <summary>隠れる側のプレイヤーオブジェクト</summary>
+        private List<GameObject> hiderPlayerObjectList = new List<GameObject>();
         #endregion
 
         #region SerializeField
@@ -201,12 +203,14 @@ namespace Game
                 }
             }
 
+            hiderPlayerObjectList.Clear(); // リストをクリア
             var hiders = GameObject.FindGameObjectsWithTag("Hider");
             // 隠れる側のプレイヤーを見えなくする
             foreach (var hider in hiders)
             {
                 // オブジェクトごと非表示にする
                 SetActiveRecursively(hider, false);
+                hiderPlayerObjectList.Add(hider);
             }
 
             graceRemainingTime = gracePeriodSeconds;
@@ -262,32 +266,8 @@ namespace Game
         [PunRPC]
         private void RPC_StartGame(double masterStartTime)
         {
-            // 猶予時間終了後の処理
-            var hiders = GameObject.FindGameObjectsWithTag("Hider");
-            foreach (var hider in hiders)
-            {
-                Debug.Log($"Reactivating hider: {hider.name}");
-                // オブジェクトを再表示
-                SetActiveRecursively(hider, true);
-                var hiderController = hider.GetComponent<HiderController>();
-
-                if (hiderController != null)
-                {
-                    hiderController.SetCamera();
-                }
-            }
-
             // ゲーム開始
             StartGameTimer(masterStartTime);
-        }
-
-        private void SetActiveRecursively(GameObject obj, bool state)
-        {
-            obj.SetActive(state);
-            foreach (Transform child in obj.transform)
-            {
-                SetActiveRecursively(child.gameObject, state);
-            }
         }
 
         /// <summary>
@@ -309,6 +289,19 @@ namespace Game
                         seekerController.enabled = true;
                     }
                 }
+
+                // 猶予時間終了後の処理
+                foreach (var hider in hiderPlayerObjectList)
+                {
+                    // オブジェクトを再表示
+                    SetActiveRecursively(hider, true);
+                    var hiderController = hider.GetComponent<HiderController>();
+
+                    if (hiderController != null)
+                    {
+                        hiderController.SetCamera();
+                    }
+                }
             }
 
             gameStarted = true;
@@ -327,6 +320,15 @@ namespace Game
                     }
                 }
             }).AddTo(this);
+        }
+
+        private void SetActiveRecursively(GameObject obj, bool state)
+        {
+            obj.SetActive(state);
+            foreach (Transform child in obj.transform)
+            {
+                SetActiveRecursively(child.gameObject, state);
+            }
         }
 
         /// <summary>
