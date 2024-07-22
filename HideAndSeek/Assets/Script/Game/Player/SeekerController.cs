@@ -215,16 +215,18 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         life--;
         gameUI.UpdateLife(life);
 
+        // 鬼側のライフが尽きた場合の処理
         if (life <= 0)
         {
-            Debug.Log("Seeker life depleted");
-            // 鬼側のライフが尽きた場合の処理
-            //PhotonNetwork.Destroy(gameObject);
-
-            GameController gameController = FindAnyObjectByType<GameController>();
-            if (gameController != null)
+            PhotonView seekerView = gameObject.GetComponent<PhotonView>();
+            if (seekerView != null)
             {
-                gameController.SeekerFailed(gameObject);
+                // GameControllerのインスタンスを取得
+                GameController gameController = FindObjectOfType<GameController>();
+                if (gameController != null)
+                {
+                    gameController.SeekerFailed(seekerView.ViewID);
+                }
             }
         }
     }
