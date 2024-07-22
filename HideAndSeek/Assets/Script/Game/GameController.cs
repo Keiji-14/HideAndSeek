@@ -338,6 +338,9 @@ namespace Game
                 {
                     capturedHiderIDs.Add(hiderViewID);
                     photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
+                    hiderPlayerCount--;
+
+                    Debug.Log($"Hider player count: {hiderPlayerCount}");
 
                     if (hiderPlayerCount <= 0)
                     {
@@ -356,9 +359,10 @@ namespace Game
             {
                 if (PhotonNetwork.LocalPlayer.ActorNumber == hider.GetComponent<PhotonView>().Owner.ActorNumber)
                 {
+                    Debug.Log("Caught player is the local player.");
                     SetSpectatorMode();
+                    PhotonNetwork.Destroy(hider);
                 }
-                Destroy(hider);
             }
         }
 
@@ -367,6 +371,7 @@ namespace Game
         /// </summary>
         private void SetSpectatorMode()
         {
+            Debug.Log("Entering spectator mode.");
             overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
         }
 
