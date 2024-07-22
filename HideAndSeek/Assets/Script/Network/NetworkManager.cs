@@ -64,11 +64,9 @@ namespace NetWork
         public void LeaveRoom()
         {
             // PhotonのLeaveRoomメソッドを使用してゲームサーバーから退出する
-            var matchingController = FindObjectOfType<MatchingController>();
-            if (matchingController != null)
-            {
-                matchingController.MatchingFinish();
-            }
+
+            matchingController.MatchingFinish();
+
             PhotonNetwork.LeaveRoom();
         }
 

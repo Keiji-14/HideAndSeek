@@ -479,7 +479,7 @@ namespace Game
             yield return new WaitForSeconds(3f);
 
             // PhotonNetworkを離脱
-            PhotonNetwork.LeaveRoom();
+            NetWork.NetworkManager.instance.LeaveRoom();
 
             // シーンをロード
             SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Title);

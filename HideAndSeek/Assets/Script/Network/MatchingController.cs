@@ -29,7 +29,7 @@ namespace NetWork
             if (isGameStarted || !isMatching)
                 return;
 
-            // 4人揃ったかどうかを確認
+            // 2人揃ったかどうかを確認
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 isGameStarted = true;
@@ -64,6 +64,7 @@ namespace NetWork
         {
             yield return new WaitForSeconds(2.0f);
 
+            isGameStarted = false;
             // ゲームシーンに移行
             MatchingCompletedSubject.OnNext(Unit.Default);
         }

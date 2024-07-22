@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: 100
-  offset: {x: 0, y: 3, z: -5}
+  offset: {x: 0, y: 2, z: -5}
   playerTransform: {fileID: 906705581141023676}
 --- !u!1 &3911344511472833739
 GameObject:
