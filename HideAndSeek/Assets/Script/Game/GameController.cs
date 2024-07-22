@@ -352,7 +352,7 @@ namespace Game
                     capturedHiderIDs.Add(hiderViewID);
                     photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
 
-                    if (capturedHiderIDs.Count >= hiderPlayerCount)
+                    if (hiderPlayerCount <= 0)
                     {
                         gameStarted = false;
                         GameOver(true);
@@ -371,7 +371,7 @@ namespace Game
                 {
                     SetSpectatorMode();
                 }
-                PhotonNetwork.Destroy(hider);
+                Destroy(hider);
             }
         }
 
