@@ -12,9 +12,6 @@ namespace NetWork
         public static NetworkManager instance = null;
         #endregion
 
-        // isGameStartedフラグの初期化
-        private bool isGameStarted = false;
-
         #region SerializeField
         [SerializeField] private MatchingController matchingController;
         #endregion
@@ -57,7 +54,6 @@ namespace NetWork
         /// </summary>
         public override void OnJoinedRoom()
         {
-            var matchingController = FindObjectOfType<MatchingController>();
             matchingController.MatchingStart();
         }
 
@@ -75,9 +71,6 @@ namespace NetWork
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
         {
-            // デバッグログを追加
-            Debug.Log("OnPlayerPropertiesUpdate called");
-
             // プレイヤーの役割が割り当てられたかどうかを確認
             if (PhotonNetwork.IsMasterClient)
             {
@@ -94,14 +87,8 @@ namespace NetWork
                 // すべてのプレイヤーに役割が割り当てられている場合
                 if (allRolesAssigned)
                 {
-                    Debug.Log("All roles assigned, loading game scene");
-
-                    // シーン遷移が多重に呼ばれないようにするためのフラグを追加
-                    if (!isGameStarted)
-                    {
-                        isGameStarted = true;
-                        photonView.RPC("LoadGameScene", RpcTarget.All);
-                    }
+                    // マスタークライアントがシーン遷移の指示を送る
+                    SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
                 }
             }
         }
@@ -113,6 +100,8 @@ namespace NetWork
         /// </summary>
         private void Init()
         {
+            PhotonNetwork.AutomaticallySyncScene = true;
+
             matchingController.MatchingCompletedSubject.Subscribe(_ =>
             {
                 AssignRolesAndLoadGameScene();
@@ -143,15 +132,7 @@ namespace NetWork
                     player.SetCustomProperties(customProperties);
                     playerIndex++;
                 }
-
-                photonView.RPC("LoadGameScene", RpcTarget.All);
             }
-        }
-
-        [PunRPC]
-        private void LoadGameScene()
-        {
-            SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
         }
         #endregion
     }
