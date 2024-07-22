@@ -10,19 +10,25 @@ namespace NetWork
     /// </summary>
     public class MatchingController : MonoBehaviour
     {
-        #region PrivateField
+        #region publicField
         /// <summary>マッチング完了時の処理</summary>
         public Subject<Unit> MatchingCompletedSubject = new Subject<Unit>();
         #endregion
 
         #region PrivateField
         /// <summary>マッチング中かどうかの処理</summary>
-        private bool isMatching = false;
+        private bool isMatching;
         /// <summary>ゲームが開始済みかどうか</summary>
-        private bool isGameStarted = false;
+        private bool isGameStarted;
         #endregion
 
         #region UnityEvent
+        private void Start()
+        {
+            isMatching = false;
+            isGameStarted = false;
+        }
+
         private void Update()
         {
             // ゲームが開始されている場合は何もしない
@@ -54,7 +60,6 @@ namespace NetWork
         public void MatchingFinish()
         {
             isMatching = false;
-            isGameStarted = false;
         }
         #endregion
 
@@ -66,7 +71,6 @@ namespace NetWork
         {
             yield return new WaitForSeconds(2.0f);
 
-            isGameStarted = false;
             // ゲームシーンに移行
             MatchingCompletedSubject.OnNext(Unit.Default);
         }
