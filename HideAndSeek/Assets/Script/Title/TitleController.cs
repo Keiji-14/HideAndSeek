@@ -47,6 +47,8 @@ namespace Title
         /// </summary>
         public void Init()
         {
+            isMatching = false;
+
             // 初回起動かどうかの判定
             if (!PlayerPrefs.HasKey("FirstTime"))
             {
