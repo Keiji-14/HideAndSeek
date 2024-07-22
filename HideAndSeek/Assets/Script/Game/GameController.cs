@@ -397,7 +397,6 @@ namespace Game
             {
                 if (PhotonNetwork.LocalPlayer.ActorNumber == hider.GetComponent<PhotonView>().Owner.ActorNumber)
                 {
-                    Debug.Log("Caught player is the local player.");
                     SetSpectatorMode();
                     PhotonNetwork.Destroy(hider);
                 }
@@ -409,22 +408,10 @@ namespace Game
         /// </summary>
         private void SetSpectatorMode()
         {
-            Debug.Log("Entering spectator mode.");
             if (overheadCameraPrefab != null)
             {
-                overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
-                if (overheadCamera != null)
-                {
-                    Debug.Log("Spectator camera instantiated successfully.");
-                }
-                else
-                {
-                    Debug.LogError("Failed to get Camera component from instantiated overheadCameraPrefab.");
-                }
-            }
-            else
-            {
-                Debug.LogError("overheadCameraPrefab is not set in the inspector.");
+                Instantiate(overheadCameraPrefab);
+                //overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
             }
         }
 
