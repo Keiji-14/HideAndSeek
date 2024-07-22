@@ -83,10 +83,10 @@ namespace Game
                     capturedHiderIDs.Add(hiderViewID);
                     hiderPlayerCount--;
 
-                    // 全プレイヤーに捕まったことを通知
-                    photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
                     // 全プレイヤーに隠れ側の数を更新
                     photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
+                    // 全プレイヤーに捕まったことを通知
+                    photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
 
                     Debug.Log($"Hider player count: {hiderPlayerCount}");
                 }
@@ -429,13 +429,13 @@ namespace Game
                     SetSpectatorMode();
                     PhotonNetwork.Destroy(hiderPlayer);
                 }
+            }
 
-                // 隠れる側のプレイヤーが全て捕まった場合
-                if (hiderPlayerCount <= 0)
-                {
-                    gameStarted = false;
-                    GameOver(true);
-                }
+            // 隠れる側のプレイヤーが全て捕まった場合
+            if (hiderPlayerCount <= 0)
+            {
+                gameStarted = false;
+                GameOver(true);
             }
         }
 
@@ -465,7 +465,6 @@ namespace Game
             else
             {
                 gameUI.ViewHiderWin();
-                Debug.Log("Hiders Win!");
             }
             // タイトル画面に戻る
             StartCoroutine(ReturnToTitle());
