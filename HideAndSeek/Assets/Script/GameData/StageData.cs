@@ -9,8 +9,10 @@ namespace GameData
         #region PublicField
         /// <summary>ステージID</summary>
         public int stageID;
-        /// <summary>ステージIオブジェクトD</summary>
+        /// <summary>ステージオブジェクト</summary>
         public GameObject stageObj;
+        /// <summary>鬼側の開始区域</summary>
+        public Transform seekerStartArea;
         /// <summary>変身するオブジェクトリスト</summary>
         public List<GameObject> transformationObjList = new List<GameObject>();
         /// <summary>botの移動先リスト</summary>
