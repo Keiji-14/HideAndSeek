@@ -169,7 +169,7 @@ namespace Game
         {
             if (!HasSpawnedPlayer(PhotonNetwork.LocalPlayer))
             {
-                var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
+                var position = new Vector3(-18f, 3f, -3f);
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
 
                 // TagObjectに生成したプレイヤーオブジェクトを設定
