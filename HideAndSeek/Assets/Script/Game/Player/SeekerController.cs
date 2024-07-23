@@ -14,6 +14,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     private bool isJumping;
     /// <summary>攻撃モーション中の状態</summary>
     private bool isAttacking;
+    /// <summary>前回のisAttackingの状態</summary>
+    private bool previousIsAttacking; 
     /// <summary>速度ベクトル</summary>
     private Vector3 velocity;
     /// <summary>カメラ</summary>
@@ -92,7 +94,7 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
             isRunning = (bool)stream.ReceiveNext();
             isGrounded = (bool)stream.ReceiveNext();
             isJumping = (bool)stream.ReceiveNext();
-            isAttacking = (bool)stream.ReceiveNext();
+            bool newIsAttacking = (bool)stream.ReceiveNext();
             animator.SetBool("isRunning", isRunning);
             animator.SetBool("isGrounded", isGrounded);
 
@@ -101,10 +103,13 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
                 animator.SetTrigger("Jump"); // ジャンプフラグが立っていたらジャンプアニメーションをトリガー
             }
 
-            if (isAttacking)
+            if (newIsAttacking && !previousIsAttacking)
             {
                 animator.SetTrigger("Attack");
             }
+
+            isAttacking = newIsAttacking;
+            previousIsAttacking = isAttacking;
         }
     }
     #endregion
