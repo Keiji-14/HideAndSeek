@@ -92,18 +92,9 @@ namespace NetWork
                 if (allRolesAssigned)
                 {
                     isMatchingStart = false;
-                    Debug.Log("isMatchingStart = false;");
-                    StartCoroutine(HandleSceneTransition());
+                    SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
                 }
             }
-        }
-
-        private IEnumerator HandleSceneTransition()
-        {
-            // シーン遷移処理
-            Debug.Log("Starting scene transition...");
-            yield return SceneLoader.Instance().PhotonNetworkLoadAsync(SceneLoader.SceneName.Game);
-            Debug.Log("Scene transition complete.");
         }
         #endregion
 

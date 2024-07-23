@@ -157,11 +157,22 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         // 左クリックで攻撃
         if (Input.GetMouseButtonDown(0) && !isAttacking && isGrounded)
         {
-            isAttacking = true;
-            Debug.Log("Attack initiated");
-            photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
-            StartCoroutine(AttackCoroutine());
+            StartCoroutine(PerformAttack());
         }
+    }
+
+    private IEnumerator PerformAttack()
+    {
+        // 攻撃が既に行われている場合は終了
+        if (isAttacking)
+            yield break;
+
+        isAttacking = true;
+        photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
+
+        yield return StartCoroutine(AttackCoroutine());
+
+        isAttacking = false;
     }
 
     private IEnumerator AttackCoroutine()
@@ -246,6 +257,7 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_SetAttackAnimation()
     {
+        Debug.Log("RPC_SetAttackAnimation called");
         animator.SetTrigger("Attack");
     }
 
