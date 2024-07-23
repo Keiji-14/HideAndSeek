@@ -121,6 +121,8 @@ namespace Scene
                 yield return null;
             }
 
+            yield return new WaitForSeconds(3.0f);
+
             // シーンロード完了を通知する
             OnSceneLoaded?.Invoke(sceneName);
         }

@@ -1,4 +1,5 @@
 ﻿using Game;
+using Audio;
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
@@ -163,6 +164,7 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         if (Input.GetMouseButtonDown(0) && !isAttacking && isGrounded)
         {
             StartCoroutine(PerformAttack());
+            SE.instance.Play(SE.SEName.ButtonSE);
         }
     }
 

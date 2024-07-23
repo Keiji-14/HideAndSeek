@@ -1,4 +1,5 @@
 ﻿using NetWork;
+using Audio;
 using System;
 using UniRx;
 using UnityEngine;
@@ -63,6 +64,7 @@ namespace Title
             InputMatchingObservable.Subscribe(_ =>
             {
                 IsMatching(!isMatching);
+                SE.instance.Play(SE.SEName.ButtonSE);
             }).AddTo(this);
         }
         #endregion
