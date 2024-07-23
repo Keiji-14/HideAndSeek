@@ -164,7 +164,7 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         if (Input.GetMouseButtonDown(0) && !isAttacking && isGrounded)
         {
             StartCoroutine(PerformAttack());
-            SE.instance.Play(SE.SEName.ButtonSE);
+            SE.instance.Play(SE.SEName.AttackSE);
         }
     }
 

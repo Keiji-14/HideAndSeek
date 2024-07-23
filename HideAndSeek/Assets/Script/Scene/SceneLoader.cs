@@ -112,6 +112,8 @@ namespace Scene
         /// <param name="sceneName">シーン名</param>
         public IEnumerator PhotonNetworkLoadAsync(string sceneName)
         {
+            yield return new WaitForSeconds(3.0f);
+
             PhotonNetwork.LoadLevel(sceneName);
 
             // シーンロード完了を待機
@@ -120,8 +122,6 @@ namespace Scene
                 Debug.Log($"Loading progress: {PhotonNetwork.LevelLoadingProgress}");
                 yield return null;
             }
-
-            yield return new WaitForSeconds(3.0f);
 
             // シーンロード完了を通知する
             OnSceneLoaded?.Invoke(sceneName);

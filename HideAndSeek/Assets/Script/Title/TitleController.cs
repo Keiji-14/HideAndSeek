@@ -67,6 +67,15 @@ namespace Title
                 SE.instance.Play(SE.SEName.ButtonSE);
             }).AddTo(this);
         }
+
+        /// <summary>
+        /// マッチング完了時の処理
+        /// </summary>
+        public void MatchingCompleted()
+        {
+            titleUI.MatchingCompletedUI();
+            SE.instance.Play(SE.SEName.MatchingSE);
+        }
         #endregion
 
         #region PrivateMethod

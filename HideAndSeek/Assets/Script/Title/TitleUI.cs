@@ -11,6 +11,8 @@ namespace Title
         #region SerializeField
         /// <summary>マッチング中の経過時間UI</summary>
         [SerializeField] private GameObject timeCountUIObj;
+        /// <summary>マッチング完了UI</summary>
+        [SerializeField] private GameObject matchedUIObj;
         /// <summary>マッチング中の経過時間テキスト</summary>
         [SerializeField] private Text timeCountText;
         #endregion
@@ -32,6 +34,15 @@ namespace Title
         public void MatchingTimeUI(float minutes, float seconds)
         {
             timeCountText.text = $"{minutes:00}:{seconds:00}";
+        }
+
+        // <summary>
+        /// マッチング完了UIの表示処理
+        /// </summary>
+        public void MatchingCompletedUI()
+        {
+            matchedUIObj.SetActive(true);
+            timeCountUIObj.SetActive(false);
         }
         #endregion
     }

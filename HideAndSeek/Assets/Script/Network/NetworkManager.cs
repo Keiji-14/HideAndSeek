@@ -108,6 +108,12 @@ namespace NetWork
 
             matchingController.MatchingCompletedSubject.Subscribe(_ =>
             {
+                var tilteController = FindObjectOfType<Title.TitleController>();
+                if (tilteController != null)
+                {
+                    tilteController.MatchingCompleted();
+                }
+
                 AssignRolesAndLoadGameScene();
             }).AddTo(this);
         }
