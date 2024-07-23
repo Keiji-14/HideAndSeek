@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UniRx;
 using UnityEngine;
+using System.Collections;
 
 namespace NetWork
 {
@@ -91,9 +92,18 @@ namespace NetWork
                 if (allRolesAssigned)
                 {
                     isMatchingStart = false;
-                    SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
+                    Debug.Log("isMatchingStart = false;");
+                    StartCoroutine(HandleSceneTransition());
                 }
             }
+        }
+
+        private IEnumerator HandleSceneTransition()
+        {
+            // シーン遷移処理
+            Debug.Log("Starting scene transition...");
+            yield return SceneLoader.Instance().PhotonNetworkLoadAsync(SceneLoader.SceneName.Game);
+            Debug.Log("Scene transition complete.");
         }
         #endregion
 

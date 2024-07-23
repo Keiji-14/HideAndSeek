@@ -110,7 +110,25 @@ namespace Scene
         /// PhotonNetworkを使用した非同期シーンロード
         /// </summary>
         /// <param name="sceneName">シーン名</param>
-        private IEnumerator PhotonNetworkLoadAsync(string sceneName)
+        public IEnumerator PhotonNetworkLoadAsync(SceneName sceneName)
+        {
+            PhotonNetwork.LoadLevel(sceneName.ToString());
+
+            // シーンロード完了を待機
+            while (PhotonNetwork.LevelLoadingProgress < 1)
+            {
+                yield return null;
+            }
+
+            // シーンロード完了を通知する
+            OnSceneLoaded?.Invoke(sceneName.ToString());
+        }
+
+        /// <summary>
+        /// PhotonNetworkを使用した非同期シーンロード
+        /// </summary>
+        /// <param name="sceneName">シーン名</param>
+        public IEnumerator PhotonNetworkLoadAsync(string sceneName)
         {
             PhotonNetwork.LoadLevel(sceneName);
 
