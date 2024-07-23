@@ -101,7 +101,7 @@ namespace Title
             isMatching = isMatchingStart;
             matchingTime = resetCount;
 
-            titleUI.ViewMatchingTimeUI(isMatching);
+            titleUI.ViewMatchingUI(isMatching);
 
             if (isMatching)
             {

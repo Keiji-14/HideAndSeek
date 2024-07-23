@@ -882,7 +882,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1122493354
 RectTransform:
   m_ObjectHideFlags: 0
@@ -935,7 +935,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u30DE\u30C3\u30C1\u30F3\u30B0\u3092\u3057\u307E\u3057\u305F"
+  m_Text: "\u30DE\u30C3\u30C1\u30F3\u30B0\u3057\u307E\u3057\u305F"
 --- !u!222 &1122493356
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1120,7 +1120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeCountUIObj: {fileID: 1669945852}
-  matchedUIObj: {fileID: 0}
+  matchedUIObj: {fileID: 1122493353}
   timeCountText: {fileID: 1669945856}
 --- !u!4 &1286658928
 Transform:
@@ -1820,7 +1820,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &1669945854
 CanvasRenderer:
   m_ObjectHideFlags: 0

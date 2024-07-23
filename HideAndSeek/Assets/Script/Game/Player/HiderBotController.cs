@@ -55,9 +55,6 @@ public class HiderBotController : MonoBehaviour
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
                 yield return null;
             }
-
-            // 少し待機してから次の移動を開始
-            yield return new WaitForSeconds(Random.Range(1f, 3f));
         }
     }
 }

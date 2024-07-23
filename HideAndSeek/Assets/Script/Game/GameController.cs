@@ -140,11 +140,11 @@ namespace Game
             gameUI.ToggleCanvas(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
 
 
-            /*if (PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient)
             {
                 int numberOfBots = 3; // 生成するボットの数を指定
                 SpawnHiderBots(numberOfBots); // ボットを生成
-            }*/
+            }
 
             // 鬼側か隠れる側かを判定する処理
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
@@ -183,7 +183,7 @@ namespace Game
         {
             if (!HasSpawnedPlayer(PhotonNetwork.LocalPlayer))
             {
-                var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
+                var position = new Vector3(Random.Range(-8f, 8f), 3f, Random.Range(-8f, 8f));
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;

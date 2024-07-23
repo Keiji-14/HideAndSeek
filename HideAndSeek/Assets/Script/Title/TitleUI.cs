@@ -13,17 +13,20 @@ namespace Title
         [SerializeField] private GameObject timeCountUIObj;
         /// <summary>マッチング完了UI</summary>
         [SerializeField] private GameObject matchedUIObj;
+        /// <summary>マッチングロードUI</summary>
+        [SerializeField] private GameObject matchingLoadingUI;
         /// <summary>マッチング中の経過時間テキスト</summary>
         [SerializeField] private Text timeCountText;
         #endregion
 
         #region PublicMethod
         /// <summary>
-        /// マッチング中の経過時間の表示切り替えの処理
+        /// マッチング中のUI表示切り替えの処理
         /// </summary>
-        public void ViewMatchingTimeUI(bool isView)
+        public void ViewMatchingUI(bool isView)
         {
             timeCountUIObj.SetActive(isView);
+            //matchingLoadingUI.SetActive(isView);
         }
 
         /// <summary>
