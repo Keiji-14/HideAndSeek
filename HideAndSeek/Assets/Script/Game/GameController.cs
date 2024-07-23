@@ -60,6 +60,8 @@ namespace Game
         /// </summary>
         public void Init()
         {
+            GameDataManager.Instance().SetStagerData(stageData);
+
             if (PhotonNetwork.IsMasterClient)
             {
                 // マスタークライアントがステージデータを生成して他のプレイヤーに共有する

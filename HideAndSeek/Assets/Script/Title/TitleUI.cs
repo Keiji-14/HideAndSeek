@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Title
@@ -11,10 +12,14 @@ namespace Title
         #region SerializeField
         /// <summary>マッチング中の経過時間UI</summary>
         [SerializeField] private GameObject timeCountUIObj;
+        /// <summary>マッチング中のテキスト</summary>
+        [SerializeField] private GameObject matchingUIObj;
         /// <summary>マッチング完了UI</summary>
         [SerializeField] private GameObject matchedUIObj;
         /// <summary>マッチングロードUI</summary>
         [SerializeField] private GameObject matchingLoadingUI;
+        /// <summary>マッチング中のテキスト</summary>
+        [SerializeField] private Text matchingText;
         /// <summary>マッチング中の経過時間テキスト</summary>
         [SerializeField] private Text timeCountText;
         #endregion
@@ -26,6 +31,20 @@ namespace Title
         public void ViewMatchingUI(bool isView)
         {
             timeCountUIObj.SetActive(isView);
+            matchingLoadingUI.SetActive(isView);
+
+            Debug.Log($"isView:{isView}");
+
+            if (isView)
+            {
+                matchingUIObj.SetActive(true);
+                matchingText.text = "マッチング中";
+                StartCoroutine(UpdateMatchingText());
+            }
+            else
+            {
+                StopCoroutine(UpdateMatchingText());
+            }
             //matchingLoadingUI.SetActive(isView);
         }
 
@@ -45,7 +64,25 @@ namespace Title
         public void MatchingCompletedUI()
         {
             matchedUIObj.SetActive(true);
+            matchingUIObj.SetActive(false);
             timeCountUIObj.SetActive(false);
+        }
+        #endregion
+
+        #region PrivateMethod
+        /// <summary>
+        /// マッチング中のテキストを動的に更新するコルーチン
+        /// </summary>
+        private IEnumerator UpdateMatchingText()
+        {
+            string baseText = "マッチング中";
+            int dotCount = 0;
+            while (true)
+            {
+                matchingText.text = baseText + new string('.', dotCount);
+                dotCount = (dotCount + 1) % 4;
+                yield return new WaitForSeconds(0.5f);
+            }
         }
         #endregion
     }
