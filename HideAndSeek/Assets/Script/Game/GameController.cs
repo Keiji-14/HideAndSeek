@@ -169,9 +169,7 @@ namespace Game
         {
             if (!HasSpawnedPlayer(PhotonNetwork.LocalPlayer))
             {
-                var stageData = GameDataManager.Instance().GetStageData();
-
-                var position = stageData.seekerStartArea.position;
+                var position = new Vector3(-18f, 3f, -3f);
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
 
                 // TagObjectに生成したプレイヤーオブジェクトを設定
@@ -428,11 +426,15 @@ namespace Game
             GameObject hiderPlayer = PhotonView.Find(hiderViewID).gameObject;
             if (hiderPlayer != null)
             {
-                if (PhotonNetwork.LocalPlayer.ActorNumber == hiderPlayer.GetComponent<PhotonView>().Owner.ActorNumber)
+                var bot = hiderPlayer.GetComponent<HiderBotController>();
+                if (bot == null)
                 {
-                    SetSpectatorMode();
-                    PhotonNetwork.Destroy(hiderPlayer);
+                    if (PhotonNetwork.LocalPlayer.ActorNumber == hiderPlayer.GetComponent<PhotonView>().Owner.ActorNumber)
+                    {
+                        SetSpectatorMode();
+                    }
                 }
+                PhotonNetwork.Destroy(hiderPlayer);
             }
 
             // 隠れる側のプレイヤーが全て捕まった場合
