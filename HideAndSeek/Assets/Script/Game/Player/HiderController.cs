@@ -30,6 +30,8 @@ public class HiderController : MonoBehaviourPunCallbacks
     [SerializeField] private Transform cameraTransform;
     /// <summary>変身するオブジェクトのリスト</summary>
     [SerializeField] private List<GameObject> transformObjList;
+    /// <summary>プレイヤー名の表示</summary>
+    [SerializeField] private PlayerNameDisplay playerNameDisplay;
     #endregion
 
     #region UnityEvent
@@ -38,11 +40,13 @@ public class HiderController : MonoBehaviourPunCallbacks
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.isKinematic = true;
 
-        SetCamera();
-
         // ランダムなオブジェクトに変身させる
         int randomIndex = Random.Range(0, transformObjList.Count);
         TransformIntoObject(randomIndex);
+
+        SetCamera();
+
+        //playerNameDisplay.Init(false);
     }
 
     private void Update()
@@ -66,7 +70,6 @@ public class HiderController : MonoBehaviourPunCallbacks
     #endregion
 
     #region PrivateMethod
-
     /// <summary>
     /// 変身オブジェクトの移動処理
     /// </summary>

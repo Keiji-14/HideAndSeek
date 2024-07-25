@@ -5,12 +5,22 @@ using UnityEngine;
 
 public class HiderBotController : MonoBehaviour
 {
-    private List<GameObject> transformationObjList;
-    private List<Transform> targetPositionList;
+    #region PrivateField
     private GameObject currentForm;
+    /// <summary>変身するオブジェクトのリスト</summary>
+    private List<GameObject> transformationObjList;
+    /// <summary>移動先のリスト</summary>
+    private List<Transform> targetPositionList;
+    #endregion
 
-    [SerializeField] private float moveSpeed = 3f;
+    #region SerializeField
+    /// <summary>移動速度</summary>
+    [SerializeField] private float speed = 3f;
+    /// <summary>プレイヤー名の表示</summary>
+    [SerializeField] private PlayerNameDisplay playerNameDisplay;
+    #endregion
 
+    #region UnityEvent
     void Start()
     {
         var stageData = GameDataManager.Instance().GetStageData();
@@ -23,14 +33,20 @@ public class HiderBotController : MonoBehaviour
         // ランダムに変身する
         TransformRandomly();
 
+        //playerNameDisplay.Init(true);
+
         // ランダムな位置に移動を開始
         StartCoroutine(MoveRandomly());
     }
+    #endregion
 
+    #region PrivateMethod
     private void TransformRandomly()
     {
-        if (transformationObjList.Count == 0) return;
+        if (transformationObjList.Count == 0) 
+            return;
 
+        // ランダムで変身する番号を選出する
         int randomIndex = Random.Range(0, transformationObjList.Count);
 
         if (currentForm != null)
@@ -38,6 +54,7 @@ public class HiderBotController : MonoBehaviour
             Destroy(currentForm);
         }
 
+        // 選出した番号のオブジェクトを生成する
         currentForm = Instantiate(transformationObjList[randomIndex], transform.position, transform.rotation, transform);
     }
 
@@ -52,9 +69,10 @@ public class HiderBotController : MonoBehaviour
 
             while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
             {
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
                 yield return null;
             }
         }
     }
+    #endregion
 }

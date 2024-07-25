@@ -44,6 +44,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private Animator animator;
     /// <summary>攻撃モーションのクリップ</summary>
     [SerializeField] private AnimationClip attackAnimationClip;
+    /// <summary>プレイヤー名の表示</summary>
+    [SerializeField] private PlayerNameDisplay playerNameDisplay;
     #endregion
 
     #region UnityEvent
@@ -55,6 +57,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 
         SetCamera();
         gameUI.UpdateLife(life);
+
+        //playerNameDisplay.Init(false);
     }
 
     private void Update()
@@ -176,7 +180,7 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 
         isAttacking = true;
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
 
         photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
 
