@@ -175,6 +175,9 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
             yield break;
 
         isAttacking = true;
+
+        yield return new WaitForSeconds(0.2f);
+
         photonView.RPC("RPC_SetAttackAnimation", RpcTarget.All);
 
         yield return StartCoroutine(AttackCoroutine());
