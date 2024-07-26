@@ -24,7 +24,7 @@ namespace NetWork
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
+                //DontDestroyOnLoad(gameObject);
 
                 Init();
             }

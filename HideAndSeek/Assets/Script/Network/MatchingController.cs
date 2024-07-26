@@ -38,6 +38,8 @@ namespace NetWork
             // 2人揃ったかどうかを確認
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
+                Debug.Log($"PhotonNetwork.CurrentRoom.PlayerCount : {PhotonNetwork.CurrentRoom.PlayerCount}");
+
                 isGameStarted = true;
                 Debug.Log("Start");
                 StartCoroutine(MoveGameRoom());
