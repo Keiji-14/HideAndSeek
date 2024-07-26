@@ -120,13 +120,14 @@ MonoBehaviour:
   jumpHeight: 1.5
   gravity: -9.81
   cameraTransform: {fileID: 7786678533296474787}
+  nameCanvas: {fileID: 6318870628369840427}
   transformObjList:
   - {fileID: 8318791718542456950, guid: 3fa775bb83a521040a00c081ad57e783, type: 3}
   - {fileID: 8958062434727102317, guid: e3a438cec5d94f64d84a1056c4c78434, type: 3}
   - {fileID: 1065699774562215107, guid: 6fae41e4f12d28146881c6f30871f611, type: 3}
   - {fileID: 9135777422565093940, guid: a662edef8314f8742aec75cdcf92c5f8, type: 3}
   - {fileID: 8166709448631958598, guid: 0b29abba5f5d42743be1ac613acd287a, type: 3}
-  playerNameDisplay: {fileID: 0}
+  playerNameDisplay: {fileID: 4727008752874514199}
 --- !u!1 &1305232979949904456
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,8 +140,9 @@ GameObject:
   - component: {fileID: 8473952985584119822}
   - component: {fileID: 1935614345681778194}
   - component: {fileID: 4727008752874514199}
+  - component: {fileID: 8653780161725394213}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: NameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,6 +221,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 948fd2b3edb3c3649a4cceaf2404f41f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8653780161725394213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305232979949904456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2385422534586920835
 GameObject:
   m_ObjectHideFlags: 0

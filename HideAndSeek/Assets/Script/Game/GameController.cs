@@ -71,7 +71,6 @@ namespace Game
             StartCoroutine(WaitForCustomProperties());
         }
 
-
         /// <summary>
         /// プレイヤーが捕まった時の処理
         /// </summary>
@@ -215,7 +214,7 @@ namespace Game
             for (int i = 0; i < botNum; i++)
             {
                 var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
-                var botObject = PhotonNetwork.Instantiate($"Prefabs/{hiderBotPrefab.name}", position, Quaternion.identity);
+                PhotonNetwork.Instantiate($"Prefabs/{hiderBotPrefab.name}", position, Quaternion.identity);
                 hiderPlayerCount++;
             }
             photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);

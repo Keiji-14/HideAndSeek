@@ -375,8 +375,9 @@ GameObject:
   - component: {fileID: 4319797011583533294}
   - component: {fileID: 2638270183869461388}
   - component: {fileID: 3062436921196915204}
+  - component: {fileID: 4651554518830573058}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: NameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -455,6 +456,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 948fd2b3edb3c3649a4cceaf2404f41f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4651554518830573058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2584433995050898723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2869964940523654063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1494,9 +1517,10 @@ MonoBehaviour:
   gravity: -9.81
   attackRange: 3
   cameraTransform: {fileID: 4440715352044716958}
+  nameCanvas: {fileID: 5672791281439592956}
   animator: {fileID: 4077519697417859490}
   attackAnimationClip: {fileID: 7400000, guid: 48618d32ac3131b49bc9c375da32d668, type: 2}
-  playerNameDisplay: {fileID: 0}
+  playerNameDisplay: {fileID: 3062436921196915204}
 --- !u!1 &9210137770468771669
 GameObject:
   m_ObjectHideFlags: 0

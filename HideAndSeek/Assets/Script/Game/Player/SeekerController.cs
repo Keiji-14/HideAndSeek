@@ -40,6 +40,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private float attackRange;
     /// <summary>カメラのTransform</summary>
     [SerializeField] private Transform cameraTransform;
+    /// <summary>名前用をキャンバス</summary>
+    [SerializeField] private Canvas nameCanvas;
     /// <summary>アニメーター</summary>
     [SerializeField] private Animator animator;
     /// <summary>攻撃モーションのクリップ</summary>
@@ -58,11 +60,13 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         SetCamera();
         gameUI.UpdateLife(life);
 
-        //playerNameDisplay.Init(false);
+        playerNameDisplay.Init(false);
     }
 
     private void Update()
     {
+        RotationCanvas();
+
         // 自分のキャラクターかどうかを確認
         if (!photonView.IsMine)
             return;
@@ -120,6 +124,21 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     #endregion
 
     #region PrivateMethod
+    /// <summary>
+    /// キャンバスをカメラに見えるように回転させる処理
+    /// </summary>
+    private void RotationCanvas()
+    {
+        Vector3 cameraDirection = Camera.main.transform.forward;
+
+        // HPバーの方向をカメラの方向に向ける
+        nameCanvas.transform.LookAt(nameCanvas.transform.position + cameraDirection);
+
+        // カメラのY軸回転を無視してHPバーを水平に保つ
+        Quaternion targetRotation = Quaternion.Euler(0, nameCanvas.transform.rotation.eulerAngles.y, 0);
+        nameCanvas.transform.rotation = Quaternion.Lerp(nameCanvas.transform.rotation, targetRotation, Time.deltaTime);
+    }
+
     private void Move()
     {
         isGrounded = characterController.isGrounded;

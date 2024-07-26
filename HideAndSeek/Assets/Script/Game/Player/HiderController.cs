@@ -11,8 +11,6 @@ public class HiderController : MonoBehaviourPunCallbacks
     [Header("Transform Object")]
     /// <summary>現在の変身オブジェクト</summary>
     private GameObject currentObject;
-    /// <summary>変身中かどうか</summary>
-    private bool isTransformed = false;
     /// <summary>Rigidbody</summary>
     private Rigidbody rigidbody;
     #endregion
@@ -28,6 +26,8 @@ public class HiderController : MonoBehaviourPunCallbacks
     [SerializeField] private float gravity;
     /// <summary>カメラのTransform</summary>
     [SerializeField] private Transform cameraTransform;
+    /// <summary>名前用をキャンバス</summary>
+    [SerializeField] private Canvas nameCanvas;
     /// <summary>変身するオブジェクトのリスト</summary>
     [SerializeField] private List<GameObject> transformObjList;
     /// <summary>プレイヤー名の表示</summary>
@@ -46,11 +46,13 @@ public class HiderController : MonoBehaviourPunCallbacks
 
         SetCamera();
 
-        //playerNameDisplay.Init(false);
+        playerNameDisplay.Init(false);
     }
 
     private void Update()
     {
+        RotationCanvas();
+
         // 自分のキャラクターかどうかを確認
         if (!photonView.IsMine)
             return;
@@ -70,6 +72,21 @@ public class HiderController : MonoBehaviourPunCallbacks
     #endregion
 
     #region PrivateMethod
+    /// <summary>
+    /// キャンバスをカメラに見えるように回転させる処理
+    /// </summary>
+    private void RotationCanvas()
+    {
+        Vector3 cameraDirection = Camera.main.transform.forward;
+
+        // HPバーの方向をカメラの方向に向ける
+        nameCanvas.transform.LookAt(nameCanvas.transform.position + cameraDirection);
+
+        // カメラのY軸回転を無視してHPバーを水平に保つ
+        Quaternion targetRotation = Quaternion.Euler(0, nameCanvas.transform.rotation.eulerAngles.y, 0);
+        nameCanvas.transform.rotation = Quaternion.Lerp(nameCanvas.transform.rotation, targetRotation, Time.deltaTime);
+    }
+
     /// <summary>
     /// 変身オブジェクトの移動処理
     /// </summary>
@@ -129,8 +146,6 @@ public class HiderController : MonoBehaviourPunCallbacks
 
         rigidbody.isKinematic = false;
         EnableColliders(currentObject, true);
-
-        isTransformed = true;
     }
 
     /// <summary>

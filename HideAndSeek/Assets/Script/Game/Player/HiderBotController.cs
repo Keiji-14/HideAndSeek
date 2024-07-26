@@ -16,6 +16,8 @@ public class HiderBotController : MonoBehaviour
     #region SerializeField
     /// <summary>移動速度</summary>
     [SerializeField] private float speed = 3f;
+    /// <summary>名前用をキャンバス</summary>
+    [SerializeField] private Canvas nameCanvas;
     /// <summary>プレイヤー名の表示</summary>
     [SerializeField] private PlayerNameDisplay playerNameDisplay;
     #endregion
@@ -33,14 +35,34 @@ public class HiderBotController : MonoBehaviour
         // ランダムに変身する
         TransformRandomly();
 
-        //playerNameDisplay.Init(true);
+        playerNameDisplay.Init(true);
 
         // ランダムな位置に移動を開始
         StartCoroutine(MoveRandomly());
     }
+
+    private void Update()
+    {
+        RotationCanvas();
+    }
     #endregion
 
     #region PrivateMethod
+    /// <summary>
+    /// キャンバスをカメラに見えるように回転させる処理
+    /// </summary>
+    private void RotationCanvas()
+    {
+        Vector3 cameraDirection = Camera.main.transform.forward;
+
+        // HPバーの方向をカメラの方向に向ける
+        nameCanvas.transform.LookAt(nameCanvas.transform.position + cameraDirection);
+
+        // カメラのY軸回転を無視してHPバーを水平に保つ
+        Quaternion targetRotation = Quaternion.Euler(0, nameCanvas.transform.rotation.eulerAngles.y, 0);
+        nameCanvas.transform.rotation = Quaternion.Lerp(nameCanvas.transform.rotation, targetRotation, Time.deltaTime);
+    }
+
     private void TransformRandomly()
     {
         if (transformationObjList.Count == 0) 

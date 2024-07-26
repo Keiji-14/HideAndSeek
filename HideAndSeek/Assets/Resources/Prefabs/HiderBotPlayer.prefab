@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7492819674415022920}
-  - component: {fileID: 3063691848458021262}
   - component: {fileID: 1902807761379493461}
   - component: {fileID: 3290955141833546657}
   - component: {fileID: 8237681599470538556}
@@ -37,32 +36,6 @@ Transform:
   - {fileID: 7321565131397106582}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!143 &3063691848458021262
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2203657887455039543}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Height: 1.5
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.45, z: 0}
 --- !u!195 &1902807761379493461
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -137,7 +110,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  playerNameDisplay: {fileID: 0}
+  nameCanvas: {fileID: 845102555026986558}
+  playerNameDisplay: {fileID: 5280966556022745534}
 --- !u!1 &4023005580666022323
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,8 +226,9 @@ GameObject:
   - component: {fileID: 1239168447418780992}
   - component: {fileID: 2740395520033869886}
   - component: {fileID: 5280966556022745534}
+  - component: {fileID: 3398523425765926074}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: NameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -332,3 +307,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 948fd2b3edb3c3649a4cceaf2404f41f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3398523425765926074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7747375909442124977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
