@@ -47,7 +47,9 @@ namespace Game
         [SerializeField] private GameObject hiderBotPrefab;
         /// <summary>上空カメラのオブジェクト</summary>
         [SerializeField] private GameObject overheadCameraPrefab;
-        /// <summary>上空カメラのオブジェクトステージ情報</summary>
+        /// <summary>消滅時のエフェクト</summary>
+        [SerializeField] private GameObject destroyEffectObj;
+        /// <summary>ステージ情報</summary>
         [SerializeField] private StageData stageData;
         [Header("Component")]
         /// <summary>ゲームUI</summary>
@@ -143,7 +145,7 @@ namespace Game
             if (PhotonNetwork.IsMasterClient)
             {
                 int numberOfBots = 3; // 生成するボットの数を指定
-                SpawnHiderBots(numberOfBots); // ボットを生成
+                SpawnHiderBots(numberOfBots);
             }
 
             // 鬼側か隠れる側かを判定する処理
@@ -433,6 +435,7 @@ namespace Game
                         SetSpectatorMode();
                     }
                 }
+                PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", hiderPlayer.transform.position, Quaternion.identity);
                 PhotonNetwork.Destroy(hiderPlayer);
             }
 
@@ -451,7 +454,6 @@ namespace Game
         {
             if (overheadCameraPrefab != null)
             {
-                //Instantiate(overheadCameraPrefab);
                 overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
                 overheadCamera = Camera.main;
             }

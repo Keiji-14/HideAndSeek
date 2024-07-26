@@ -12,7 +12,9 @@ namespace NetWork
         public static NetworkManager instance = null;
         #endregion
 
+        #region PrivateField
         private bool isMatchingStart = false;
+        #endregion
 
         #region SerializeField
         [SerializeField] private MatchingController matchingController;
