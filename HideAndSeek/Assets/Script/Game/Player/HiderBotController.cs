@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class HiderBotController : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class HiderBotController : MonoBehaviour
     private List<GameObject> transformationObjList;
     /// <summary>移動先のリスト</summary>
     private List<Transform> targetPositionList;
+    /// <summary>NavMeshAgentコンポーネント</summary>
+    private NavMeshAgent navMeshAgent;
     #endregion
 
     #region SerializeField
@@ -32,18 +35,24 @@ public class HiderBotController : MonoBehaviour
             targetPositionList = stageData.botTargetPositionList;
         }
 
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.speed = speed;
+        navMeshAgent.baseOffset = 0;
+
         // ランダムに変身する
         TransformRandomly();
 
         playerNameDisplay.Init(true);
-
-        // ランダムな位置に移動を開始
-        StartCoroutine(MoveRandomly());
     }
 
     private void Update()
     {
         RotationCanvas();
+
+        if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
+        {
+            MoveToRandomPosition();
+        }
     }
     #endregion
 
@@ -80,21 +89,13 @@ public class HiderBotController : MonoBehaviour
         currentForm = Instantiate(transformationObjList[randomIndex], transform.position, transform.rotation, transform);
     }
 
-    private IEnumerator MoveRandomly()
+    private void MoveToRandomPosition()
     {
-        while (true)
-        {
-            if (targetPositionList.Count == 0) yield break;
+        if (targetPositionList.Count == 0) return;
 
-            int randomIndex = Random.Range(0, targetPositionList.Count);
-            Vector3 targetPosition = targetPositionList[randomIndex].position;
-
-            while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-                yield return null;
-            }
-        }
+        int randomIndex = Random.Range(0, targetPositionList.Count);
+        Vector3 targetPosition = targetPositionList[randomIndex].position;
+        navMeshAgent.SetDestination(targetPosition);
     }
     #endregion
 }
