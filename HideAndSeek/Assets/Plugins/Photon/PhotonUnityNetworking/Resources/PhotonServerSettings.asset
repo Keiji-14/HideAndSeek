@@ -57,6 +57,8 @@ MonoBehaviour:
   - RPC_StartGracePeriod
   - RPC_UpdateHiderCount
   - RPC_DestroySeeker
+  - SyncPlayerName
+  - RPC_SyncPlayerName
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

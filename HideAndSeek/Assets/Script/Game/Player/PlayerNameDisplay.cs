@@ -13,7 +13,6 @@ public class PlayerNameDisplay : MonoBehaviourPunCallbacks
     /// <param name="isBot">ボットかどうか</param>
     public void Init(bool isBot)
     {
-        var nameLabel = gameObject.GetComponent<Text>();
         var playerName = GameDataManager.Instance().GetPlayerData().name;
 
         if (isBot)
@@ -24,23 +23,29 @@ public class PlayerNameDisplay : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.NickName = playerName;
         }
-
         
-        // プレイヤー名を設定
-        nameLabel.text = $"{playerName}";
+        // プレイヤー名を設定し、他のプレイヤーに通知
+        photonView.RPC("RPC_SyncPlayerName", RpcTarget.AllBuffered, playerName);
 
         // 自分の役割に基づいて名前の表示を設定
-        SetNameVisibility(nameLabel);
+        SetNameVisibility();
     }
     #endregion
 
     #region PrivateMethod
-    /// <summary>
-    /// ゲーム開始後のタイマー処理を行う
-    /// </summary>
-    /// <param name="nameLabel">自身のプレイヤー名</param>
-    private void SetNameVisibility(Text nameLabel)
+    [PunRPC]
+    private void RPC_SyncPlayerName(string playerName)
     {
+        var nameLabel = gameObject.GetComponent<Text>();
+        nameLabel.text = $"{playerName}";
+    }
+
+    /// <summary>
+    /// 自分の役割に基づいて名前の表示を設定
+    /// </summary>
+    private void SetNameVisibility()
+    {
+        var nameLabel = gameObject.GetComponent<Text>();
         // 自分の役割を取得
         string myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties["Role"];
 
