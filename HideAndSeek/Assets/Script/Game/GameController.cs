@@ -140,7 +140,6 @@ namespace Game
 
             gameUI.ToggleCanvas(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
 
-
             if (PhotonNetwork.IsMasterClient)
             {
                 int numberOfBots = 3; // 生成するボットの数を指定
@@ -252,7 +251,8 @@ namespace Game
                 }
             }
 
-            hiderPlayerObjectList.Clear(); // リストをクリア
+            // リストをクリア
+            hiderPlayerObjectList.Clear();
             var hiders = GameObject.FindGameObjectsWithTag("Hider");
             // 隠れる側のプレイヤーを見えなくする
             foreach (var hider in hiders)
@@ -397,7 +397,7 @@ namespace Game
         /// <summary>
         /// RPCで鬼側が消滅したことを処理する
         /// </summary>
-        /// <param name="seekerPlayer">鬼のプレイヤーの</param>
+        /// <param name="seekerViewID">鬼のプレイヤーID</param>
         [PunRPC]
         private void RPC_DestroySeeker(int seekerViewID)
         {
@@ -451,8 +451,9 @@ namespace Game
         {
             if (overheadCameraPrefab != null)
             {
-                Instantiate(overheadCameraPrefab);
-                //overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
+                //Instantiate(overheadCameraPrefab);
+                overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
+                overheadCamera = Camera.main;
             }
         }
 

@@ -217,6 +217,8 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 
         if (Physics.Raycast(camera.transform.position, forward, out hit, attackRange))
         {
+            Debug.Log(hit.collider.gameObject.name);
+
             if (hit.collider.CompareTag("Hider"))
             {
                 CaptureHider(hit.collider.gameObject);
@@ -234,14 +236,11 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void CaptureHider(GameObject hider)
     {
-        // 親オブジェクトが存在する場合、親オブジェクトを取得
-        if (hider.transform.parent != null)
-        {
-            hider = hider.transform.parent.gameObject;
-        }
+        // 最親オブジェクトを取得
+        GameObject rootHider = GetRootParent(hider);
 
         // Hiderを捕まえた時の処理
-        PhotonView hiderView = hider.GetComponent<PhotonView>();
+        PhotonView hiderView = rootHider.GetComponent<PhotonView>();
         if (hiderView != null)
         {
             // GameControllerのインスタンスを取得
@@ -251,6 +250,16 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
                 gameController.OnPlayerCaught(hiderView.ViewID);
             }
         }
+    }
+
+    private GameObject GetRootParent(GameObject obj)
+    {
+        Transform current = obj.transform;
+        while (current.parent != null)
+        {
+            current = current.parent;
+        }
+        return current.gameObject;
     }
 
     private void HandleWrongAttack(GameObject target)
