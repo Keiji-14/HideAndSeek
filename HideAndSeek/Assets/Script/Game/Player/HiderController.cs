@@ -15,8 +15,6 @@ public class HiderController : MonoBehaviourPunCallbacks
     private GameObject currentObject;
     /// <summary>Rigidbody</summary>
     private Rigidbody rigidbody;
-    /// <summary>ゲーム処理のコンポーネント</summary>
-    private GameController gameController;
     #endregion
 
     #region SerializeField
@@ -48,11 +46,9 @@ public class HiderController : MonoBehaviourPunCallbacks
         }
 
         rigidbody = GetComponent<Rigidbody>();
-        rigidbody.isKinematic = true;
 
         // ランダムなオブジェクトに変身させる
-        gameController = FindObjectOfType<GameController>();
-        int randomIndex = gameController.GetRandomTransformIndex();
+        int randomIndex = Random.Range(0, transformationObjList.Count);
         TransformIntoObject(randomIndex);
 
         SetCamera();

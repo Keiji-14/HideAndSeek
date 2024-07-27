@@ -12,8 +12,6 @@ public class HiderBotController : MonoBehaviourPunCallbacks
     private GameObject currentObject;
     /// <summary>NavMeshAgentコンポーネント</summary>
     private NavMeshAgent navMeshAgent;
-    /// <summary>ゲーム処理のコンポーネント</summary>
-    private GameController gameController;
     /// <summary>変身するオブジェクトのリスト</summary>
     private List<GameObject> transformationObjList;
     /// <summary>移動先のリスト</summary>
@@ -48,8 +46,7 @@ public class HiderBotController : MonoBehaviourPunCallbacks
         rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
 
         // ランダムなオブジェクトに変身させる
-        gameController = FindObjectOfType<GameController>();
-        int randomIndex = gameController.GetRandomTransformIndex();
+        int randomIndex = Random.Range(0, transformationObjList.Count);
         TransformIntoObject(randomIndex);
 
         // 初期移動先を設定

@@ -70,26 +70,9 @@ namespace Game
             {
                 // マスタークライアントがステージデータを生成して他のプレイヤーに共有する
                 //photonView.RPC("RPC_SetStageData", RpcTarget.AllBuffered, stageData.stageID);
-
-                photonView.RPC("RPC_InitializeTransformationList", RpcTarget.AllBuffered);
             }
 
             StartCoroutine(WaitForCustomProperties());
-        }
-
-        public int GetRandomTransformIndex()
-        {
-            if (availableTransformIndexList.Count == 0)
-            {
-                return -1;
-            }
-
-            int randomIndex = Random.Range(0, availableTransformIndexList.Count);
-            int transformIndex = availableTransformIndexList[randomIndex];
-            availableTransformIndexList.RemoveAt(randomIndex);
-
-            photonView.RPC("RPC_SyncTransformationList", RpcTarget.OthersBuffered, availableTransformIndexList.ToArray());
-            return transformIndex;
         }
 
         /// <summary>
