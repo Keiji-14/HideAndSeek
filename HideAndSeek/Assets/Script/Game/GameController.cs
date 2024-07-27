@@ -84,9 +84,10 @@ namespace Game
                 if (!capturedHiderIDs.Contains(hiderViewID))
                 {
                     capturedHiderIDs.Add(hiderViewID);
-                    hiderPlayerCount--;
 
                     // 全プレイヤーに隠れ側の数を更新
+                    var subtractHider = -1;
+                    photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, subtractHider);
                     photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
                     // 全プレイヤーに捕まったことを通知
                     photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
@@ -189,21 +190,10 @@ namespace Game
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
-                hiderPlayerCount++;
 
-                photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
+                var addHider = 1;
+                photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, addHider);
             }
-        }
-
-        /// <summary>
-        /// 隠れる側のプレイヤー数を更新する処理
-        /// </summary>
-        /// <param name="hiderCount">現在の隠れる側のプレイヤー数</param>
-        [PunRPC]
-        private void RPC_UpdateHiderCount(int hiderCount)
-        {
-            hiderPlayerCount = hiderCount;
-            gameUI.UpdateHider(hiderCount);
         }
 
         /// <summary>
@@ -216,9 +206,21 @@ namespace Game
             {
                 var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
                 PhotonNetwork.Instantiate($"Prefabs/{hiderBotPrefab.name}", position, Quaternion.identity);
-                hiderPlayerCount++;
+
+                var addHider = 1;
+                photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, addHider);
             }
-            photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
+        }
+
+        /// <summary>
+        /// 隠れる側のプレイヤー数を更新する処理
+        /// </summary>
+        /// <param name="hiderValue">隠れる側プレイヤーの変動値</param>
+        [PunRPC]
+        private void RPC_UpdateHiderCount(int hiderValue)
+        {
+            hiderPlayerCount += hiderValue;
+            gameUI.UpdateHider(hiderPlayerCount);
         }
 
         /// <summary>
