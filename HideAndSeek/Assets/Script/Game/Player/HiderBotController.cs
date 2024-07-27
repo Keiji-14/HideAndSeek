@@ -1,12 +1,14 @@
 ﻿using GameData;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class HiderBotController : MonoBehaviour
+public class HiderBotController : MonoBehaviourPunCallbacks
 {
     #region PrivateField
-    private GameObject currentForm;
+    /// <summary>現在の変身オブジェクト</summary>
+    private GameObject currentObject;
     /// <summary>NavMeshAgentコンポーネント</summary>
     private NavMeshAgent navMeshAgent;
     /// <summary>変身するオブジェクトのリスト</summary>
@@ -44,8 +46,9 @@ public class HiderBotController : MonoBehaviour
 
         playerNameDisplay.Init(true);
 
-        // ランダムに変身する
-        TransformRandomly();
+        // ランダムなオブジェクトに変身させる
+        int randomIndex = Random.Range(0, transformationObjList.Count);
+        TransformIntoObject(randomIndex);
 
         // 初期移動先を設定
         MoveToRandomPosition();
@@ -102,7 +105,7 @@ public class HiderBotController : MonoBehaviour
         nameCanvas.transform.rotation = Quaternion.Lerp(nameCanvas.transform.rotation, targetRotation, Time.deltaTime);
     }
 
-    private void TransformRandomly()
+    /*private void TransformRandomly()
     {
         if (transformationObjList.Count == 0) 
             return;
@@ -117,6 +120,33 @@ public class HiderBotController : MonoBehaviour
 
         // 選出した番号のオブジェクトを生成する
         currentForm = Instantiate(transformationObjList[randomIndex], transform.position, transform.rotation, transform);
+    }*/
+
+    /// <summary>
+    /// プレイヤーを物に変身させる処理
+    /// </summary>
+    private void TransformIntoObject(int transformIndex)
+    {
+        photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, transformIndex);
+    }
+
+    /// <summary>
+    /// プレイヤーを物に変身させる処理
+    /// </summary>
+    [PunRPC]
+    private void RPC_TransformIntoObject(int transformIndex)
+    {
+        if (currentObject != null && currentObject != gameObject)
+        {
+            Destroy(currentObject);
+        }
+
+        var position = transform.position;
+        var rotation = transform.rotation;
+        currentObject = Instantiate(transformationObjList[transformIndex], position, rotation);
+        currentObject.transform.SetParent(this.transform);
+        currentObject.transform.localPosition = Vector3.zero;
+        currentObject.transform.localRotation = Quaternion.identity;
     }
 
     private void MoveToRandomPosition()

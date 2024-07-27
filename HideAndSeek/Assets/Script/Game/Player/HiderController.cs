@@ -29,7 +29,7 @@ public class HiderController : MonoBehaviourPunCallbacks
     /// <summary>名前用をキャンバス</summary>
     [SerializeField] private Canvas nameCanvas;
     /// <summary>変身するオブジェクトのリスト</summary>
-    [SerializeField] private List<GameObject> transformObjList;
+    [SerializeField] private List<GameObject> transformationObjList;
     /// <summary>プレイヤー名の表示</summary>
     [SerializeField] private PlayerNameDisplay playerNameDisplay;
     #endregion
@@ -41,7 +41,7 @@ public class HiderController : MonoBehaviourPunCallbacks
         rigidbody.isKinematic = true;
 
         // ランダムなオブジェクトに変身させる
-        int randomIndex = Random.Range(0, transformObjList.Count);
+        int randomIndex = Random.Range(0, transformationObjList.Count);
         TransformIntoObject(randomIndex);
 
         SetCamera();
@@ -139,25 +139,12 @@ public class HiderController : MonoBehaviourPunCallbacks
 
         var position = transform.position;
         var rotation = transform.rotation;
-        currentObject = Instantiate(transformObjList[transformIndex], position, rotation);
+        currentObject = Instantiate(transformationObjList[transformIndex], position, rotation);
         currentObject.transform.SetParent(this.transform);
         currentObject.transform.localPosition = Vector3.zero;
         currentObject.transform.localRotation = Quaternion.identity;
 
         rigidbody.isKinematic = false;
-        EnableColliders(currentObject, true);
-    }
-
-    /// <summary>
-    /// 子オブジェクトのコライダーを有効化または無効化する
-    /// </summary>
-    private void EnableColliders(GameObject obj, bool enable)
-    {
-        Collider[] colliders = obj.GetComponentsInChildren<Collider>();
-        foreach (var collider in colliders)
-        {
-            collider.enabled = enable;
-        }
     }
     #endregion
 }
