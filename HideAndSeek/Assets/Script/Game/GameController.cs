@@ -88,7 +88,6 @@ namespace Game
                     // 全プレイヤーに隠れ側の数を更新
                     var subtractHider = -1;
                     photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, subtractHider);
-                    photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, hiderPlayerCount);
                     // 全プレイヤーに捕まったことを通知
                     photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
 
