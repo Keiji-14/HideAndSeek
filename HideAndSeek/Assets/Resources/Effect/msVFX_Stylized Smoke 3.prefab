@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 6279167053230240376}
   - component: {fileID: 450599359481502212}
   - component: {fileID: 1302401033569149662}
-  - component: {fileID: -2494749350315883128}
+  - component: {fileID: -8611817732159184094}
+  - component: {fileID: -5914650217009178126}
   m_Layer: 0
   m_Name: msVFX_Stylized Smoke 3
   m_TagString: Untagged
@@ -4611,7 +4612,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &-2494749350315883128
+--- !u!114 &-8611817732159184094
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4620,6 +4621,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 4603967572944593327}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 430b6d1323ff9de46b124b4fe9671477, type: 3}
+  m_Script: {fileID: 11500000, guid: b52da81b1407e484baf5b7b427bf1be9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5914650217009178126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4603967572944593327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
