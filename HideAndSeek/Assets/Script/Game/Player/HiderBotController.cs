@@ -1,4 +1,5 @@
-﻿using GameData;
+﻿using Game;
+using GameData;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class HiderBotController : MonoBehaviourPunCallbacks
     private GameObject currentObject;
     /// <summary>NavMeshAgentコンポーネント</summary>
     private NavMeshAgent navMeshAgent;
+    /// <summary>ゲーム処理のコンポーネント</summary>
+    private GameController gameController;
     /// <summary>変身するオブジェクトのリスト</summary>
     private List<GameObject> transformationObjList;
     /// <summary>移動先のリスト</summary>
@@ -44,14 +47,15 @@ public class HiderBotController : MonoBehaviourPunCallbacks
 
         rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
 
-        playerNameDisplay.Init(true);
-
         // ランダムなオブジェクトに変身させる
-        int randomIndex = Random.Range(0, transformationObjList.Count);
+        gameController = FindObjectOfType<GameController>();
+        int randomIndex = gameController.GetRandomTransformIndex();
         TransformIntoObject(randomIndex);
 
         // 初期移動先を設定
         MoveToRandomPosition();
+
+        playerNameDisplay.Init(true);
     }
 
     private void Update()
@@ -104,23 +108,6 @@ public class HiderBotController : MonoBehaviourPunCallbacks
         Quaternion targetRotation = Quaternion.Euler(0, nameCanvas.transform.rotation.eulerAngles.y, 0);
         nameCanvas.transform.rotation = Quaternion.Lerp(nameCanvas.transform.rotation, targetRotation, Time.deltaTime);
     }
-
-    /*private void TransformRandomly()
-    {
-        if (transformationObjList.Count == 0) 
-            return;
-
-        // ランダムで変身する番号を選出する
-        int randomIndex = Random.Range(0, transformationObjList.Count);
-
-        if (currentForm != null)
-        {
-            Destroy(currentForm);
-        }
-
-        // 選出した番号のオブジェクトを生成する
-        currentForm = Instantiate(transformationObjList[randomIndex], transform.position, transform.rotation, transform);
-    }*/
 
     /// <summary>
     /// プレイヤーを物に変身させる処理

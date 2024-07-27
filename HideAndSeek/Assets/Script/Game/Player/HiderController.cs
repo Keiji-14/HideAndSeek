@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Game;
+using GameData;
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
@@ -13,6 +15,8 @@ public class HiderController : MonoBehaviourPunCallbacks
     private GameObject currentObject;
     /// <summary>Rigidbody</summary>
     private Rigidbody rigidbody;
+    /// <summary>ゲーム処理のコンポーネント</summary>
+    private GameController gameController;
     #endregion
 
     #region SerializeField
@@ -37,11 +41,18 @@ public class HiderController : MonoBehaviourPunCallbacks
     #region UnityEvent
     private void Start()
     {
+        var stageData = GameDataManager.Instance().GetStageData();
+        if (stageData != null)
+        {
+            transformationObjList = stageData.transformationObjList;
+        }
+
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.isKinematic = true;
 
         // ランダムなオブジェクトに変身させる
-        int randomIndex = Random.Range(0, transformationObjList.Count);
+        gameController = FindObjectOfType<GameController>();
+        int randomIndex = gameController.GetRandomTransformIndex();
         TransformIntoObject(randomIndex);
 
         SetCamera();
@@ -143,8 +154,6 @@ public class HiderController : MonoBehaviourPunCallbacks
         currentObject.transform.SetParent(this.transform);
         currentObject.transform.localPosition = Vector3.zero;
         currentObject.transform.localRotation = Quaternion.identity;
-
-        rigidbody.isKinematic = false;
     }
     #endregion
 }

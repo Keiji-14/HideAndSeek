@@ -27,9 +27,11 @@ namespace Game
         private float gameRemainingTime;
         /// <summary>上空視点カメラ</summary>
         private Camera overheadCamera;
-        /// <summary>隠れる側のIDリスト</summary>
-        private List<int> capturedHiderIDs = new List<int>();
-        /// <summary>隠れる側のプレイヤーオブジェクト</summary>
+        /// <summary>捕まえたプレイヤーのIDリスト</summary>
+        private List<int> capturedHiderIDList = new List<int>();
+        /// <summary>変身可能なオブジェクト番号リスト</summary>
+        private List<int> availableTransformIndexList;
+        /// <summary>隠れる側のプレイヤーリスト</summary>
         private List<GameObject> hiderPlayerObjectList = new List<GameObject>();
         #endregion
 
@@ -68,9 +70,26 @@ namespace Game
             {
                 // マスタークライアントがステージデータを生成して他のプレイヤーに共有する
                 //photonView.RPC("RPC_SetStageData", RpcTarget.AllBuffered, stageData.stageID);
+
+                photonView.RPC("RPC_InitializeTransformationList", RpcTarget.AllBuffered);
             }
 
             StartCoroutine(WaitForCustomProperties());
+        }
+
+        public int GetRandomTransformIndex()
+        {
+            if (availableTransformIndexList.Count == 0)
+            {
+                return -1;
+            }
+
+            int randomIndex = Random.Range(0, availableTransformIndexList.Count);
+            int transformIndex = availableTransformIndexList[randomIndex];
+            availableTransformIndexList.RemoveAt(randomIndex);
+
+            photonView.RPC("RPC_SyncTransformationList", RpcTarget.OthersBuffered, availableTransformIndexList.ToArray());
+            return transformIndex;
         }
 
         /// <summary>
@@ -81,9 +100,9 @@ namespace Game
         {
             if (gameStarted)
             {
-                if (!capturedHiderIDs.Contains(hiderViewID))
+                if (!capturedHiderIDList.Contains(hiderViewID))
                 {
-                    capturedHiderIDs.Add(hiderViewID);
+                    capturedHiderIDList.Add(hiderViewID);
 
                     // 全プレイヤーに隠れ側の数を更新
                     var subtractHider = -1;
@@ -125,6 +144,26 @@ namespace Game
                 // ネットワーク経由でインスタンス化
                 Instantiate(stageData.stageObj, Vector3.zero, Quaternion.identity);
             }
+        }
+
+        [PunRPC]
+        private void RPC_InitializeTransformationList()
+        {
+            availableTransformIndexList = new List<int>();
+
+            var transformationObjList = GameDataManager.Instance().GetStageData().transformationObjList;
+
+            for (int i = 0; i < transformationObjList.Count; i++)
+            {
+                availableTransformIndexList.Add(i);
+            }
+            photonView.RPC("RPC_SyncTransformationList", RpcTarget.OthersBuffered, availableTransformIndexList.ToArray());
+        }
+
+        [PunRPC]
+        private void RPC_SyncTransformationList(int[] indices)
+        {
+            availableTransformIndexList = new List<int>(indices);
         }
 
         /// <summary>
