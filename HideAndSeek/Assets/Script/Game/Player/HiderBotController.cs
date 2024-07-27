@@ -1,5 +1,4 @@
 ﻿using GameData;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,12 +7,14 @@ public class HiderBotController : MonoBehaviour
 {
     #region PrivateField
     private GameObject currentForm;
+    /// <summary>NavMeshAgentコンポーネント</summary>
+    private NavMeshAgent navMeshAgent;
     /// <summary>変身するオブジェクトのリスト</summary>
     private List<GameObject> transformationObjList;
     /// <summary>移動先のリスト</summary>
     private List<Transform> targetPositionList;
-    /// <summary>NavMeshAgentコンポーネント</summary>
-    private NavMeshAgent navMeshAgent;
+    /// <summary>隠れる側が鬼に見えないようにするためのRendererリスト</summary>
+    private List<Renderer> rendererList;
     #endregion
 
     #region SerializeField
@@ -39,10 +40,15 @@ public class HiderBotController : MonoBehaviour
         navMeshAgent.speed = speed;
         navMeshAgent.baseOffset = 0;
 
+        rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
+
+        playerNameDisplay.Init(true);
+
         // ランダムに変身する
         TransformRandomly();
 
-        playerNameDisplay.Init(true);
+        // 初期移動先を設定
+        MoveToRandomPosition();
     }
 
     private void Update()
@@ -51,7 +57,31 @@ public class HiderBotController : MonoBehaviour
 
         if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
         {
-            MoveToRandomPosition();
+            navMeshAgent.isStopped = true;
+        }
+    }
+    #endregion
+
+    #region PublicMethod
+    /// <summary>
+    /// 隠れる側のプレイヤーを非表示にする
+    /// </summary>
+    public void HideBot()
+    {
+        foreach (var renderer in rendererList)
+        {
+            renderer.enabled = false;
+        }
+    }
+
+    /// <summary>
+    /// 隠れる側のプレイヤーを再表示する
+    /// </summary>
+    public void ShowBot()
+    {
+        foreach (var renderer in rendererList)
+        {
+            renderer.enabled = true;
         }
     }
     #endregion

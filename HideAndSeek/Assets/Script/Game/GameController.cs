@@ -214,11 +214,11 @@ namespace Game
         /// <summary>
         /// 隠れる側のプレイヤー数を更新する処理
         /// </summary>
-        /// <param name="hiderValue">隠れる側プレイヤーの変動値</param>
+        /// <param name="changeValue">変更する数値</param>
         [PunRPC]
-        private void RPC_UpdateHiderCount(int hiderValue)
+        private void RPC_UpdateHiderCount(int changeValue)
         {
-            hiderPlayerCount += hiderValue;
+            hiderPlayerCount += changeValue;
             gameUI.UpdateHider(hiderPlayerCount);
         }
 
@@ -260,8 +260,16 @@ namespace Game
             // 隠れる側のプレイヤーを見えなくする
             foreach (var hider in hiders)
             {
-                // オブジェクトごと非表示にする
-                SetActiveRecursively(hider, false);
+                HiderBotController botController = hider.GetComponent<HiderBotController>();
+                if (botController != null)
+                {
+                    botController.HideBot();
+                }
+                else
+                {
+                    // オブジェクトごと非表示にする
+                    SetActiveRecursively(hider, false);
+                }
                 hiderPlayerObjectList.Add(hider);
             }
 
@@ -357,10 +365,17 @@ namespace Game
                     // オブジェクトを再表示
                     SetActiveRecursively(hider, true);
                     var hiderController = hider.GetComponent<HiderController>();
+                    var hiderBotController = hider.GetComponent<HiderBotController>();
 
                     if (hiderController != null)
                     {
+                        // オブジェクトを再表示
+                        SetActiveRecursively(hider, true);
                         hiderController.SetCamera();
+                    }
+                    else if (hiderBotController != null)
+                    {
+                        hiderBotController.ShowBot();
                     }
                 }
             }
