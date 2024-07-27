@@ -92,8 +92,6 @@ namespace Game
                     photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, subtractHider);
                     // 全プレイヤーに捕まったことを通知
                     photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
-
-                    Debug.Log($"Hider player count: {hiderPlayerCount}");
                 }
             }
         }
@@ -127,26 +125,6 @@ namespace Game
                 // ネットワーク経由でインスタンス化
                 Instantiate(stageData.stageObj, Vector3.zero, Quaternion.identity);
             }
-        }
-
-        [PunRPC]
-        private void RPC_InitializeTransformationList()
-        {
-            availableTransformIndexList = new List<int>();
-
-            var transformationObjList = GameDataManager.Instance().GetStageData().transformationObjList;
-
-            for (int i = 0; i < transformationObjList.Count; i++)
-            {
-                availableTransformIndexList.Add(i);
-            }
-            photonView.RPC("RPC_SyncTransformationList", RpcTarget.OthersBuffered, availableTransformIndexList.ToArray());
-        }
-
-        [PunRPC]
-        private void RPC_SyncTransformationList(int[] indices)
-        {
-            availableTransformIndexList = new List<int>(indices);
         }
 
         /// <summary>
@@ -473,7 +451,9 @@ namespace Game
                         SetSpectatorMode();
                     }
                 }
-                PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", hiderPlayer.transform.position, Quaternion.identity);
+                var pos = new Vector3(hiderPlayer.transform.position.x , hiderPlayer.transform.position.y + 1.5f, hiderPlayer.transform.position.z);
+
+                PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", pos, Quaternion.identity);
                 PhotonNetwork.Destroy(hiderPlayer);
             }
 
