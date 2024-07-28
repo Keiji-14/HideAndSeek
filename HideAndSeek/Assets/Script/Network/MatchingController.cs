@@ -64,18 +64,5 @@ namespace NetWork
             isMatching = false;
         }
         #endregion
-
-        #region PrivateMethod
-        /// <summary>
-        /// ゲーム画面に移動する処理
-        /// </summary>
-        private IEnumerator MoveGameRoom()
-        {
-            yield return new WaitForSeconds(1.0f);
-
-            // ゲームシーンに移行
-            MatchingCompletedSubject.OnNext(Unit.Default);
-        }
-        #endregion
     }
 }

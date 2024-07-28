@@ -129,6 +129,8 @@ namespace NetWork
                 }
 
                 Debug.Log("All roles assigned. Loading game scene...");
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+
                 SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
             }
         }
