@@ -16,14 +16,6 @@ MonoBehaviour:
   stageObj: {fileID: 4950511154702027227, guid: 55dc9fdcb4d5f5d4bacd57f2b5f9aa1d, type: 3}
   seekerStartArea: {fileID: 0}
   transformationObjList:
-  - {fileID: 8958062434727102317, guid: e3a438cec5d94f64d84a1056c4c78434, type: 3}
-  - {fileID: 8166709448631958598, guid: 0b29abba5f5d42743be1ac613acd287a, type: 3}
-  - {fileID: 8318791718542456950, guid: 3fa775bb83a521040a00c081ad57e783, type: 3}
-  - {fileID: 9135777422565093940, guid: a662edef8314f8742aec75cdcf92c5f8, type: 3}
-  - {fileID: 1065699774562215107, guid: 6fae41e4f12d28146881c6f30871f611, type: 3}
-  - {fileID: 4724835876887063429, guid: 498ce473c44507b4db5dc428b9d9bec1, type: 3}
-  - {fileID: 1251363932618190821, guid: 77e6e9274a3673745902a2648527e3a7, type: 3}
-  - {fileID: 6076092243463148279, guid: e7edd4a17f27dd948a3f028eef958b26, type: 3}
   - {fileID: 5323160757108591472, guid: 9a2ef19d14e1af8458c546883c00bb17, type: 3}
   botTargetPositionList:
   - {fileID: 7205770579478474904, guid: 18480304da76dd74897ff29a1cdf13ee, type: 3}
