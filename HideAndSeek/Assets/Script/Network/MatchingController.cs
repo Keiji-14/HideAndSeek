@@ -41,7 +41,8 @@ namespace NetWork
                 Debug.Log($"PhotonNetwork.CurrentRoom.PlayerCount : {PhotonNetwork.CurrentRoom.PlayerCount}");
 
                 isGameStarted = true;
-                StartCoroutine(MoveGameRoom());
+                // ゲームシーンに移行
+                MatchingCompletedSubject.OnNext(Unit.Default);
             }
         }
         #endregion
