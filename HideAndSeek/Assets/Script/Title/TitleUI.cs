@@ -33,8 +33,6 @@ namespace Title
             timeCountUIObj.SetActive(isView);
             matchingLoadingUI.SetActive(isView);
 
-            Debug.Log($"isView:{isView}");
-
             if (isView)
             {
                 matchingUIObj.SetActive(true);

@@ -217,8 +217,6 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
 
         if (Physics.Raycast(camera.transform.position, forward, out hit, attackRange))
         {
-            Debug.Log(hit.collider.gameObject.name);
-
             if (hit.collider.CompareTag("Hider"))
             {
                 CaptureHider(hit.collider.gameObject);
@@ -299,7 +297,6 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_SetAttackAnimation()
     {
-        Debug.Log("RPC_SetAttackAnimation called");
         animator.SetTrigger("Attack");
     }
 
