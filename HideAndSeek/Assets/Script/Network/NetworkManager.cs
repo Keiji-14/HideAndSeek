@@ -12,6 +12,12 @@ namespace NetWork
         public static NetworkManager instance = null;
         #endregion
 
+        #region PrivateField
+        private bool isMatchingStart = false;
+        private const string ROOM_PREFIX = "Room_";
+        private int maxRoomSuffix = 10000; // ランダムなルーム名のサフィックスの最大値
+        #endregion
+
         #region SerializeField
         [SerializeField] private MatchingController matchingController;
         #endregion
@@ -44,8 +50,7 @@ namespace NetWork
         /// </summary>
         public override void OnConnectedToMaster()
         {
-            // "Room"という名前のルームに参加する（ルームが存在しなければ作成して参加する）
-            PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions { MaxPlayers = 2 }, TypedLobby.Default);
+            JoinRandomRoom();
         }
 
         /// <summary>
@@ -99,6 +104,19 @@ namespace NetWork
 
                 AssignRolesAndLoadGameScene();
             }).AddTo(this);
+        }
+
+        private void JoinRandomRoom()
+        {
+            string randomRoomName = GenerateRandomRoomName();
+            RoomOptions roomOptions = new RoomOptions { MaxPlayers = 2 };
+            PhotonNetwork.JoinOrCreateRoom(randomRoomName, roomOptions, TypedLobby.Default);
+        }
+
+        private string GenerateRandomRoomName()
+        {
+            int randomSuffix = Random.Range(0, maxRoomSuffix);
+            return $"{ROOM_PREFIX}{randomSuffix}";
         }
 
         /// <summary>
