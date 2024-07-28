@@ -1,5 +1,4 @@
-﻿using Game;
-using GameData;
+﻿using GameData;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;

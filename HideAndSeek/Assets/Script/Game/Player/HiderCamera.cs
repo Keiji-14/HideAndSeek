@@ -1,20 +1,20 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class HiderCamera : MonoBehaviour
 {
     #region PrivateField
-    /// <summary>ƒJƒƒ‰‚ÌX²‰ñ“]Šp“x</summary>
+    /// <summary>ã‚«ãƒ¡ãƒ©ãƒ­ãƒƒã‚¯çŠ¶æ…‹</summary>
+    private bool isCameraLocked = false;
+    /// <summary>ã‚«ãƒ¡ãƒ©ã®Xè»¸å›è»¢è§’åº¦</summary>
     private float xRotation = 0f;
-    /// <summary>ƒJƒƒ‰‚ÌY²‰ñ“]Šp“x</summary>
-    private float yRotation = 0f;
     #endregion
 
     #region SerializeField
-    /// <summary>ƒ}ƒEƒXŠ´“x</summary>
+    /// <summary>ãƒã‚¦ã‚¹æ„Ÿåº¦</summary>
     [SerializeField] private float mouseSensitivity = 100.0f;
-    /// <summary>ƒJƒƒ‰‚ÌƒIƒtƒZƒbƒgˆÊ’u</summary>
+    /// <summary>ã‚«ãƒ¡ãƒ©ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆä½ç½®</summary>
     [SerializeField] private Vector3 offset;
-    /// <summary>ƒvƒŒƒCƒ„[‚ÌTransform</summary>
+    /// <summary>ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®Transform</summary>
     [SerializeField] private Transform playerTransform;
     #endregion
 
@@ -26,6 +26,11 @@ public class HiderCamera : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SwitchLockCamera();
+        }
+
         LookAround();
     }
 
@@ -37,25 +42,36 @@ public class HiderCamera : MonoBehaviour
 
     #region PrivateMethod
     /// <summary>
-    /// ƒJƒƒ‰‚Ì‰ñ“]‚ğ§Œä‚·‚éˆ—
+    /// è‡ªãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ­ãƒƒã‚¯ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹å‡¦ç†
     /// </summary>
-    private void LookAround()
+    private void SwitchLockCamera()
     {
-        // ƒ}ƒEƒX‚Ì“ü—Í‚ğæ“¾
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
-
-        yRotation += mouseX;
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
-        // ƒJƒƒ‰ƒŠƒO‚Ì‰ñ“]‚ğİ’è
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        playerTransform.Rotate(Vector3.up * mouseX);
+        isCameraLocked = !isCameraLocked;
     }
 
     /// <summary>
-    /// ƒJƒƒ‰‚ÌˆÊ’u‚ğİ’è‚µ‚ÄƒvƒŒƒCƒ„[‚ğŒ©‚éˆ—
+    /// ã‚«ãƒ¡ãƒ©ã®å›è»¢ã‚’åˆ¶å¾¡ã™ã‚‹å‡¦ç†
+    /// </summary>
+    private void LookAround()
+    {
+        // ãƒã‚¦ã‚¹ã®å…¥åŠ›ã‚’å–å¾—
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        // ã‚«ãƒ¡ãƒ©ãƒªã‚°ã®å›è»¢ã‚’è¨­å®š
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        
+        if (!isCameraLocked)
+        {
+            playerTransform.Rotate(Vector3.up * mouseX);
+        }
+    }
+
+    /// <summary>
+    /// ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã‚’è¨­å®šã—ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹ã‚‹å‡¦ç†
     /// </summary>
     private void FollowPlayer()
     {
