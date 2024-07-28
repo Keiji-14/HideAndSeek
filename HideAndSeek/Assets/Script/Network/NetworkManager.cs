@@ -1,6 +1,7 @@
 ﻿using Scene;
 using Photon.Pun;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 using UniRx;
 using UnityEngine;
 
@@ -61,6 +62,11 @@ namespace NetWork
             matchingController.MatchingStart();
         }
 
+        public override void OnJoinRandomFailed(short returnCode, string message)
+        {
+            CreateRoom();
+        }
+
         /// <summary>
         /// ゲームサーバーから退出する処理
         /// </summary>
@@ -115,6 +121,8 @@ namespace NetWork
         {
             string randomRoomName = GenerateRandomRoomName();
             RoomOptions roomOptions = new RoomOptions { MaxPlayers = 2 };
+            roomOptions.CustomRoomProperties = new Hashtable() { { "IsOpen", true } };
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "IsOpen" };
             PhotonNetwork.CreateRoom(randomRoomName, roomOptions, TypedLobby.Default);
         }
 
