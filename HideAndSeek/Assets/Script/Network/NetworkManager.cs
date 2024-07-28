@@ -12,10 +12,6 @@ namespace NetWork
         public static NetworkManager instance = null;
         #endregion
 
-        #region PrivateField
-        private bool isMatchingStart = false;
-        #endregion
-
         #region SerializeField
         [SerializeField] private MatchingController matchingController;
         #endregion
@@ -57,11 +53,7 @@ namespace NetWork
         /// </summary>
         public override void OnJoinedRoom()
         {
-            if (!isMatchingStart)
-            {
-                isMatchingStart = true;
-                matchingController.MatchingStart();
-            }
+            matchingController.MatchingStart();
         }
 
         /// <summary>
@@ -80,40 +72,6 @@ namespace NetWork
             {
                 PhotonNetwork.LeaveRoom();
             }
-        }
-
-        public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
-        {
-            Debug.Log("OnPlayerPropertiesUpdate Called");
-            Debug.Log("isMatchingStart: " + isMatchingStart);
-
-            // プレイヤーの役割が割り当てられたかどうかを確認
-            if (PhotonNetwork.IsMasterClient && isMatchingStart)
-            {
-                bool allRolesAssigned = true;
-                foreach (var player in PhotonNetwork.PlayerList)
-                {
-                    if (!player.CustomProperties.ContainsKey("Role"))
-                    {
-                        allRolesAssigned = false;
-                        break;
-                    }
-                }
-
-                if (allRolesAssigned)
-                {
-                    isMatchingStart = false;
-                    Debug.Log("All roles assigned. Loading game scene...");
-                    SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
-                }
-            }
-        }
-
-        public override void OnLeftRoom()
-        {
-            Debug.Log("OnLeftRoom Called");
-            // ルーム退出時にフラグをリセットする
-            isMatchingStart = false;
         }
         #endregion
 
@@ -167,6 +125,8 @@ namespace NetWork
                     player.SetCustomProperties(customProperties);
                     playerIndex++;
                 }
+
+                SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
             }
         }
 
