@@ -14,7 +14,6 @@ namespace NetWork
         #endregion
 
         #region PrivateField
-        private bool isMatchingStart = false;
         private const string ROOM_PREFIX = "Room_";
         private int maxRoomSuffix = 10000; // ランダムなルーム名のサフィックスの最大値
         #endregion
@@ -83,6 +82,9 @@ namespace NetWork
             {
                 PhotonNetwork.LeaveRoom();
             }
+
+            // Photonサーバーとの接続を切断する
+            PhotonNetwork.Disconnect();
         }
         #endregion
 
