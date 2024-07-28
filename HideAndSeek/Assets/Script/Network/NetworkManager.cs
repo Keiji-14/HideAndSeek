@@ -68,7 +68,6 @@ namespace NetWork
         public void LeaveRoom()
         {
             // PhotonのLeaveRoomメソッドを使用してゲームサーバーから退出する
-
             matchingController.MatchingFinish();
 
             PhotonNetwork.LeaveRoom();
@@ -107,7 +106,11 @@ namespace NetWork
             PhotonNetwork.AutomaticallySyncScene = true;
 
             // 既にルームに入っている場合は退出する
-            if (PhotonNetwork.InRoom)
+            if (PhotonNetwork.IsMasterClient)
+            {
+                CloseRoom();
+            }
+            else
             {
                 PhotonNetwork.LeaveRoom();
             }
@@ -149,6 +152,21 @@ namespace NetWork
                     playerIndex++;
                 }
             }
+        }
+
+        /// <summary>
+        /// ルームを閉じる処理
+        /// </summary>
+        private void CloseRoom()
+        {
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                if (!player.IsLocal)
+                {
+                    PhotonNetwork.CloseConnection(player);
+                }
+            }
+            PhotonNetwork.LeaveRoom();
         }
         #endregion
     }
