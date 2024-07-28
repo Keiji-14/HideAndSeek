@@ -500,7 +500,7 @@ namespace Game
         private IEnumerator ReturnToTitle()
         {
             // 数秒待機
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
 
             Cursor.lockState = CursorLockMode.None;
 

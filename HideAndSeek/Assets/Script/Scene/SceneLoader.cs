@@ -112,8 +112,6 @@ namespace Scene
         /// <param name="sceneName">シーン名</param>
         public IEnumerator PhotonNetworkLoadAsync(string sceneName)
         {
-            yield return new WaitForSeconds(5.0f);
-
             PhotonNetwork.LoadLevel(sceneName);
 
             // シーンロード完了を待機

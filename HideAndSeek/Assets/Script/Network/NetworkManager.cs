@@ -117,15 +117,18 @@ namespace NetWork
                     if (playerIndex == seekerIndex)
                     {
                         customProperties["Role"] = "Seeker";
+                        Debug.Log("Assigned Seeker role to player: " + player.NickName);
                     }
                     else
                     {
                         customProperties["Role"] = "Hider";
+                        Debug.Log("Assigned Hider role to player: " + player.NickName);
                     }
                     player.SetCustomProperties(customProperties);
                     playerIndex++;
                 }
 
+                Debug.Log("All roles assigned. Loading game scene...");
                 SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
             }
         }

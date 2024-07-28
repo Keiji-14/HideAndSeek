@@ -70,7 +70,7 @@ namespace NetWork
         /// </summary>
         private IEnumerator MoveGameRoom()
         {
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(1.0f);
 
             // ゲームシーンに移行
             MatchingCompletedSubject.OnNext(Unit.Default);
