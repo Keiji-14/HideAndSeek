@@ -72,6 +72,11 @@ namespace Game
                 //photonView.RPC("RPC_SetStageData", RpcTarget.AllBuffered, stageData.stageID);
             }
 
+            if (PhotonNetwork.LocalPlayer != null)
+            {
+                PhotonNetwork.LocalPlayer.TagObject = null;
+            }
+
             StartCoroutine(WaitForCustomProperties());
         }
 
@@ -154,10 +159,14 @@ namespace Game
                 SpawnSeekerPlayer(seekerPrefab);
                 StartCoroutine(GracePeriodSeekerCoroutine());
             }
-            else
+            else if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Hider")
             {
                 SpawnHiderPlayer(hiderPrefab);
                 StartCoroutine(GracePeriodHiderCoroutine());
+            }
+            else
+            {
+                Debug.Log("Role = null");
             }
         }
 
