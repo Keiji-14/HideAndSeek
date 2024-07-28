@@ -14,6 +14,8 @@ public class HiderController : MonoBehaviourPunCallbacks
     private GameObject currentObject;
     /// <summary>Rigidbody</summary>
     private Rigidbody rigidbody;
+    /// <summary>自身のカメラ処理のコンポーネント</summary>
+    private HiderCamera hiderCamera;
     #endregion
 
     #region SerializeField
@@ -45,6 +47,7 @@ public class HiderController : MonoBehaviourPunCallbacks
         }
 
         rigidbody = GetComponent<Rigidbody>();
+        hiderCamera = GetComponentInChildren<HiderCamera>();
 
         // ランダムなオブジェクトに変身させる
         int randomIndex = Random.Range(0, transformationObjList.Count);
@@ -101,7 +104,7 @@ public class HiderController : MonoBehaviourPunCallbacks
     /// </summary>
     private void TransformMove()
     {
-        if (rigidbody == null)
+        if (rigidbody == null || (hiderCamera != null && hiderCamera.IsCameraLocked()))
             return;
 
         float moveX = Input.GetAxis("Horizontal");

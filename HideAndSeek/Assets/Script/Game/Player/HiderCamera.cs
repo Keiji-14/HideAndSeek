@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// 隠れる側のカメラ処理
+/// </summary>
 public class HiderCamera : MonoBehaviour
 {
     #region PrivateField
@@ -42,6 +45,16 @@ public class HiderCamera : MonoBehaviour
     }
     #endregion
 
+    #region PublicMethod
+    /// <summary>
+    /// カメラロック状態を取得する処理
+    /// </summary>
+    public bool IsCameraLocked()
+    {
+        return isCameraLocked;
+    }
+    #endregion
+
     #region PrivateMethod
     /// <summary>
     /// 自プレイヤーのロックを切り替える処理
@@ -78,8 +91,17 @@ public class HiderCamera : MonoBehaviour
     /// </summary>
     private void FollowPlayer()
     {
-        Vector3 desiredPosition = playerTransform.position + offset;
-        transform.position = desiredPosition;
+        if (!isCameraLocked)
+        {
+            Vector3 desiredPosition = playerTransform.position + playerTransform.rotation * offset;
+            transform.position = desiredPosition;
+        }
+        else
+        {
+            Vector3 direction = new Vector3(Mathf.Sin(yRotation * Mathf.Deg2Rad), 0, Mathf.Cos(yRotation * Mathf.Deg2Rad));
+            Vector3 desiredPosition = playerTransform.position - direction * offset.z + Vector3.up * offset.y;
+            transform.position = desiredPosition;
+        }
         transform.LookAt(playerTransform.position + Vector3.up * offset.y);
     }
     #endregion
