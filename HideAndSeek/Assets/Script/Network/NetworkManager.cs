@@ -84,6 +84,9 @@ namespace NetWork
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
         {
+            Debug.Log("OnPlayerPropertiesUpdate Called");
+            Debug.Log("isMatchingStart: " + isMatchingStart);
+
             // プレイヤーの役割が割り当てられたかどうかを確認
             if (PhotonNetwork.IsMasterClient && isMatchingStart)
             {
@@ -100,9 +103,17 @@ namespace NetWork
                 if (allRolesAssigned)
                 {
                     isMatchingStart = false;
+                    Debug.Log("All roles assigned. Loading game scene...");
                     SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
                 }
             }
+        }
+
+        public override void OnLeftRoom()
+        {
+            Debug.Log("OnLeftRoom Called");
+            // ルーム退出時にフラグをリセットする
+            isMatchingStart = false;
         }
         #endregion
 
