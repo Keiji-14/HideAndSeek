@@ -451,6 +451,9 @@ namespace Game
                         SetSpectatorMode();
                     }
                 }
+                var pos = new Vector3(hiderPlayer.transform.position.x, hiderPlayer.transform.position.y + 0.5f, hiderPlayer.transform.position.z);
+
+
                 PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", hiderPlayer.transform.position, Quaternion.identity);
                 PhotonNetwork.Destroy(hiderPlayer);
             }
