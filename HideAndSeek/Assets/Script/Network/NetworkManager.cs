@@ -108,9 +108,14 @@ namespace NetWork
 
         private void JoinRandomRoom()
         {
+            PhotonNetwork.JoinRandomRoom();
+        }
+
+        private void CreateRoom()
+        {
             string randomRoomName = GenerateRandomRoomName();
             RoomOptions roomOptions = new RoomOptions { MaxPlayers = 2 };
-            PhotonNetwork.JoinOrCreateRoom(randomRoomName, roomOptions, TypedLobby.Default);
+            PhotonNetwork.CreateRoom(randomRoomName, roomOptions, TypedLobby.Default);
         }
 
         private string GenerateRandomRoomName()
