@@ -83,6 +83,11 @@ namespace NetWork
                 PhotonNetwork.LeaveRoom();
             }
 
+            if (PhotonNetwork.LocalPlayer != null)
+            {
+                PhotonNetwork.LocalPlayer.TagObject = null;
+            }
+
             // Photonサーバーとの接続を切断する
             PhotonNetwork.Disconnect();
         }

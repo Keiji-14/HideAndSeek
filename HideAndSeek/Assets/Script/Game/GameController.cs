@@ -72,11 +72,6 @@ namespace Game
                 //photonView.RPC("RPC_SetStageData", RpcTarget.AllBuffered, stageData.stageID);
             }
 
-            if (PhotonNetwork.LocalPlayer != null)
-            {
-                PhotonNetwork.LocalPlayer.TagObject = null;
-            }
-
             StartCoroutine(WaitForCustomProperties());
         }
 
