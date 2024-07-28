@@ -348,40 +348,10 @@ namespace Game
         /// <param name="masterStartTime">マスタークライアントの開始時間</param>
         private void StartGameTimer(double masterStartTime)
         {
-            if (overheadCamera != null)
+            // 開始時の鬼の処理
+            if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
-                Destroy(overheadCamera.gameObject);
-
-                // 自プレイヤーのSeekerControllerを有効にする
-                GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
-                if (playerObject != null)
-                {
-                    SeekerController seekerController = playerObject.GetComponent<SeekerController>();
-                    if (seekerController != null)
-                    {
-                        seekerController.enabled = true;
-                    }
-                }
-
-                // 猶予時間終了後の処理
-                foreach (var hider in hiderPlayerObjectList)
-                {
-                    // オブジェクトを再表示
-                    SetActiveRecursively(hider, true);
-                    var hiderController = hider.GetComponent<HiderController>();
-                    var hiderBotController = hider.GetComponent<HiderBotController>();
-
-                    if (hiderController != null)
-                    {
-                        // オブジェクトを再表示
-                        SetActiveRecursively(hider, true);
-                        hiderController.SetCamera();
-                    }
-                    else if (hiderBotController != null)
-                    {
-                        hiderBotController.ShowBot();
-                    }
-                }
+                StarGameSeekerInit();
             }
 
             gameStarted = true;
@@ -400,6 +370,45 @@ namespace Game
                     }
                 }
             }).AddTo(this);
+        }
+
+        /// <summary>
+        /// ゲーム開始直後の鬼の処理
+        /// </summary>
+        private void StarGameSeekerInit()
+        {
+            Destroy(overheadCamera.gameObject);
+
+            // 自プレイヤーのSeekerControllerを有効にする
+            GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
+            if (playerObject != null)
+            {
+                SeekerController seekerController = playerObject.GetComponent<SeekerController>();
+                if (seekerController != null)
+                {
+                    seekerController.enabled = true;
+                }
+            }
+
+            // 猶予時間終了後の処理
+            foreach (var hider in hiderPlayerObjectList)
+            {
+                // オブジェクトを再表示
+                SetActiveRecursively(hider, true);
+                var hiderController = hider.GetComponent<HiderController>();
+                var hiderBotController = hider.GetComponent<HiderBotController>();
+
+                if (hiderController != null)
+                {
+                    // オブジェクトを再表示
+                    SetActiveRecursively(hider, true);
+                    hiderController.SetCamera();
+                }
+                else if (hiderBotController != null)
+                {
+                    hiderBotController.ShowBot();
+                }
+            }
         }
 
         /// <summary>

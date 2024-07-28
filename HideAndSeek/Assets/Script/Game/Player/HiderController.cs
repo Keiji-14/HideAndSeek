@@ -84,6 +84,9 @@ public class HiderController : MonoBehaviourPunCallbacks
     /// </summary>
     private void RotationCanvas()
     {
+        if (Camera.main == null)
+            return;
+
         Vector3 cameraDirection = Camera.main.transform.forward;
 
         // HPバーの方向をカメラの方向に向ける
