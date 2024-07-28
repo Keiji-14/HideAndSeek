@@ -57,9 +57,11 @@ namespace NetWork
         /// </summary>
         public override void OnJoinedRoom()
         {
-            isMatchingStart = true;
-
-            matchingController.MatchingStart();
+            if (!isMatchingStart)
+            {
+                isMatchingStart = true;
+                matchingController.MatchingStart();
+            }
         }
 
         /// <summary>
@@ -70,7 +72,14 @@ namespace NetWork
             // PhotonのLeaveRoomメソッドを使用してゲームサーバーから退出する
             matchingController.MatchingFinish();
 
-            PhotonNetwork.LeaveRoom();
+            if (PhotonNetwork.IsMasterClient)
+            {
+                CloseRoom();
+            }
+            else
+            {
+                PhotonNetwork.LeaveRoom();
+            }
         }
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
@@ -106,13 +115,9 @@ namespace NetWork
             PhotonNetwork.AutomaticallySyncScene = true;
 
             // 既にルームに入っている場合は退出する
-            if (PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.InRoom)
             {
-                CloseRoom();
-            }
-            else
-            {
-                PhotonNetwork.LeaveRoom();
+                LeaveRoom();
             }
 
             matchingController.MatchingCompletedSubject.Subscribe(_ =>
@@ -159,6 +164,8 @@ namespace NetWork
         /// </summary>
         private void CloseRoom()
         {
+            Debug.Log("CloseRoom");
+
             foreach (var player in PhotonNetwork.PlayerList)
             {
                 if (!player.IsLocal)

@@ -504,9 +504,6 @@ namespace Game
 
             Cursor.lockState = CursorLockMode.None;
 
-            // PhotonNetworkを離脱
-            PhotonNetwork.LeaveRoom();
-
             // シーンをロード
             SceneLoader.Instance().Load(SceneLoader.SceneName.Title);
         }

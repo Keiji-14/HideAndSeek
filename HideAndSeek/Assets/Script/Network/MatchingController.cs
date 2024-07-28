@@ -35,8 +35,6 @@ namespace NetWork
             if (isGameStarted || !isMatching)
                 return;
 
-            Debug.Log("Matching Now");
-
             // 2人揃ったかどうかを確認
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
