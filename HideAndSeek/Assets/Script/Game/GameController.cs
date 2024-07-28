@@ -455,11 +455,16 @@ namespace Game
                         SetSpectatorMode();
                     }
                 }
-                var pos = new Vector3(hiderPlayer.transform.position.x, hiderPlayer.transform.position.y + 0.5f, hiderPlayer.transform.position.z);
+                
+                // MasterClientが消滅処理を行う
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    // エフェクトの生成座標
+                    var pos = new Vector3(hiderPlayer.transform.position.x, hiderPlayer.transform.position.y + 0.5f, hiderPlayer.transform.position.z);
 
-
-                PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", hiderPlayer.transform.position, Quaternion.identity);
-                PhotonNetwork.Destroy(hiderPlayer);
+                    PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", pos, Quaternion.identity);
+                    PhotonNetwork.Destroy(hiderPlayer);
+                }
             }
 
             // 隠れる側のプレイヤーが全て捕まった場合
@@ -507,7 +512,7 @@ namespace Game
         private IEnumerator ReturnToTitle()
         {
             // 数秒待機
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(5.0f);
 
             // シーンをロード
             SceneLoader.Instance().Load(SceneLoader.SceneName.Title);

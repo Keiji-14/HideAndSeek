@@ -7,24 +7,29 @@ using UnityEngine;
 
 namespace NetWork
 {
+    /// <summary>
+    /// ネットワークの管理を行うクラス
+    /// </summary>
     public class NetworkManager : MonoBehaviourPunCallbacks
     {
         #region PublicField
+        /// <summary>シングルトン</summary>
         public static NetworkManager instance = null;
         #endregion
 
         #region PrivateField
-        private const string ROOM_PREFIX = "Room_";
-        private int maxRoomSuffix = 10000; // ランダムなルーム名のサフィックスの最大値
-        #endregion
-
-        #region SerializeField
-        [SerializeField] private MatchingController matchingController;
+        /// <summary>ルーム名</summary>
+        private const string roomPrefix = "Room_";
+        /// <summary>ランダムなルーム名の最大値</summary>
+        private int maxRoomSuffix = 10000;
+        /// <summary>マッチング処理のコンポーネント</summary>
+        private MatchingController matchingController;
         #endregion
 
         #region UnityEvent
         private void Awake()
         {
+            // シングルトンの実装
             if (instance == null)
             {
                 instance = this;
@@ -39,9 +44,11 @@ namespace NetWork
         #endregion
 
         #region PublicMethod
+        /// <summary>
+        /// PhotonServerSettingsの設定内容を使ってマスターサーバーへ接続する処理
+        /// </summary>
         public void ConnectUsingSettings()
         {
-            // PhotonServerSettingsの設定内容を使ってマスターサーバーへ接続する
             PhotonNetwork.ConnectUsingSettings();
         }
 
@@ -61,6 +68,11 @@ namespace NetWork
             matchingController.MatchingStart();
         }
 
+        /// <summary>
+        /// ランダムルームへの参加に失敗したときに呼ばれるコールバックメソッド
+        /// </summary>
+        /// <param name="returnCode">失敗の原因を示すコード</param>
+        /// <param name="message">失敗の詳細メッセージ</param>
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
             CreateRoom();
@@ -71,21 +83,24 @@ namespace NetWork
         /// </summary>
         public void LeaveRoom()
         {
-            // PhotonのLeaveRoomメソッドを使用してゲームサーバーから退出する
-            matchingController.MatchingFinish();
+            if (PhotonNetwork.InRoom)
+            {
+                // PhotonのLeaveRoomメソッドを使用してゲームサーバーから退出する
+                matchingController.MatchingFinish();
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                CloseRoom();
-            }
-            else
-            {
-                PhotonNetwork.LeaveRoom();
-            }
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    CloseRoom();
+                }
+                else
+                {
+                    PhotonNetwork.LeaveRoom();
+                }
 
-            if (PhotonNetwork.LocalPlayer != null)
-            {
-                PhotonNetwork.LocalPlayer.TagObject = null;
+                if (PhotonNetwork.LocalPlayer != null)
+                {
+                    PhotonNetwork.LocalPlayer.TagObject = null;
+                }
             }
 
             // Photonサーバーとの接続を切断する
@@ -99,7 +114,10 @@ namespace NetWork
         /// </summary>
         private void Init()
         {
+            // シーン自動同期の有効化
             PhotonNetwork.AutomaticallySyncScene = true;
+
+            matchingController = FindObjectOfType<MatchingController>();
 
             // 既にルームに入っている場合は退出する
             if (PhotonNetwork.InRoom)
@@ -119,24 +137,37 @@ namespace NetWork
             }).AddTo(this);
         }
 
+        /// <summary>
+        /// ランダムルームに参加する
+        /// </summary>
         private void JoinRandomRoom()
         {
             PhotonNetwork.JoinRandomRoom();
         }
 
+        /// <summary>
+        /// 新しいルームを作成する
+        /// </summary>
         private void CreateRoom()
         {
+            // ランダムなルーム名を生成する
             string randomRoomName = GenerateRandomRoomName();
+            // ルームのオプションを設定する
             RoomOptions roomOptions = new RoomOptions { MaxPlayers = 2 };
             roomOptions.CustomRoomProperties = new Hashtable() { { "IsOpen", true } };
             roomOptions.CustomRoomPropertiesForLobby = new string[] { "IsOpen" };
+            // ルームを作成する
             PhotonNetwork.CreateRoom(randomRoomName, roomOptions, TypedLobby.Default);
         }
 
+        /// <summary>
+        /// ランダムなルーム名を生成する
+        /// </summary>
+        /// <returns>生成されたランダムなルーム名</returns>
         private string GenerateRandomRoomName()
         {
             int randomSuffix = Random.Range(0, maxRoomSuffix);
-            return $"{ROOM_PREFIX}{randomSuffix}";
+            return $"{roomPrefix}{randomSuffix}";
         }
 
         /// <summary>
@@ -155,18 +186,15 @@ namespace NetWork
                     if (playerIndex == seekerIndex)
                     {
                         customProperties["Role"] = "Seeker";
-                        Debug.Log("Assigned Seeker role to player: " + player.NickName);
                     }
                     else
                     {
                         customProperties["Role"] = "Hider";
-                        Debug.Log("Assigned Hider role to player: " + player.NickName);
                     }
                     player.SetCustomProperties(customProperties);
                     playerIndex++;
                 }
 
-                Debug.Log("All roles assigned. Loading game scene...");
                 PhotonNetwork.CurrentRoom.IsOpen = false;
 
                 SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
@@ -178,8 +206,6 @@ namespace NetWork
         /// </summary>
         private void CloseRoom()
         {
-            Debug.Log("CloseRoom");
-
             foreach (var player in PhotonNetwork.PlayerList)
             {
                 if (!player.IsLocal)
