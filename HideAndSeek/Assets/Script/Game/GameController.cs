@@ -505,8 +505,6 @@ namespace Game
             // 数秒待機
             yield return new WaitForSeconds(2f);
 
-            Cursor.lockState = CursorLockMode.None;
-
             // シーンをロード
             SceneLoader.Instance().Load(SceneLoader.SceneName.Title);
         }

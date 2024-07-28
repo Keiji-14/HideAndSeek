@@ -146,7 +146,7 @@ namespace NetWork
 
                 foreach (var player in PhotonNetwork.PlayerList)
                 {
-                    ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+                    Hashtable customProperties = new Hashtable();
                     if (playerIndex == seekerIndex)
                     {
                         customProperties["Role"] = "Seeker";

@@ -51,6 +51,8 @@ namespace Title
         {
             isMatching = false;
 
+            Cursor.lockState = CursorLockMode.None;
+
             // 初回起動かどうかの判定
             if (!PlayerPrefs.HasKey("FirstTime"))
             {
