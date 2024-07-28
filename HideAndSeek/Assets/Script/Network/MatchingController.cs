@@ -1,5 +1,4 @@
 ﻿using Photon.Pun;
-using System.Collections;
 using UniRx;
 using UnityEngine;
 
@@ -35,8 +34,8 @@ namespace NetWork
             if (isGameStarted || !isMatching)
                 return;
 
-            // 2人揃ったかどうかを確認
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            // 3人揃ったかどうかを確認
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
             {
                 Debug.Log($"PhotonNetwork.CurrentRoom.PlayerCount : {PhotonNetwork.CurrentRoom.PlayerCount}");
 
