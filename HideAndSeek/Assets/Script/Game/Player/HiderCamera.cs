@@ -7,6 +7,8 @@ public class HiderCamera : MonoBehaviour
     private bool isCameraLocked = false;
     /// <summary>カメラのX軸回転角度</summary>
     private float xRotation = 0f;
+    /// <summary>カメラのY軸回転角度</summary>
+    private float yRotation = 0f;
     #endregion
 
     #region SerializeField
@@ -58,12 +60,13 @@ public class HiderCamera : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
+        yRotation += mouseX;
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         // カメラリグの回転を設定
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        
+        transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
+
         if (!isCameraLocked)
         {
             playerTransform.Rotate(Vector3.up * mouseX);
@@ -75,7 +78,7 @@ public class HiderCamera : MonoBehaviour
     /// </summary>
     private void FollowPlayer()
     {
-        Vector3 desiredPosition = playerTransform.position + playerTransform.rotation * offset;
+        Vector3 desiredPosition = playerTransform.position + offset;
         transform.position = desiredPosition;
         transform.LookAt(playerTransform.position + Vector3.up * offset.y);
     }
