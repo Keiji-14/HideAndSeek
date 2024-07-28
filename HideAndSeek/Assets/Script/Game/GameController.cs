@@ -502,7 +502,7 @@ namespace Game
             // 数秒待機
             yield return new WaitForSeconds(3f);
 
-            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.None;
 
             // PhotonNetworkを離脱
             PhotonNetwork.LeaveRoom();

@@ -26,7 +26,6 @@ namespace NetWork
             if (instance == null)
             {
                 instance = this;
-                //DontDestroyOnLoad(gameObject);
 
                 Init();
             }
@@ -106,6 +105,12 @@ namespace NetWork
         private void Init()
         {
             PhotonNetwork.AutomaticallySyncScene = true;
+
+            // 既にルームに入っている場合は退出する
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
 
             matchingController.MatchingCompletedSubject.Subscribe(_ =>
             {
