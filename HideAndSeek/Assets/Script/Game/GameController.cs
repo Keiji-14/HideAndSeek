@@ -451,9 +451,7 @@ namespace Game
                         SetSpectatorMode();
                     }
                 }
-                var pos = new Vector3(hiderPlayer.transform.position.x , hiderPlayer.transform.position.y + 1.5f, hiderPlayer.transform.position.z);
-
-                PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", pos, Quaternion.identity);
+                PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", hiderPlayer.transform.position, Quaternion.identity);
                 PhotonNetwork.Destroy(hiderPlayer);
             }
 
@@ -503,6 +501,8 @@ namespace Game
         {
             // 数秒待機
             yield return new WaitForSeconds(3f);
+
+            Cursor.lockState = CursorLockMode.Locked;
 
             // PhotonNetworkを離脱
             PhotonNetwork.LeaveRoom();
