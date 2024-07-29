@@ -75,7 +75,7 @@ public class HiderCamera : MonoBehaviour
 
         yRotation += mouseX;
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, yRotation, 90f);
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         // カメラリグの回転を設定
         transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
@@ -93,13 +93,15 @@ public class HiderCamera : MonoBehaviour
     {
         if (!isCameraLocked)
         {
-            Vector3 desiredPosition = playerTransform.position + playerTransform.rotation * offset;
+            Quaternion cameraRotation = Quaternion.Euler(xRotation, yRotation, 0f);
+            Vector3 desiredPosition = playerTransform.position + cameraRotation * offset;
             transform.position = desiredPosition;
         }
         else
         {
-            Vector3 direction = new Vector3(Mathf.Sin(yRotation * Mathf.Deg2Rad), 0, Mathf.Cos(yRotation * Mathf.Deg2Rad));
-            Vector3 desiredPosition = playerTransform.position - direction * offset.z + Vector3.up * offset.y;
+            Quaternion cameraRotation = Quaternion.Euler(xRotation, yRotation, 0f);
+            Vector3 direction = cameraRotation * Vector3.back;
+            Vector3 desiredPosition = playerTransform.position + direction * offset.z + Vector3.up * offset.y;
             transform.position = desiredPosition;
         }
         transform.LookAt(playerTransform.position + Vector3.up * offset.y);
