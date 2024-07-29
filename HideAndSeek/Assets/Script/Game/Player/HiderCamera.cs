@@ -75,7 +75,7 @@ public class HiderCamera : MonoBehaviour
 
         yRotation += mouseX;
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        xRotation = Mathf.Clamp(xRotation, yRotation, 90f);
 
         // カメラリグの回転を設定
         transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);

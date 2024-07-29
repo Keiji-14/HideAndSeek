@@ -95,8 +95,8 @@ public class HiderController : MonoBehaviourPunCallbacks
         nameCanvas.transform.LookAt(nameCanvas.transform.position + cameraDirection);
 
         // カメラのY軸回転を無視してHPバーを水平に保つ
-        Quaternion targetRotation = Quaternion.Euler(0, nameCanvas.transform.rotation.eulerAngles.y, 0);
-        nameCanvas.transform.rotation = Quaternion.Lerp(nameCanvas.transform.rotation, targetRotation, Time.deltaTime);
+        //Quaternion targetRotation = Quaternion.Euler(0, nameCanvas.transform.rotation.eulerAngles.y, 0);
+        //nameCanvas.transform.rotation = Quaternion.Lerp(nameCanvas.transform.rotation, targetRotation, Time.deltaTime);
     }
 
     /// <summary>
