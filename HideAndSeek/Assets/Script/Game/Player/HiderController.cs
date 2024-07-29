@@ -106,7 +106,10 @@ public class HiderController : MonoBehaviourPunCallbacks
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * moveX + transform.forward * moveZ;
+        Vector3 move = hiderCamera.transform.right * moveX + hiderCamera.transform.forward * moveZ;
+
+        // 水平移動用
+        move.y = 0;
         rigidbody.MovePosition(rigidbody.position + move * speed * Time.deltaTime);
 
         if (Input.GetButtonDown("Jump") && IsGrounded())

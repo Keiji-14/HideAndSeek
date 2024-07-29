@@ -72,15 +72,6 @@ public class HiderCamera : MonoBehaviour
     private void SwitchLockCamera()
     {
         isCameraLocked = !isCameraLocked;
-
-        if (!isCameraLocked)
-        {
-            // ロック解除時に初期位置と回転に戻す
-            transform.position = initialPosition;
-            transform.rotation = initialRotation;
-            xRotation = initialRotation.eulerAngles.x;
-            yRotation = initialRotation.eulerAngles.y;
-        }
     }
 
     /// <summary>
@@ -114,15 +105,7 @@ public class HiderCamera : MonoBehaviour
         // 縦方向の回転を考慮してカメラの位置を設定
         Quaternion cameraRotation = Quaternion.Euler(xRotation, yRotation, 0f);
 
-        if (!isCameraLocked)
-        {
-            desiredPosition = playerTransform.position + cameraRotation * offset;
-        }
-        else
-        {
-            Vector3 direction = cameraRotation * Vector3.back;
-            desiredPosition = playerTransform.position + direction * offset.z + Vector3.up * offset.y;
-        }
+        desiredPosition = playerTransform.position + cameraRotation * offset;
 
         // カメラの位置をスムーズに補間
         transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
