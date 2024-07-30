@@ -34,10 +34,16 @@ namespace Title
         #endregion
 
         #region SerializeField
+        [Header("Window Object")]
+        /// <summary>タイトル画面</summary>
+        [SerializeField] private GameObject titleWindow;
+        /// <summary>マッチング画面</summary>
+        [SerializeField] private GameObject matchWindow;
+        /// <summary>マッチング中の画面</summary>
+        [SerializeField] private GameObject matchingWindow;
+        [Header("Transform Object")]
         /// <summary>マッチング中の経過時間UI</summary>
         [SerializeField] private GameObject timeCountUIObj;
-        /// <summary>マッチング中の経過時間UI</summary>
-        [SerializeField] private GameObject matchingWindow;
         /// <summary>マッチング中のテキスト</summary>
         [SerializeField] private GameObject matchingUIObj;
         /// <summary>マッチング完了UI</summary>
@@ -66,21 +72,24 @@ namespace Title
         {
             InputSeekerBtnObservable.Subscribe(_ =>
             {
+                SwicthMatchingWindow(true);
                 SelectedRoleSubject.OnNext("Seeker");
             }).AddTo(this);
 
             InputHiderBtnObservable.Subscribe(_ =>
             {
+                SwicthMatchingWindow(true);
                 SelectedRoleSubject.OnNext("Hider");
             }).AddTo(this);
 
             InputTitleBackBtnObservable.Subscribe(_ =>
             {
-                SwicthMatchingWindow(false);
+                SwicthMatchWindow(false);
             }).AddTo(this);
 
             InputMatchingCancelBtnObservable.Subscribe(_ =>
             {
+                SwicthMatchingWindow(false);
                 MatchingCancelSubject.OnNext(Unit.Default);
             }).AddTo(this);
         }
@@ -105,10 +114,20 @@ namespace Title
         }
 
         /// <summary>
-        /// マッチングウィンドウの表示を切り替える処理
+        /// マッチング画面の表示を切り替える処理
+        /// </summary>
+        public void SwicthMatchWindow(bool isView)
+        {
+            titleWindow.SetActive(!isView);
+            matchWindow.SetActive(isView);
+        }
+
+        /// <summary>
+        /// マッチング中の画面の表示を切り替える処理
         /// </summary>
         public void SwicthMatchingWindow(bool isView)
         {
+            matchWindow.SetActive(!isView);
             matchingWindow.SetActive(isView);
         }
 

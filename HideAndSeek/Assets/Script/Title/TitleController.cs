@@ -71,8 +71,7 @@ namespace Title
 
             InputMatchingObservable.Subscribe(_ =>
             {
-                titleUI.SwicthMatchingWindow(true);
-                //IsMatching(!isMatching);
+                titleUI.SwicthMatchWindow(true);
                 SE.instance.Play(SE.SEName.ButtonSE);
             }).AddTo(this);
 
