@@ -1,7 +1,7 @@
 Font: Noto Sans JP  Style: Medium
-Point Size: 93   SP/PD Ratio: 5.4%
+Point Size: 35   SP/PD Ratio: 14.3%
 
-Characters included: 7128/7131
+Characters included: 792/795
 Missing characters: 3
 Excluded characters: 0
 
