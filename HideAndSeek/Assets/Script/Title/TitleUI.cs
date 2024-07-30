@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,15 +11,47 @@ namespace Title
     /// </summary>
     public class TitleUI : MonoBehaviour
     {
+        #region PrivateField
+        /// <summary>役割選択後の処理</summary>
+        public Subject<string> SelectedRoleSubject = new Subject<string>();
+        /// <summary>マッチングキャンセル時の処理</summary>
+        public Subject<Unit> MatchingCancelSubject = new Subject<Unit>();
+        #endregion
+
+        #region PrivateField
+        /// <summary>鬼側のボタンを押した時の処理 </summary>
+        private IObservable<Unit> InputSeekerBtnObservable =>
+             seekerBtn.OnClickAsObservable();
+        /// <summary>鬼側のボタンを押した時の処理 </summary>
+        private IObservable<Unit> InputHiderBtnObservable =>
+             hiderBtn.OnClickAsObservable();
+        /// <summary>タイトル画面に戻るボタンを押した時の処理 </summary>
+        private IObservable<Unit> InputTitleBackBtnObservable =>
+             titleBackBtn.OnClickAsObservable();
+        /// <summary>マッチングキャンセルボタンを押した時の処理 </summary>
+        private IObservable<Unit> InputMatchingCancelBtnObservable =>
+             matchingCancelBtn.OnClickAsObservable();
+        #endregion
+
         #region SerializeField
         /// <summary>マッチング中の経過時間UI</summary>
         [SerializeField] private GameObject timeCountUIObj;
+        /// <summary>マッチング中の経過時間UI</summary>
+        [SerializeField] private GameObject matchingWindow;
         /// <summary>マッチング中のテキスト</summary>
         [SerializeField] private GameObject matchingUIObj;
         /// <summary>マッチング完了UI</summary>
         [SerializeField] private GameObject matchedUIObj;
         /// <summary>マッチングロードUI</summary>
         [SerializeField] private GameObject matchingLoadingUI;
+        /// <summary>鬼側の選択ボタン</summary>
+        [SerializeField] private Button seekerBtn;
+        /// <summary>隠れる側側の選択ボタン</summary>
+        [SerializeField] private Button hiderBtn;
+        /// <summary>タイトル画面に戻るボタン</summary>
+        [SerializeField] private Button titleBackBtn;
+        /// <summary>マッチングキャンセルボタン</summary>
+        [SerializeField] private Button matchingCancelBtn;
         /// <summary>マッチング中のテキスト</summary>
         [SerializeField] private Text matchingText;
         /// <summary>マッチング中の経過時間テキスト</summary>
@@ -25,6 +59,32 @@ namespace Title
         #endregion
 
         #region PublicMethod
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        public void Init()
+        {
+            InputSeekerBtnObservable.Subscribe(_ =>
+            {
+                SelectedRoleSubject.OnNext("Seeker");
+            }).AddTo(this);
+
+            InputHiderBtnObservable.Subscribe(_ =>
+            {
+                SelectedRoleSubject.OnNext("Hider");
+            }).AddTo(this);
+
+            InputTitleBackBtnObservable.Subscribe(_ =>
+            {
+                SwicthMatchingWindow(false);
+            }).AddTo(this);
+
+            InputMatchingCancelBtnObservable.Subscribe(_ =>
+            {
+                MatchingCancelSubject.OnNext(Unit.Default);
+            }).AddTo(this);
+        }
+
         /// <summary>
         /// マッチング中のUI表示切り替えの処理
         /// </summary>
@@ -36,14 +96,20 @@ namespace Title
             if (isView)
             {
                 matchingUIObj.SetActive(true);
-                matchingText.text = "マッチング中";
                 StartCoroutine(UpdateMatchingText());
             }
             else
             {
                 StopCoroutine(UpdateMatchingText());
             }
-            //matchingLoadingUI.SetActive(isView);
+        }
+
+        /// <summary>
+        /// マッチングウィンドウの表示を切り替える処理
+        /// </summary>
+        public void SwicthMatchingWindow(bool isView)
+        {
+            matchingWindow.SetActive(isView);
         }
 
         /// <summary>

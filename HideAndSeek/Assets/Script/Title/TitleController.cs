@@ -1,4 +1,5 @@
 ﻿using NetWork;
+using GameData;
 using Audio;
 using System;
 using UniRx;
@@ -19,13 +20,15 @@ namespace Title
         private const float resetCount = 0.0f;
         /// <summary>マッチング中かどうかの処理</summary>
         private bool isMatching = false;
+
+        private string selectedRole;
         /// <summary>マッチング開始ボタンを選択した時の処理 </summary>
         private IObservable<Unit> InputMatchingObservable =>
             matchingBtn.OnClickAsObservable();
         #endregion
 
         #region SerializeField
-        /// <summary>マッチング開始ボタン</summary>
+        /// <summary>マッチングボタン</summary>
         [SerializeField] private Button matchingBtn;
         /// <summary>初回起動時の処理</summary>
         [SerializeField] private FirstStartup firstStartup;
@@ -50,6 +53,7 @@ namespace Title
         public void Init()
         {
             isMatching = false;
+            selectedRole = string.Empty;
 
             Cursor.lockState = CursorLockMode.None;
 
@@ -63,10 +67,25 @@ namespace Title
                 firstStartup.AlreadyStartUp();
             }
 
+            titleUI.Init();
+
             InputMatchingObservable.Subscribe(_ =>
             {
-                IsMatching(!isMatching);
+                titleUI.SwicthMatchingWindow(true);
+                //IsMatching(!isMatching);
                 SE.instance.Play(SE.SEName.ButtonSE);
+            }).AddTo(this);
+
+            titleUI.SelectedRoleSubject.Subscribe(role =>
+            {
+                selectedRole = role;
+                Debug.Log($"ロールが選択されました: {role}");
+                IsMatching(true);
+            }).AddTo(this);
+
+            titleUI.MatchingCancelSubject.Subscribe(_ =>
+            {
+                IsMatching(false);
             }).AddTo(this);
         }
 
@@ -92,15 +111,14 @@ namespace Title
             int seconds = Mathf.FloorToInt(matchingTime % 60f);
             
             titleUI.MatchingTimeUI(minutes, seconds);
-
         }
 
         /// <summary>
         /// マッチング中かどうかの処理
         /// </summary>
-        private void IsMatching(bool isMatchingStart)
+        private void IsMatching(bool isMatching)
         {
-            isMatching = isMatchingStart;
+            this.isMatching = isMatching;
             matchingTime = resetCount;
 
             titleUI.ViewMatchingUI(isMatching);
@@ -108,6 +126,7 @@ namespace Title
             if (isMatching)
             {
                 NetworkManager.instance.ConnectUsingSettings();
+                GameDataManager.Instance().SetPlayerRole(selectedRole);
             }
             else
             {

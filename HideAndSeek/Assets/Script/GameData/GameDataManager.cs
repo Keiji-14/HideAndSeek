@@ -77,6 +77,25 @@ namespace GameData
         }
 
         /// <summary>
+        /// プレイヤーの役割を設定する処理
+        /// </summary>
+        public void SetPlayerRole(string role)
+        {
+            if (playerData != null)
+            {
+                playerData.role = role;
+            }
+        }
+
+        /// <summary>
+        /// プレイヤーの役割を返す
+        /// </summary>
+        public string GetPlayerRole()
+        {
+            return playerData != null ? playerData.role : string.Empty;
+        }
+
+        /// <summary>
         /// ステージ情報を設定する処理
         /// </summary>
         public void SetStagerData(StageData stageData)

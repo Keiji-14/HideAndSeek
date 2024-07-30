@@ -175,6 +175,13 @@ namespace NetWork
         /// </summary>
         private void AssignRolesAndLoadGameScene()
         {
+            /*if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+
+                SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
+            }*/
+
             if (PhotonNetwork.IsMasterClient)
             {
                 int seekerIndex = Random.Range(0, PhotonNetwork.PlayerList.Length);
