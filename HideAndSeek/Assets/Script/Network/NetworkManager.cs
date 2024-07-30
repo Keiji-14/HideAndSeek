@@ -178,6 +178,7 @@ namespace NetWork
         {
             Hashtable customProperties = new Hashtable();
             customProperties["Role"] = GameDataManager.Instance().GetPlayerRole();
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
 
             if (PhotonNetwork.IsMasterClient)
             {

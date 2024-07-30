@@ -1,0 +1,15 @@
+Font: Noto Sans JP  Style: Medium
+Point Size: 93   SP/PD Ratio: 5.4%
+
+Characters included: 7128/7131
+Missing characters: 3
+Excluded characters: 0
+
+Characters missing from font file:
+----------------------------------------
+ID: 8254	Hex: 203E	Char [‾]
+ID: 8260	Hex: 2044	Char [⁄]
+ID: 8786	Hex: 2252	Char [≒]
+
+Characters excluded from packing:
+----------------------------------------

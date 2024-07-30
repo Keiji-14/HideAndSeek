@@ -78,7 +78,6 @@ namespace Title
             titleUI.SelectedRoleSubject.Subscribe(role =>
             {
                 selectedRole = role;
-                Debug.Log($"ロールが選択されました: {role}");
                 IsMatching(true);
             }).AddTo(this);
 

@@ -41,7 +41,7 @@ namespace Title
         [SerializeField] private GameObject matchWindow;
         /// <summary>マッチング中の画面</summary>
         [SerializeField] private GameObject matchingWindow;
-        [Header("Transform Object")]
+        [Header("Matching Object")]
         /// <summary>マッチング中の経過時間UI</summary>
         [SerializeField] private GameObject timeCountUIObj;
         /// <summary>マッチング中のテキスト</summary>
@@ -50,6 +50,11 @@ namespace Title
         [SerializeField] private GameObject matchedUIObj;
         /// <summary>マッチングロードUI</summary>
         [SerializeField] private GameObject matchingLoadingUI;
+        /// <summary>鬼側のUI</summary>
+        [SerializeField] private GameObject seekerUIObj;
+        /// <summary>隠れる側のUI</summary>
+        [SerializeField] private GameObject HiderUIObj;
+        [Header("Button")]
         /// <summary>鬼側の選択ボタン</summary>
         [SerializeField] private Button seekerBtn;
         /// <summary>隠れる側側の選択ボタン</summary>
@@ -58,6 +63,7 @@ namespace Title
         [SerializeField] private Button titleBackBtn;
         /// <summary>マッチングキャンセルボタン</summary>
         [SerializeField] private Button matchingCancelBtn;
+        [Header("Text")]
         /// <summary>マッチング中のテキスト</summary>
         [SerializeField] private Text matchingText;
         /// <summary>マッチング中の経過時間テキスト</summary>
@@ -70,15 +76,21 @@ namespace Title
         /// </summary>
         public void Init()
         {
+            titleWindow.SetActive(true);
+            matchWindow.SetActive(false);
+            matchingWindow.SetActive(false);
+
             InputSeekerBtnObservable.Subscribe(_ =>
             {
                 SwicthMatchingWindow(true);
+                ViewRoleImageUI(true);
                 SelectedRoleSubject.OnNext("Seeker");
             }).AddTo(this);
 
             InputHiderBtnObservable.Subscribe(_ =>
             {
                 SwicthMatchingWindow(true);
+                ViewRoleImageUI(false);
                 SelectedRoleSubject.OnNext("Hider");
             }).AddTo(this);
 
@@ -123,15 +135,6 @@ namespace Title
         }
 
         /// <summary>
-        /// マッチング中の画面の表示を切り替える処理
-        /// </summary>
-        public void SwicthMatchingWindow(bool isView)
-        {
-            matchWindow.SetActive(!isView);
-            matchingWindow.SetActive(isView);
-        }
-
-        /// <summary>
         /// マッチング中の経過時間の表示処理
         /// </summary>
         /// <param name="minutes">マッチング中の分を計測する値</param>
@@ -156,6 +159,24 @@ namespace Title
         #endregion
 
         #region PrivateMethod
+        /// <summary>
+        /// マッチング中の画面の表示を切り替える処理
+        /// </summary>
+        private void SwicthMatchingWindow(bool isView)
+        {
+            matchWindow.SetActive(!isView);
+            matchingWindow.SetActive(isView);
+        }
+
+        /// <summary>
+        /// マッチング中の画面の表示を切り替える処理
+        /// </summary>
+        private void ViewRoleImageUI(bool isSeeker)
+        {
+            seekerUIObj.SetActive(isSeeker);
+            HiderUIObj.SetActive(!isSeeker);
+        }
+
         /// <summary>
         /// マッチング中のテキストを動的に更新するコルーチン
         /// </summary>
