@@ -149,6 +149,9 @@ namespace Title
             matchedUIObj.SetActive(true);
             matchingUIObj.SetActive(false);
             timeCountUIObj.SetActive(false);
+
+            // マッチング完了後にキャンセルボタンを無効化
+            matchingCancelBtn.interactable = false;
         }
         #endregion
 

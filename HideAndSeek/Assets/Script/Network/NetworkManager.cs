@@ -1,4 +1,5 @@
 ﻿using Scene;
+using GameData;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
@@ -175,33 +176,11 @@ namespace NetWork
         /// </summary>
         private void AssignRolesAndLoadGameScene()
         {
-            /*if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-
-                SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
-            }*/
+            Hashtable customProperties = new Hashtable();
+            customProperties["Role"] = GameDataManager.Instance().GetPlayerRole();
 
             if (PhotonNetwork.IsMasterClient)
             {
-                int seekerIndex = Random.Range(0, PhotonNetwork.PlayerList.Length);
-                int playerIndex = 0;
-
-                foreach (var player in PhotonNetwork.PlayerList)
-                {
-                    Hashtable customProperties = new Hashtable();
-                    if (playerIndex == seekerIndex)
-                    {
-                        customProperties["Role"] = "Seeker";
-                    }
-                    else
-                    {
-                        customProperties["Role"] = "Hider";
-                    }
-                    player.SetCustomProperties(customProperties);
-                    playerIndex++;
-                }
-
                 PhotonNetwork.CurrentRoom.IsOpen = false;
 
                 SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
