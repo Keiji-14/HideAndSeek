@@ -61,6 +61,7 @@ MonoBehaviour:
   - RPC_SyncPlayerName
   - RPC_InitializeTransformationList
   - RPC_SyncTransformationList
+  - RPC_DisplayCaughtMessage
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

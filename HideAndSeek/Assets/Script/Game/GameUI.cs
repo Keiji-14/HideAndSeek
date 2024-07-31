@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 namespace Game
 {
@@ -33,6 +34,8 @@ namespace Game
         [SerializeField] private TextMeshProUGUI graceTimerText;
         /// <summary>隠れる側の人数テキスト</summary>
         [SerializeField] private TextMeshProUGUI hiderCountText;
+        /// <summary>捕まえた時の表示テキスト</summary>
+        [SerializeField] private TextMeshProUGUI caughtPlayerText;
         #endregion
 
         #region PublicMethod
@@ -92,12 +95,14 @@ namespace Game
         }
 
         /// <summary>
-        /// 捕まえたプレイヤー名を表示する
+        /// 捕まえた情報を表示する
         /// </summary>
         /// <param name="name">捕まえたプレイヤー名</param>
-        public void ViewCaughtPlayerName(string name)
+        public IEnumerator ViewCaughtPlayerName(string caughtStr)
         {
-            hiderCountText.text = $"{name}を捕まえました";
+            caughtPlayerText.text = caughtStr;
+            yield return new WaitForSeconds(5f); // 5秒間表示
+            caughtPlayerText.text = "";
         }
 
         /// <summary>

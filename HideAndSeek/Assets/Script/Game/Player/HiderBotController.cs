@@ -1,5 +1,4 @@
-﻿using Game;
-using GameData;
+﻿using GameData;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
@@ -8,6 +7,8 @@ using UnityEngine.AI;
 public class HiderBotController : MonoBehaviourPunCallbacks
 {
     #region PrivateField
+    /// <summary>ボットの名前</summary>
+    private string botName;
     /// <summary>現在の変身オブジェクト</summary>
     private GameObject currentObject;
     /// <summary>NavMeshAgentコンポーネント</summary>
@@ -51,8 +52,6 @@ public class HiderBotController : MonoBehaviourPunCallbacks
 
         // 初期移動先を設定
         MoveToRandomPosition();
-
-        playerNameDisplay.Init(true);
     }
 
     private void Update()
@@ -67,6 +66,16 @@ public class HiderBotController : MonoBehaviourPunCallbacks
     #endregion
 
     #region PublicMethod
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    public void Init(string name)
+    {
+        botName = name;
+
+        playerNameDisplay.Init(true, botName);
+    }
+
     /// <summary>
     /// 隠れる側のプレイヤーを非表示にする
     /// </summary>
@@ -87,6 +96,14 @@ public class HiderBotController : MonoBehaviourPunCallbacks
         {
             renderer.enabled = true;
         }
+    }
+
+    /// <summary>
+    /// ボットのプレイヤー名を返す
+    /// </summary>
+    public string GetBotName()
+    {
+        return botName;
     }
     #endregion
 

@@ -1,5 +1,6 @@
 ﻿using GameData;
 using Photon.Pun;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerNameDisplay : MonoBehaviourPunCallbacks
@@ -9,14 +10,13 @@ public class PlayerNameDisplay : MonoBehaviourPunCallbacks
     /// 初期化
     /// </summary>
     /// <param name="isBot">ボットかどうか</param>
-    public void Init(bool isBot)
+    public void Init(bool isBot, string name = null)
     {
         var playerName = GameDataManager.Instance().GetPlayerData().name;
 
         if (isBot)
         {
             playerName = "bot";
-            PhotonNetwork.NickName = playerName;
         }
         else
         {

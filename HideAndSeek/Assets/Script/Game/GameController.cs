@@ -88,6 +88,7 @@ namespace Game
                     capturedHiderIDList.Add(hiderViewID);
 
                     GameObject hiderPlayer = PhotonView.Find(hiderViewID).gameObject;
+
                     if (hiderPlayer != null)
                     {
                         var bot = hiderPlayer.GetComponent<HiderBotController>();
@@ -102,6 +103,7 @@ namespace Game
                         // 捕まえた通知を送信
                         string seekerName = PhotonNetwork.LocalPlayer.NickName;
                         string hiderName = hiderPlayer.GetComponent<PhotonView>().Owner.NickName;
+
                         photonView.RPC("RPC_DisplayCaughtMessage", RpcTarget.All, hiderViewID, seekerName, hiderName);
 
                         // MasterClientが消滅処理を行う
@@ -166,8 +168,6 @@ namespace Game
                 yield return null;
             }
 
-            Debug.Log(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
-
             gameUI.ToggleCanvas(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
 
             if (PhotonNetwork.IsMasterClient)
@@ -186,10 +186,6 @@ namespace Game
             {
                 SpawnHiderPlayer(hiderPrefab);
                 StartCoroutine(GracePeriodHiderCoroutine());
-            }
-            else
-            {
-                Debug.Log("Role = null");
             }
         }
 
@@ -236,10 +232,13 @@ namespace Game
             for (int i = 0; i < botNum; i++)
             {
                 var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
-                PhotonNetwork.Instantiate($"Prefabs/{hiderBotPrefab.name}", position, Quaternion.identity);
+                var botObject = PhotonNetwork.Instantiate($"Prefabs/{hiderBotPrefab.name}", position, Quaternion.identity);
+                var botPlayerObject = botObject.GetComponent<HiderBotController>();
+                botPlayerObject.Init("bot");
 
                 var addHider = 1;
                 photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, addHider);
+
             }
         }
 
@@ -524,15 +523,28 @@ namespace Game
             GameObject hiderPlayer = PhotonView.Find(hiderViewID).gameObject;
             if (hiderPlayer != null)
             {
-                if (PhotonNetwork.LocalPlayer.ActorNumber == hiderPlayer.GetComponent<PhotonView>().Owner.ActorNumber)
+                var bot = hiderPlayer.GetComponent<HiderBotController>();
+                bool isBot = bot != null;
+
+                string caughtHiderName = isBot ? bot.GetBotName() : hiderName;
+
+                if (PhotonNetwork.LocalPlayer.ActorNumber == hiderPlayer.GetComponent<PhotonView>().Owner.ActorNumber && !isBot)
                 {
                     Debug.Log($"{seekerName}に捕まりました");
-                    //gameUI.DisplayMessage($"あなたは鬼の{seekerName}に捕まりました。");
+                    StartCoroutine(gameUI.ViewCaughtPlayerName($"{seekerName}に捕まりました"));
                 }
-                else if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
+                else if (PhotonNetwork.LocalPlayer.NickName == seekerName)
                 {
-                    Debug.Log($"{hiderName}を捕まえました");
-                    //gameUI.DisplayMessage($"あなたは{hiderName}を捕まえました。");
+                    if (isBot)
+                    {
+                        Debug.Log($"{caughtHiderName}を捕まえました");
+                        StartCoroutine(gameUI.ViewCaughtPlayerName($"{caughtHiderName}を捕まえました"));
+                    }
+                    else
+                    {
+                        Debug.Log($"{caughtHiderName}を捕まえました");
+                        StartCoroutine(gameUI.ViewCaughtPlayerName($"{caughtHiderName}を捕まえました"));
+                    }
                 }
             }
         }
