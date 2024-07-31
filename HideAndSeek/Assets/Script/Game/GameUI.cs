@@ -26,12 +26,14 @@ namespace Game
         [SerializeField] private GameObject seekerWinBar;
         /// <summary>隠れる側の勝利バー</summary>
         [SerializeField] private GameObject hiderWinBar;
-        /// <summary>隠れる側のCanvas</summary>
+        /// <summary>ライフアイコン</summary>
         [SerializeField] private List<GameObject> lifeIconList;
         /// <summary>ゲームの制限時間テキスト</summary>
         [SerializeField] private TextMeshProUGUI timerText;
         /// <summary>ゲーム開始の猶予時間テキスト</summary>
         [SerializeField] private TextMeshProUGUI graceTimerText;
+        /// <summary>猶予時間時に表示するテキスト</summary>
+        [SerializeField] private TextMeshProUGUI graceAssistText;
         /// <summary>隠れる側の人数テキスト</summary>
         [SerializeField] private TextMeshProUGUI hiderCountText;
         /// <summary>捕まえた時の表示テキスト</summary>
@@ -95,13 +97,26 @@ namespace Game
         }
 
         /// <summary>
+        /// 猶予時間中に表示する
+        /// </summary>
+        /// <param name="graceAssistStr">表示内容</param>
+        public IEnumerator ViewGraceText(string graceAssistStr)
+        {
+            graceAssistText.text = graceAssistStr;
+            // 10秒間表示
+            yield return new WaitForSeconds(10f);
+            graceAssistText.text = "";
+        }
+
+        /// <summary>
         /// 捕まえた情報を表示する
         /// </summary>
-        /// <param name="name">捕まえたプレイヤー名</param>
+        /// <param name="caughtStr">表示内容</param>
         public IEnumerator ViewCaughtPlayerName(string caughtStr)
         {
             caughtPlayerText.text = caughtStr;
-            yield return new WaitForSeconds(5f); // 5秒間表示
+            // 5秒間表示
+            yield return new WaitForSeconds(5f);
             caughtPlayerText.text = "";
         }
 

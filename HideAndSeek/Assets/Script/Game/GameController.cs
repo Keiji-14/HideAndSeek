@@ -202,6 +202,8 @@ namespace Game
 
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
+
+                StartCoroutine(gameUI.ViewGraceText("他の人が隠れている間にマップを覚えましょう"));
             }
         }
 
@@ -219,6 +221,8 @@ namespace Game
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
 
                 var addHider = 1;
+
+                StartCoroutine(gameUI.ViewGraceText("鬼から見つからないように隠れましょう"));
                 photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, addHider);
             }
         }
