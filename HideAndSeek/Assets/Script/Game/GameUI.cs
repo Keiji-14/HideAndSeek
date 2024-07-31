@@ -1,7 +1,6 @@
-﻿using Photon.Pun;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 namespace Game
 {
@@ -11,10 +10,17 @@ namespace Game
     public class GameUI : MonoBehaviour
     {
         #region SerializeField
+        [Header("Seeker UI")]
         /// <summary>鬼側のCanvas</summary>
         [SerializeField] private GameObject seekerCanvasObj;
+        /// <summary>鬼側の開始時UI</summary>
+        [SerializeField] private GameObject seekerStartUIObj;
+        [Header("Hider UI")]
         /// <summary>隠れる側のCanvas</summary>
         [SerializeField] private GameObject hiderCanvasObj;
+        /// <summary>隠れる側の開始時UI</summary>
+        [SerializeField] private GameObject hiderStartUIObj;
+        [Header("Common UI")]
         /// <summary>鬼側の勝利バー</summary>
         [SerializeField] private GameObject seekerWinBar;
         /// <summary>隠れる側の勝利バー</summary>
@@ -22,11 +28,11 @@ namespace Game
         /// <summary>隠れる側のCanvas</summary>
         [SerializeField] private List<GameObject> lifeIconList;
         /// <summary>ゲームの制限時間テキスト</summary>
-        [SerializeField] private Text timerText;
+        [SerializeField] private TextMeshProUGUI timerText;
         /// <summary>ゲーム開始の猶予時間テキスト</summary>
-        [SerializeField] private Text graceTimerText;
-        /// <summary>テキスト</summary>
-        [SerializeField] private Text hiderCountText;
+        [SerializeField] private TextMeshProUGUI graceTimerText;
+        /// <summary>隠れる側の人数テキスト</summary>
+        [SerializeField] private TextMeshProUGUI hiderCountText;
         #endregion
 
         #region PublicMethod
@@ -48,7 +54,6 @@ namespace Game
         {
             seekerWinBar.SetActive(true);
         }
-
 
         public void ViewHiderWin()
         {
@@ -84,6 +89,15 @@ namespace Game
             {
                 lifeIconList[i].SetActive(i < life);
             }
+        }
+
+        /// <summary>
+        /// 捕まえたプレイヤー名を表示する
+        /// </summary>
+        /// <param name="name">捕まえたプレイヤー名</param>
+        public void ViewCaughtPlayerName(string name)
+        {
+            hiderCountText.text = $"{name}を捕まえました";
         }
 
         /// <summary>

@@ -1,7 +1,5 @@
 ﻿using GameData;
 using Photon.Pun;
-using Photon.Realtime;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerNameDisplay : MonoBehaviourPunCallbacks
@@ -18,6 +16,7 @@ public class PlayerNameDisplay : MonoBehaviourPunCallbacks
         if (isBot)
         {
             playerName = "bot";
+            PhotonNetwork.NickName = playerName;
         }
         else
         {

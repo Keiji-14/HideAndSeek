@@ -76,9 +76,9 @@ namespace Game
         }
 
         /// <summary>
-        /// プレイヤーが捕まった時の処理
+        /// プレイヤーが捕まえた時の処理
         /// </summary>
-        /// <param name="hiderViewID">捕まったプレイヤーのPhotonViewID</param>
+        /// <param name="hiderViewID">捕まえたプレイヤーのPhotonViewID</param>
         public void OnPlayerCaught(int hiderViewID)
         {
             if (gameStarted)
@@ -87,10 +87,38 @@ namespace Game
                 {
                     capturedHiderIDList.Add(hiderViewID);
 
+                    GameObject hiderPlayer = PhotonView.Find(hiderViewID).gameObject;
+                    if (hiderPlayer != null)
+                    {
+                        var bot = hiderPlayer.GetComponent<HiderBotController>();
+                        if (bot == null)
+                        {
+                            if (PhotonNetwork.LocalPlayer.ActorNumber == hiderPlayer.GetComponent<PhotonView>().Owner.ActorNumber)
+                            {
+                                SetSpectatorMode();
+                            }
+                        }
+
+                        // 捕まえた通知を送信
+                        string seekerName = PhotonNetwork.LocalPlayer.NickName;
+                        string hiderName = hiderPlayer.GetComponent<PhotonView>().Owner.NickName;
+                        photonView.RPC("RPC_DisplayCaughtMessage", RpcTarget.All, hiderViewID, seekerName, hiderName);
+
+                        // MasterClientが消滅処理を行う
+                        if (PhotonNetwork.IsMasterClient)
+                        {
+                            // エフェクトの生成座標
+                            var pos = new Vector3(hiderPlayer.transform.position.x, hiderPlayer.transform.position.y + 0.5f, hiderPlayer.transform.position.z);
+
+                            PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", pos, Quaternion.identity);
+                            PhotonNetwork.Destroy(hiderPlayer);
+                        }
+                    }
+
                     // 全プレイヤーに隠れ側の数を更新
                     var subtractHider = -1;
                     photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, subtractHider);
-                    // 全プレイヤーに捕まったことを通知
+                    // 全プレイヤーに捕まえた事を通知
                     photonView.RPC("RPC_OnPlayerCaught", RpcTarget.All, hiderViewID);
                 }
             }
@@ -481,6 +509,31 @@ namespace Game
             {
                 gameStarted = false;
                 GameOver(true);
+            }
+        }
+
+        /// <summary>
+        /// 捕まえたプレイヤーと鬼のメッセージを表示するRPC
+        /// </summary>
+        /// <param name="hiderViewID">捕まったプレイヤーのPhotonViewID</param>
+        /// <param name="seekerName">捕まえた鬼の名前</param>
+        /// <param name="hiderName">捕まったプレイヤーの名前</param>
+        [PunRPC]
+        private void RPC_DisplayCaughtMessage(int hiderViewID, string seekerName, string hiderName)
+        {
+            GameObject hiderPlayer = PhotonView.Find(hiderViewID).gameObject;
+            if (hiderPlayer != null)
+            {
+                if (PhotonNetwork.LocalPlayer.ActorNumber == hiderPlayer.GetComponent<PhotonView>().Owner.ActorNumber)
+                {
+                    Debug.Log($"{seekerName}に捕まりました");
+                    //gameUI.DisplayMessage($"あなたは鬼の{seekerName}に捕まりました。");
+                }
+                else if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
+                {
+                    Debug.Log($"{hiderName}を捕まえました");
+                    //gameUI.DisplayMessage($"あなたは{hiderName}を捕まえました。");
+                }
             }
         }
 
