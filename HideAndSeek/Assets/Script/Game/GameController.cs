@@ -503,6 +503,14 @@ namespace Game
                     var pos = new Vector3(hiderPlayer.transform.position.x, hiderPlayer.transform.position.y + 0.5f, hiderPlayer.transform.position.z);
 
                     PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", pos, Quaternion.identity);
+                    // 所有権の確認と移行
+                    PhotonView hiderPhotonView = hiderPlayer.GetComponent<PhotonView>();
+                    if (!hiderPhotonView.IsMine)
+                    {
+                        hiderPhotonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+                    }
+
+                    // オブジェクトを削除
                     PhotonNetwork.Destroy(hiderPlayer);
                 }
             }
