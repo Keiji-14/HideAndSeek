@@ -1,33 +1,36 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// エフェクト終了時に消滅させる処理
-/// </summary>
-public class DestroyOnParticleSystemEnd : MonoBehaviour
+namespace Effect
 {
-    #region PrivateField
-    /// <summary>パーティクルシステム</summary>
-    private ParticleSystem particleSystem;
-    #endregion
-
-    #region UnityEvent
-    void Start()
+    /// <summary>
+    /// エフェクト終了時に消滅させる処理
+    /// </summary>
+    public class DestroyOnParticleSystemEnd : MonoBehaviour
     {
-        particleSystem = GetComponent<ParticleSystem>();
-        
-        // パーティクルシステムがnullの場合、直ぐに消滅させる
-        if (particleSystem == null)
-        {
-            Destroy(this);
-        }
-    }
+        #region PrivateField
+        /// <summary>パーティクルシステム</summary>
+        private ParticleSystem particleSystem;
+        #endregion
 
-    void Update()
-    {
-        if (particleSystem != null && !particleSystem.IsAlive())
+        #region UnityEvent
+        void Start()
         {
-            Destroy(gameObject);
+            particleSystem = GetComponent<ParticleSystem>();
+
+            // パーティクルシステムがnullの場合、直ぐに消滅させる
+            if (particleSystem == null)
+            {
+                Destroy(this);
+            }
         }
+
+        void Update()
+        {
+            if (particleSystem != null && !particleSystem.IsAlive())
+            {
+                Destroy(gameObject);
+            }
+        }
+        #endregion
     }
-    #endregion
 }

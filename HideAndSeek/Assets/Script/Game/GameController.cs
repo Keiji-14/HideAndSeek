@@ -1,7 +1,7 @@
 ﻿using GameData;
 using Scene;
+using Player;
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -252,7 +252,7 @@ namespace Game
         /// </summary>
         /// <param name="player">チェックするプレイヤー</param>
         /// <returns>生成されている場合はtrue</returns>
-        private bool HasSpawnedPlayer(Player player)
+        private bool HasSpawnedPlayer(Photon.Realtime.Player player)
         {
             return player.TagObject != null;
         }
