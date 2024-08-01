@@ -120,8 +120,8 @@ MonoBehaviour:
   jumpHeight: 1.5
   gravity: -9.81
   cameraTransform: {fileID: 7786678533296474787}
-  nameCanvas: {fileID: 6318870628369840427}
   transformationObjList: []
+  nameCanvas: {fileID: 6318870628369840427}
   playerNameDisplay: {fileID: 4727008752874514199}
 --- !u!1 &1305232979949904456
 GameObject:
@@ -347,6 +347,8 @@ MonoBehaviour:
   offset: {x: 0, y: 2, z: -5}
   playerTransform: {fileID: 906705581141023676}
   smoothSpeed: 0.125
+  minXRotation: -18
+  maxXRotation: 60
 --- !u!1 &7687797012044697043
 GameObject:
   m_ObjectHideFlags: 0

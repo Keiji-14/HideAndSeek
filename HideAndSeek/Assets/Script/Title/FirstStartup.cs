@@ -1,4 +1,5 @@
 ﻿using GameData;
+using Audio;
 using System;
 using UniRx;
 using UnityEngine;
@@ -59,6 +60,7 @@ namespace Title
 
                 PlayerData playerData = new PlayerData(nameInputField.text);
                 GameDataManager.Instance().PlayerDataInit();
+                SE.instance.Play(SE.SEName.ButtonSE);
 
                 firstStartupWindow.SetActive(false);
             }).AddTo(this);

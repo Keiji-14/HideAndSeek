@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Audio;
+using System;
 using System.Collections;
 using UniRx;
 using UnityEngine;
@@ -84,6 +85,7 @@ namespace Title
             {
                 SwicthMatchingWindow(true);
                 ViewRoleImageUI(true);
+                SE.instance.Play(SE.SEName.ButtonSE);
                 SelectedRoleSubject.OnNext("Seeker");
             }).AddTo(this);
 
@@ -91,16 +93,19 @@ namespace Title
             {
                 SwicthMatchingWindow(true);
                 ViewRoleImageUI(false);
+                SE.instance.Play(SE.SEName.ButtonSE);
                 SelectedRoleSubject.OnNext("Hider");
             }).AddTo(this);
 
             InputTitleBackBtnObservable.Subscribe(_ =>
             {
+                SE.instance.Play(SE.SEName.ButtonSE);
                 SwicthMatchWindow(false);
             }).AddTo(this);
 
             InputMatchingCancelBtnObservable.Subscribe(_ =>
             {
+                SE.instance.Play(SE.SEName.ButtonSE);
                 SwicthMatchingWindow(false);
                 MatchingCancelSubject.OnNext(Unit.Default);
             }).AddTo(this);

@@ -31,10 +31,11 @@ namespace Player
         [SerializeField] private float gravity;
         /// <summary>カメラのTransform</summary>
         [SerializeField] private Transform cameraTransform;
-        /// <summary>名前用をキャンバス</summary>
-        [SerializeField] private Canvas nameCanvas;
         /// <summary>変身するオブジェクトのリスト</summary>
         [SerializeField] private List<GameObject> transformationObjList;
+        [Header("Component")]
+        /// <summary>名前用をキャンバス</summary>
+        [SerializeField] private Canvas nameCanvas;
         /// <summary>プレイヤー名の表示</summary>
         [SerializeField] private PlayerNameDisplay playerNameDisplay;
         #endregion

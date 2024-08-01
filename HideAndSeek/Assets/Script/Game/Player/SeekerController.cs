@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Player
 {
+    /// <summary>
+    /// 鬼側のプレイヤー処理
+    /// </summary>
     public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
     {
         #region PrivateField
@@ -21,6 +24,7 @@ namespace Player
         private bool previousIsAttacking;
         /// <summary>速度ベクトル</summary>
         private Vector3 velocity;
+        [Header("Component")]
         /// <summary>カメラ</summary>
         private Camera camera;
         /// <summary>キャラクターコントローラー</summary>
@@ -42,6 +46,7 @@ namespace Player
         [SerializeField] private float attackRange;
         /// <summary>カメラのTransform</summary>
         [SerializeField] private Transform cameraTransform;
+        [Header("Component")]
         /// <summary>名前用をキャンバス</summary>
         [SerializeField] private Canvas nameCanvas;
         /// <summary>アニメーター</summary>

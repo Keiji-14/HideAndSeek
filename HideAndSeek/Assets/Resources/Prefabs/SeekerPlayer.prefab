@@ -585,6 +585,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 100
   playerBody: {fileID: 4433321712977858867}
+  minXRotation: -60
+  maxXRotation: 75
 --- !u!1 &2956106848255200928
 GameObject:
   m_ObjectHideFlags: 0
