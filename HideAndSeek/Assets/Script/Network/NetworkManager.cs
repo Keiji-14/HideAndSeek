@@ -154,7 +154,7 @@ namespace NetWork
             // ランダムなルーム名を生成する
             string randomRoomName = GenerateRandomRoomName();
             // ルームのオプションを設定する
-            RoomOptions roomOptions = new RoomOptions { MaxPlayers = 2 };
+            RoomOptions roomOptions = new RoomOptions { MaxPlayers = 3 };
             roomOptions.CustomRoomProperties = new Hashtable() { { "IsOpen", true } };
             roomOptions.CustomRoomPropertiesForLobby = new string[] { "IsOpen" };
             // ルームを作成する
