@@ -22,18 +22,25 @@ namespace Title
         private bool isMatching = false;
 
         private string selectedRole;
-        /// <summary>マッチング開始ボタンを選択した時の処理 </summary>
-        private IObservable<Unit> InputMatchingObservable =>
-            matchingBtn.OnClickAsObservable();
+        /// <summary>開始ボタンを選択した時の処理 </summary>
+        private IObservable<Unit> InputStartObservable =>
+            startBtn.OnClickAsObservable();
+        /// <summary>マイページボタンを選択した時の処理 </summary>
+        private IObservable<Unit> InputMyPageObservable =>
+            myPageBtn.OnClickAsObservable();
         #endregion
 
         #region SerializeField
-        /// <summary>マッチングボタン</summary>
-        [SerializeField] private Button matchingBtn;
+        /// <summary>開始ボタン</summary>
+        [SerializeField] private Button startBtn;
+        /// <summary>マイページボタン</summary>
+        [SerializeField] private Button myPageBtn;
         /// <summary>初回起動時の処理</summary>
         [SerializeField] private FirstStartup firstStartup;
         /// <summary>タイトル画面のUI</summary>
         [SerializeField] private TitleUI titleUI;
+        /// <summary>マイページ画面</summary>
+        [SerializeField] private MyPage myPage;
         #endregion
 
         #region UnityEvent
@@ -69,9 +76,15 @@ namespace Title
 
             titleUI.Init();
 
-            InputMatchingObservable.Subscribe(_ =>
+            InputStartObservable.Subscribe(_ =>
             {
                 titleUI.SwicthMatchWindow(true);
+                SE.instance.Play(SE.SEName.ButtonSE);
+            }).AddTo(this);
+
+            InputMyPageObservable.Subscribe(_ =>
+            {
+                myPage.OpenMyPage();
                 SE.instance.Play(SE.SEName.ButtonSE);
             }).AddTo(this);
 
@@ -85,6 +98,10 @@ namespace Title
             {
                 IsMatching(false);
             }).AddTo(this);
+
+            myPage.Init();
+
+            
         }
 
         /// <summary>

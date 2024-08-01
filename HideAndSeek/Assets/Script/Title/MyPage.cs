@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GameData;
+using Audio;
+using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,26 +13,41 @@ namespace Title
     /// </summary>
     public class MyPage : MonoBehaviour
     {
-        /*#region PrivateField
-        /// <summary>決定ボタンを選択した時の処理 </summary>
-        private IObservable<Unit> InputEnterBtnObservable =>
-            enterBtn.OnClickAsObservable();
+        #region PrivateField
+        /// <summary>名前変更ボタンを選択した時の処理 </summary>
+        private IObservable<Unit> InputChangeNameBtnObservable =>
+            changeNameBtn.OnClickAsObservable();
+        /// <summary>名前決定ボタンを選択した時の処理 </summary>
+        private IObservable<Unit> InputEnterNameBtnObservable =>
+            enterNameBtn.OnClickAsObservable();
         /// <summary>閉じるボタンを選択した時の処理 </summary>
         private IObservable<Unit> InputCloseBtnObservable =>
             closeBtn.OnClickAsObservable();
         #endregion
 
         #region SerializeField
-        /// <summary>決定ボタン</summary>
-        [SerializeField] private Button enterBtn;
+        /// <summary>名前変更ボタン</summary>
+        [SerializeField] private Button changeNameBtn;
+        /// <summary>名前決定ボタン</summary>
+        [SerializeField] private Button enterNameBtn;
         /// <summary>閉じるボタン</summary>
         [SerializeField] private Button closeBtn;
         /// <summary>名前を表示</summary>
-        [SerializeField] private TextMeshProUGUI nameText;
+        [SerializeField] private Text nameText;
         /// <summary>名前入力場所</summary>
         [SerializeField] private InputField nameInputField;
         /// <summary>マイページウィンドウ</summary>
         [SerializeField] private GameObject myPageWindow;
+        /// <summary>名前変更ウィンドウ</summary>
+        [SerializeField] private GameObject changeNameWindow;
+        #endregion
+
+        #region UnityEvent
+        void Update()
+        {
+            // テキストが含まれているかどうかでボタンを有効にする
+            enterNameBtn.interactable = IsInputFieldValue();
+        }
         #endregion
 
         #region PublicMethod
@@ -39,21 +56,23 @@ namespace Title
         /// </summary>
         public void Init()
         {
-            nameInputField.text = "";
+            InputChangeNameBtnObservable.Subscribe(_ =>
+            {
+                OpenChangeNameWindow();
+            }).AddTo(this);
 
-            nameInputField.onValueChanged.AddListener(OnInputFieldValueChanged);
-
-            InputEnterBtnObservable.Subscribe(_ =>
+            InputEnterNameBtnObservable.Subscribe(_ =>
             {
                 if (nameInputField.text.Length > 0)
                 {
-                    PlayerPrefs.SetInt("FirstTime", 1);
                     PlayerPrefs.SetString("UserName", nameInputField.text);
 
                     PlayerData playerData = new PlayerData(nameInputField.text);
-                    GameDataManager.instance.SetPlayerData(playerData);
+                    GameDataManager.Instance().SetPlayerData(playerData);
+
+                    UpdateViewName();
                 }
-                myPageWindow.SetActive(false);
+                changeNameWindow.SetActive(false);
 
                 SE.instance.Play(SE.SEName.ButtonSE);
             }).AddTo(this);
@@ -61,7 +80,6 @@ namespace Title
             InputCloseBtnObservable.Subscribe(_ =>
             {
                 myPageWindow.SetActive(false);
-
                 SE.instance.Play(SE.SEName.ButtonSE);
             }).AddTo(this);
         }
@@ -71,15 +89,33 @@ namespace Title
         /// </summary>
         public void OpenMyPage()
         {
-            nameInputField.text = "";
-
-            nameText.text = GameDataManager.instance.GetPlayerData().name;
+            UpdateViewName();
 
             myPageWindow.SetActive(true);
+        }
+
+        /// <summary>
+        /// 名前変更ウィンドウを開く処理
+        /// </summary>
+        public void OpenChangeNameWindow()
+        {
+            nameInputField.text = "";
+
+            nameInputField.onValueChanged.AddListener(OnInputFieldValueChanged);
+
+            changeNameWindow.SetActive(true);
         }
         #endregion
 
         #region PrivateMethod
+        /// <summary>
+        /// 表示する名前を更新する処理
+        /// </summary>
+        private void UpdateViewName()
+        {
+            nameText.text = GameDataManager.Instance().GetPlayerData().name;
+        }
+
         /// <summary>
         /// ひらがな、カタカナ、英語、一部の記号以外の文字を削除する処理
         /// </summary>
@@ -90,6 +126,14 @@ namespace Title
             // テキストを更新する
             nameInputField.text = filteredText;
         }
-        #endregion*/
+
+        /// <summary>
+        /// テキストが含まれているかどうかの処理
+        /// </summary>
+        private bool IsInputFieldValue()
+        {
+            return nameInputField.text.Length > 0;
+        }
+        #endregion
     }
 }

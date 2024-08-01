@@ -162,8 +162,8 @@ namespace Game
 
             if (PhotonNetwork.IsMasterClient)
             {
-                int numberOfBots = 3; // 生成するボットの数を指定
-                SpawnHiderBots(numberOfBots);
+                //int numberOfBots = 3; // 生成するボットの数を指定
+                //SpawnHiderBots(numberOfBots);
             }
 
             // 鬼側か隠れる側かを判定する処理
@@ -265,7 +265,7 @@ namespace Game
             // 上空視点カメラ
             overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
             // プレイヤー生成待ちのため少し待つ
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
 
             // 自プレイヤーのSeekerControllerを取得して移動を無効にする
             GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;

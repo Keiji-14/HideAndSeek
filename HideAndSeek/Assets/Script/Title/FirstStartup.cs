@@ -14,7 +14,7 @@ namespace Title
     {
         #region PrivateField
         /// <summary>プレイヤー名の初期名</summary>
-        private const string initialText = "ユーザー";
+        private const string initialText = "User";
         /// <summary>決定ボタンを選択した時の処理</summary>
         private IObservable<Unit> InputEnterObservable =>
             enterBtn.OnClickAsObservable();
@@ -96,6 +96,6 @@ namespace Title
         {
             return nameInputField.text.Length > 0;
         }
-        #endregion*/
+        #endregion
     }
 }
