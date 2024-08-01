@@ -20,12 +20,12 @@ namespace Title
         private const float resetCount = 0.0f;
         /// <summary>マッチング中かどうかの処理</summary>
         private bool isMatching = false;
-
+        /// <summary>選択した役割</summary>
         private string selectedRole;
-        /// <summary>開始ボタンを選択した時の処理 </summary>
+        /// <summary>開始ボタンを選択した時の処理</summary>
         private IObservable<Unit> InputStartObservable =>
             startBtn.OnClickAsObservable();
-        /// <summary>マイページボタンを選択した時の処理 </summary>
+        /// <summary>マイページボタンを選択した時の処理</summary>
         private IObservable<Unit> InputMyPageObservable =>
             myPageBtn.OnClickAsObservable();
         #endregion
@@ -100,8 +100,6 @@ namespace Title
             }).AddTo(this);
 
             myPage.Init();
-
-            
         }
 
         /// <summary>
@@ -129,8 +127,9 @@ namespace Title
         }
 
         /// <summary>
-        /// マッチング中かどうかの処理
+        /// マッチングを行うかの処理
         /// </summary>
+        /// <param name="isMatching">マッチング中かどうかの判定</param>
         private void IsMatching(bool isMatching)
         {
             this.isMatching = isMatching;

@@ -2,6 +2,9 @@
 
 namespace GameData
 {
+    /// <summary>
+    /// ゲーム中の情報
+    /// </summary>
     public class GameData : MonoBehaviour
     {
         #region PublicField

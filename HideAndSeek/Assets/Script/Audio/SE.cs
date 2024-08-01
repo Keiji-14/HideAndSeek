@@ -23,6 +23,7 @@ namespace Audio
         #region UnityEvent
         private void Awake()
         {
+            // シングルトンの実装
             if (instance == null)
             {
                 instance = this;

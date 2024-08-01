@@ -29,7 +29,7 @@ namespace Player
         private Camera camera;
         /// <summary>キャラクターコントローラー</summary>
         private CharacterController characterController;
-        /// <summary>攻撃モーションのクリップ</summary>
+        /// <summary>ゲームUI</summary>
         private GameUI gameUI;
         #endregion
 
@@ -96,6 +96,11 @@ namespace Player
             cameraTransform.gameObject.SetActive(photonView.IsMine);
         }
 
+        /// <summary>
+        /// Photonのシリアライズ処理
+        /// </summary>
+        /// <param name="stream">データストリーム</param>
+        /// <param name="info">メッセージ情報</param>
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if (stream.IsWriting)
@@ -116,7 +121,8 @@ namespace Player
 
                 if (isJumping)
                 {
-                    animator.SetTrigger("Jump"); // ジャンプフラグが立っていたらジャンプアニメーションをトリガー
+                    // ジャンプフラグが立っていたらジャンプアニメーションをトリガー
+                    animator.SetTrigger("Jump");
                 }
 
                 if (newIsAttacking && !previousIsAttacking)
@@ -146,6 +152,9 @@ namespace Player
 
         }
 
+        /// <summary>
+        /// 移動処理
+        /// </summary>
         private void Move()
         {
             isGrounded = characterController.isGrounded;
@@ -169,6 +178,7 @@ namespace Player
                 photonView.RPC("RPC_SetRunningAnimation", RpcTarget.All, isRunning);
             }
 
+            // ジャンプ処理
             if (Input.GetButtonDown("Jump") && isGrounded)
             {
                 isJumping = true;
@@ -188,6 +198,9 @@ namespace Player
             photonView.RPC("RPC_UpdateGroundedState", RpcTarget.All, isGrounded);
         }
 
+        /// <summary>
+        /// 攻撃処理
+        /// </summary>
         private void HandleAttack()
         {
             // 左クリックで攻撃
@@ -197,6 +210,9 @@ namespace Player
             }
         }
 
+        /// <summary>
+        /// 攻撃のコルーチン処理
+        /// </summary>
         private IEnumerator PerformAttack()
         {
             // 攻撃が既に行われている場合は終了
@@ -214,6 +230,9 @@ namespace Player
             isAttacking = false;
         }
 
+        /// <summary>
+        /// 攻撃コルーチン
+        /// </summary>
         private IEnumerator AttackCoroutine()
         {
             animator.SetTrigger("Attack");
@@ -222,6 +241,7 @@ namespace Player
             RaycastHit hit;
             Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
 
+            // 攻撃が当たったかどうか
             if (Physics.Raycast(camera.transform.position, forward, out hit, attackRange))
             {
                 if (hit.collider.CompareTag("Hider"))
@@ -240,6 +260,10 @@ namespace Player
             isAttacking = false;
         }
 
+        /// <summary>
+        /// 隠れる側のプレイヤーを捕まえる処理
+        /// </summary>
+        /// <param name="hider">隠れる側のプレイヤーオブジェクト</param>
         private void CaptureHider(GameObject hider)
         {
             // 最親オブジェクトを取得
@@ -260,6 +284,11 @@ namespace Player
             }
         }
 
+        /// <summary>
+        /// オブジェクトの最親オブジェクトを取得する処理
+        /// </summary>
+        /// <param name="obj">対象オブジェクト</param>
+        /// <returns>最親オブジェクト</returns>
         private GameObject GetRootParent(GameObject obj)
         {
             Transform current = obj.transform;
@@ -270,6 +299,10 @@ namespace Player
             return current.gameObject;
         }
 
+        /// <summary>
+        /// 間違ったターゲットに攻撃した場合の処理
+        /// </summary>
+        /// <param name="target">攻撃対象のオブジェクト</param>
         private void HandleWrongAttack(GameObject target)
         {
             Debug.Log("Wrong target hit: " + target.name);
@@ -292,24 +325,38 @@ namespace Player
             }
         }
 
+        /// <summary>
+        /// 走るアニメーションを同期するRPC
+        /// </summary>
+        /// <param name="isRunning">走っているかどうかの状態</param>
         [PunRPC]
         private void RPC_SetRunningAnimation(bool isRunning)
         {
             animator.SetBool("isRunning", isRunning);
         }
 
+        /// <summary>
+        /// ジャンプアニメーションを同期するRPC
+        /// </summary>
         [PunRPC]
         private void RPC_SetJumpAnimation()
         {
             animator.SetTrigger("Jump");
         }
 
+        /// <summary>
+        /// 攻撃アニメーションを同期するRPC
+        /// </summary>
         [PunRPC]
         private void RPC_SetAttackAnimation()
         {
             animator.SetTrigger("Attack");
         }
 
+        /// <summary>
+        /// 地面にいるかどうかの状態を同期するRPC
+        /// </summary>
+        /// <param name="groundedState">地面にいるかどうかの状態</param>
         [PunRPC]
         private void RPC_UpdateGroundedState(bool groundedState)
         {

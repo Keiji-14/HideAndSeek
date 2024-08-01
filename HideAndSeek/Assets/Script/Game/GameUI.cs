@@ -41,6 +41,10 @@ namespace Game
         #endregion
 
         #region PublicMethod
+        /// <summary>
+        /// 役割によって表示するCanavsを切り替える
+        /// </summary>
+        /// <param name="role">役割</param>
         public void ToggleCanvas(string role)
         {
             if (role == "Seeker")
@@ -55,11 +59,17 @@ namespace Game
             }
         }
 
+        /// <summary>
+        /// 鬼側の勝利時に表示する
+        /// </summary>
         public void ViewSeekerWin()
         {
             seekerWinBar.SetActive(true);
         }
 
+        /// <summary>
+        /// 隠れる側の勝利時に表示する
+        /// </summary>
         public void ViewHiderWin()
         {
             hiderWinBar.SetActive(true);

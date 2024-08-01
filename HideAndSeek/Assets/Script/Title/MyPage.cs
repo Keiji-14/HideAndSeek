@@ -63,6 +63,7 @@ namespace Title
 
             InputEnterNameBtnObservable.Subscribe(_ =>
             {
+                // InputFieldにテキストが含まれているかどうか
                 if (nameInputField.text.Length > 0)
                 {
                     PlayerPrefs.SetString("UserName", nameInputField.text);

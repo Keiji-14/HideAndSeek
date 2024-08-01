@@ -37,8 +37,6 @@ namespace NetWork
             // 3人揃ったかどうかを確認
             if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
             {
-                Debug.Log($"PhotonNetwork.CurrentRoom.PlayerCount : {PhotonNetwork.CurrentRoom.PlayerCount}");
-
                 isGameStarted = true;
                 // ゲームシーンに移行
                 MatchingCompletedSubject.OnNext(Unit.Default);

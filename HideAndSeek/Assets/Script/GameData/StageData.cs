@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace GameData
 {
+    /// <summary>
+    /// ステージ情報
+    /// </summary>
     [CreateAssetMenu(fileName = "StageData", menuName = "Create Stage Data")]
     public class StageData : ScriptableObject
     {

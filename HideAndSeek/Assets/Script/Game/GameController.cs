@@ -66,12 +66,6 @@ namespace Game
         {
             GameDataManager.Instance().SetStagerData(stageData);
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                // マスタークライアントがステージデータを生成して他のプレイヤーに共有する
-                //photonView.RPC("RPC_SetStageData", RpcTarget.AllBuffered, stageData.stageID);
-            }
-
             StartCoroutine(WaitForCustomProperties());
         }
 

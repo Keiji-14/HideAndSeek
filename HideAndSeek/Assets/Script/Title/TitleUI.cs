@@ -114,6 +114,7 @@ namespace Title
         /// <summary>
         /// マッチング中のUI表示切り替えの処理
         /// </summary>
+        /// <param name="isView">表示判定</param>
         public void ViewMatchingUI(bool isView)
         {
             timeCountUIObj.SetActive(isView);
@@ -133,6 +134,7 @@ namespace Title
         /// <summary>
         /// マッチング画面の表示を切り替える処理
         /// </summary>
+        /// <param name="isView">表示判定</param>
         public void SwicthMatchWindow(bool isView)
         {
             titleWindow.SetActive(!isView);
@@ -167,6 +169,7 @@ namespace Title
         /// <summary>
         /// マッチング中の画面の表示を切り替える処理
         /// </summary>
+        /// <param name="isView">表示判定</param>
         private void SwicthMatchingWindow(bool isView)
         {
             matchWindow.SetActive(!isView);
@@ -176,6 +179,7 @@ namespace Title
         /// <summary>
         /// マッチング中の画面の表示を切り替える処理
         /// </summary>
+        /// <param name="isSeeker">鬼かどうかの判定</param>
         private void ViewRoleImageUI(bool isSeeker)
         {
             seekerUIObj.SetActive(isSeeker);

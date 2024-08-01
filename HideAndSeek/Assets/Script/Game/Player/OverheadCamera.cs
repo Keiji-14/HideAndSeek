@@ -73,7 +73,7 @@ namespace Player
             // 現在の回転角度を取得
             Vector3 currentRotation = transform.eulerAngles;
             currentRotation.x = verticalRotation;
-            currentRotation.z = 0;  // Z軸の回転をリセット
+            currentRotation.z = 0;
 
             // カメラの回転を設定
             transform.eulerAngles = currentRotation;
