@@ -238,14 +238,16 @@ public class SeekerController : MonoBehaviourPunCallbacks, IPunObservable
         GameObject rootHider = GetRootParent(hider);
 
         // Hiderを捕まえた時の処理
+        PhotonView seekderView = gameObject.GetComponent<PhotonView>();
         PhotonView hiderView = rootHider.GetComponent<PhotonView>();
+
         if (hiderView != null)
         {
             // GameControllerのインスタンスを取得
             GameController gameController = FindObjectOfType<GameController>();
             if (gameController != null)
             {
-                gameController.OnPlayerCaught(hiderView.ViewID);
+                gameController.OnPlayerCaught(seekderView.ViewID, hiderView.ViewID);
             }
         }
     }

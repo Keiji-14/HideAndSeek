@@ -78,8 +78,9 @@ namespace Game
         /// <summary>
         /// プレイヤーが捕まえた時の処理
         /// </summary>
-        /// <param name="hiderViewID">捕まえたプレイヤーのPhotonViewID</param>
-        public void OnPlayerCaught(int hiderViewID)
+        /// <param name="seekerViewID">捕まえた鬼のPhotonViewID</param>
+        /// <param name="hiderViewID">捕まったプレイヤーのPhotonViewID</param>
+        public void OnPlayerCaught(int seekerViewID, int hiderViewID)
         {
             if (gameStarted)
             {
@@ -101,10 +102,9 @@ namespace Game
                         }
 
                         // 捕まえた通知を送信
-                        string seekerName = PhotonNetwork.LocalPlayer.NickName;
                         string hiderName = hiderPlayer.GetComponent<PhotonView>().Owner.NickName;
 
-                        photonView.RPC("RPC_DisplayCaughtMessage", RpcTarget.All, hiderViewID, seekerName, hiderName);
+                        photonView.RPC("RPC_DisplayCaughtMessage", RpcTarget.All, seekerViewID, hiderViewID, hiderName);
 
                         // MasterClientが消滅処理を行う
                         if (PhotonNetwork.IsMasterClient)
@@ -518,14 +518,16 @@ namespace Game
         /// <summary>
         /// 捕まえたプレイヤーと鬼のメッセージを表示するRPC
         /// </summary>
-        /// <param name="hiderViewID">捕まったプレイヤーのPhotonViewID</param>
-        /// <param name="seekerName">捕まえた鬼の名前</param>
+        /// <param name="seekerViewID">捕まえた鬼のPhotonViewID</param>
+        /// <param name="hiderViewID">捕まったプレイヤーのPhotonViewID</param
         /// <param name="hiderName">捕まったプレイヤーの名前</param>
         [PunRPC]
-        private void RPC_DisplayCaughtMessage(int hiderViewID, string seekerName, string hiderName)
+        private void RPC_DisplayCaughtMessage(int seekerViewID, int hiderViewID, string hiderName)
         {
+            GameObject seekerPlayer = PhotonView.Find(seekerViewID).gameObject;
             GameObject hiderPlayer = PhotonView.Find(hiderViewID).gameObject;
-            if (hiderPlayer != null)
+
+            if (seekerPlayer != null && hiderPlayer != null)
             {
                 var bot = hiderPlayer.GetComponent<HiderBotController>();
                 bool isBot = bot != null;
@@ -534,21 +536,11 @@ namespace Game
 
                 if (PhotonNetwork.LocalPlayer.ActorNumber == hiderPlayer.GetComponent<PhotonView>().Owner.ActorNumber && !isBot)
                 {
-                    Debug.Log($"{seekerName}に捕まりました");
-                    StartCoroutine(gameUI.ViewCaughtPlayerName($"{seekerName}に捕まりました"));
+                    StartCoroutine(gameUI.ViewCaughtPlayerName($"{seekerPlayer.GetComponent<PhotonView>().Owner.NickName}に捕まりました"));
                 }
-                else if (PhotonNetwork.LocalPlayer.NickName == seekerName)
+                else if (PhotonNetwork.LocalPlayer.ActorNumber == seekerPlayer.GetComponent<PhotonView>().Owner.ActorNumber)
                 {
-                    if (isBot)
-                    {
-                        Debug.Log($"{caughtHiderName}を捕まえました");
-                        StartCoroutine(gameUI.ViewCaughtPlayerName($"{caughtHiderName}を捕まえました"));
-                    }
-                    else
-                    {
-                        Debug.Log($"{caughtHiderName}を捕まえました");
-                        StartCoroutine(gameUI.ViewCaughtPlayerName($"{caughtHiderName}を捕まえました"));
-                    }
+                    StartCoroutine(gameUI.ViewCaughtPlayerName($"{caughtHiderName}を捕まえました"));
                 }
             }
         }
