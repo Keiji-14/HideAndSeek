@@ -194,7 +194,6 @@ namespace Player
             if (Input.GetMouseButtonDown(0) && !isAttacking && isGrounded)
             {
                 StartCoroutine(PerformAttack());
-                SE.instance.Play(SE.SEName.AttackSE);
             }
         }
 
@@ -218,6 +217,7 @@ namespace Player
         private IEnumerator AttackCoroutine()
         {
             animator.SetTrigger("Attack");
+            SE.instance.Play(SE.SEName.AttackSE);
 
             RaycastHit hit;
             Vector3 forward = camera.transform.TransformDirection(Vector3.forward);
@@ -227,6 +227,7 @@ namespace Player
                 if (hit.collider.CompareTag("Hider"))
                 {
                     CaptureHider(hit.collider.gameObject);
+                    SE.instance.Play(SE.SEName.AttackSE);
                 }
                 else
                 {

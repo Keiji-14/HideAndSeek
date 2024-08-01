@@ -41,6 +41,7 @@ namespace Audio
             ButtonSE,
             AttackSE,
             MatchingSE,
+            CorrectSE,
         }
 
         /// <summary>
