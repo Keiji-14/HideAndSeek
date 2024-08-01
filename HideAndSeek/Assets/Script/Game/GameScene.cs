@@ -9,6 +9,7 @@ namespace Game
     public class GameScene : SceneBase
     {
         #region SerializeField
+        /// <summary>ゲーム画面の処理</summary>
         [SerializeField] private GameController gameController;
         #endregion
 

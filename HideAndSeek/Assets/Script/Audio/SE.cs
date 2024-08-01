@@ -9,12 +9,14 @@ namespace Audio
     public class SE : MonoBehaviour
     {
         #region PublicField
+        /// <summary>シングルトン</summary>
         public static SE instance = null;
         #endregion
 
         #region SerializeField
+        /// <summary>効果音</summary>
         [SerializeField] private AudioSource audioSource;
-
+        /// <summary>各効果音のLリスト</summary>
         [SerializeField] private List<AudioClip> seClipList;
         #endregion
 

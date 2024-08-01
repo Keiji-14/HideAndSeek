@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Game
 {
     /// <summary>
-    /// ゲーム画面の処理管理
+    /// ゲーム画面の処理を管理する
     /// </summary>
     public class GameController : MonoBehaviourPunCallbacks
     {
@@ -232,7 +232,6 @@ namespace Game
 
                 var addHider = 1;
                 photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, addHider);
-
             }
         }
 
@@ -398,7 +397,12 @@ namespace Game
         /// </summary>
         private void StarGameSeekerInit()
         {
-            Destroy(overheadCamera.gameObject);
+            if (overheadCamera == null)
+            {
+                // 上空カメラを削除する
+                Destroy(overheadCamera.gameObject);
+                overheadCamera = null;
+            }
 
             // 自プレイヤーのSeekerControllerを有効にする
             GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
@@ -532,6 +536,7 @@ namespace Game
 
                 string caughtHiderName = isBot ? bot.GetBotName() : hiderName;
 
+                // 隠れる側のプレイヤーかどうか
                 if (PhotonNetwork.LocalPlayer.ActorNumber == hiderPlayer.GetComponent<PhotonView>().Owner.ActorNumber && !isBot)
                 {
                     StartCoroutine(gameUI.ViewCaughtPlayerName($"{seekerPlayer.GetComponent<PhotonView>().Owner.NickName}に捕まりました"));

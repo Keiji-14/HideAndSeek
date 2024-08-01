@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Player
 {
     /// <summary>
-    /// 隠れる側の処理
+    /// 隠れる側のプレイヤー処理
     /// </summary>
     public class HiderController : MonoBehaviourPunCallbacks
     {
@@ -134,6 +134,7 @@ namespace Player
         /// <summary>
         /// プレイヤーを物に変身させる処理
         /// </summary>
+        /// <param name="transformIndex">変身するオブジェクトのインデックス</param>
         private void TransformIntoObject(int transformIndex)
         {
             photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, transformIndex);
@@ -142,6 +143,7 @@ namespace Player
         /// <summary>
         /// プレイヤーを物に変身させる処理
         /// </summary>
+        /// <param name="transformIndex">変身するオブジェクトのインデックス</param>
         [PunRPC]
         private void RPC_TransformIntoObject(int transformIndex)
         {

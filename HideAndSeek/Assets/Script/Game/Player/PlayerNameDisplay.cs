@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 namespace Player
 {
+    /// <summary>
+    /// 頭上にプレイヤー名を表示する処理
+    /// </summary>
     public class PlayerNameDisplay : MonoBehaviourPunCallbacks
     {
         #region PublicMethod
@@ -11,8 +14,10 @@ namespace Player
         /// 初期化
         /// </summary>
         /// <param name="isBot">ボットかどうか</param>
+        /// <param name="name">名前<param>
         public void Init(bool isBot, string name = null)
         {
+            // プレイヤー名を取得
             var playerName = GameDataManager.Instance().GetPlayerData().name;
 
             if (isBot)
@@ -33,6 +38,10 @@ namespace Player
         #endregion
 
         #region PrivateMethod
+        /// <summary>
+        /// プレイヤー名を同期する処理
+        /// </summary>
+        /// <param name="playerName">同期するプレイヤー名</param>
         [PunRPC]
         private void RPC_SyncPlayerName(string playerName)
         {

@@ -6,6 +6,9 @@ using UnityEngine.AI;
 
 namespace Player
 {
+    /// <summary>
+    /// 隠れる側のボット処理
+    /// </summary>
     public class HiderBotController : MonoBehaviourPunCallbacks
     {
         #region PrivateField
@@ -71,10 +74,10 @@ namespace Player
         /// <summary>
         /// 初期化
         /// </summary>
+        /// <param name="name">ボットの名前</param>
         public void Init(string name)
         {
             botName = name;
-
             playerNameDisplay.Init(true, botName);
         }
 
@@ -90,7 +93,7 @@ namespace Player
         }
 
         /// <summary>
-        /// 隠れる側のプレイヤーを再表示する
+        /// 隠れる側のプレイヤーを表示する
         /// </summary>
         public void ShowBot()
         {
@@ -103,6 +106,7 @@ namespace Player
         /// <summary>
         /// ボットのプレイヤー名を返す
         /// </summary>
+        /// <returns>ボットの名前</returns>
         public string GetBotName()
         {
             return botName;
@@ -127,6 +131,7 @@ namespace Player
         /// <summary>
         /// プレイヤーを物に変身させる処理
         /// </summary>
+        /// <param name="transformIndex">変身するオブジェクトのインデックス</param>
         private void TransformIntoObject(int transformIndex)
         {
             photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, transformIndex);
@@ -135,6 +140,7 @@ namespace Player
         /// <summary>
         /// プレイヤーを物に変身させる処理
         /// </summary>
+        /// <param name="transformIndex">変身するオブジェクトのインデックス</param>
         [PunRPC]
         private void RPC_TransformIntoObject(int transformIndex)
         {

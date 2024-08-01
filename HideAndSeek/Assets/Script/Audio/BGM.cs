@@ -11,6 +11,7 @@ namespace Audio
     public class BGM : MonoBehaviour
     {
         #region PublicField
+        /// <summary>シングルトン</summary>
         public static BGM instance = null;
         #endregion
 
@@ -19,7 +20,8 @@ namespace Audio
         #endregion
 
         #region SerializeField
-        [SerializeField] private AudioSource bgm;
+        /// <summary>BGM</summary>
+        [SerializeField] private AudioSource audioSource;
         /// <summary>各シーンのBGM</summary>
         [SerializeField] private List<SceneBGM> sceneBGMList;
         #endregion
@@ -106,10 +108,10 @@ namespace Audio
         {
             if (sceneBGMMap.TryGetValue(sceneName, out var bgmClip))
             {
-                if (bgm.clip != bgmClip)
+                if (audioSource.clip != bgmClip)
                 {
-                    bgm.clip = bgmClip;
-                    bgm.Play();
+                    audioSource.clip = bgmClip;
+                    audioSource.Play();
                 }
             }
         }

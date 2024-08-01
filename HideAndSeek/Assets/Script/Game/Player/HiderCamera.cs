@@ -14,10 +14,6 @@ namespace Player
         private float xRotation = 0f;
         /// <summary>カメラのY軸回転角度</summary>
         private float yRotation = 0f;
-        /// <summary>初期位置</summary>
-        private Vector3 initialPosition;
-        /// <summary>初期回転</summary>
-        private Quaternion initialRotation;
         #endregion
 
         #region SerializeField
@@ -29,16 +25,16 @@ namespace Player
         [SerializeField] private Transform playerTransform;
         /// <summary>カメラの補間速度</summary>
         [SerializeField] private float smoothSpeed = 0.125f;
+        /// <summary>カメラのX軸回転角度の最小値</summary>
+        [SerializeField] private float minXRotation = -18f;
+        /// <summary>カメラのX軸回転角度の最大値</summary>
+        [SerializeField] private float maxXRotation = 90f;
         #endregion
 
         #region UnityEvent
         void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
-
-            // 初期の座標と回転を保持
-            initialPosition = transform.position;
-            initialRotation = transform.rotation;
         }
 
         void Update()
@@ -87,7 +83,7 @@ namespace Player
 
             yRotation += mouseX;
             xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            xRotation = Mathf.Clamp(xRotation, minXRotation, maxXRotation);
 
             // カメラリグの回転を設定
             transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
