@@ -205,7 +205,7 @@ namespace Game
         {
             if (!HasSpawnedPlayer(PhotonNetwork.LocalPlayer))
             {
-                var position = new Vector3(Random.Range(-8f, 8f), 3f, Random.Range(-8f, 8f));
+                var position = new Vector3(Random.Range(-4f, 4f), 3f, Random.Range(-8f, 8f));
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
@@ -397,7 +397,7 @@ namespace Game
         /// </summary>
         private void StarGameSeekerInit()
         {
-            if (overheadCamera == null)
+            if (overheadCamera != null)
             {
                 // 上空カメラを削除する
                 Destroy(overheadCamera.gameObject);
