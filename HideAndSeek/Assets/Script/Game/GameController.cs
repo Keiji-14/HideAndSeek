@@ -105,16 +105,6 @@ namespace Game
                         string hiderName = hiderPlayer.GetComponent<PhotonView>().Owner.NickName;
 
                         photonView.RPC("RPC_DisplayCaughtMessage", RpcTarget.All, seekerViewID, hiderViewID, hiderName);
-
-                        // MasterClientが消滅処理を行う
-                        if (PhotonNetwork.IsMasterClient)
-                        {
-                            // エフェクトの生成座標
-                            var pos = new Vector3(hiderPlayer.transform.position.x, hiderPlayer.transform.position.y + 0.5f, hiderPlayer.transform.position.z);
-
-                            PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", pos, Quaternion.identity);
-                            PhotonNetwork.Destroy(hiderPlayer);
-                        }
                     }
 
                     // 全プレイヤーに隠れ側の数を更新
@@ -495,8 +485,8 @@ namespace Game
                         SetSpectatorMode();
                     }
                 }
-                
-                // MasterClientが消滅処理を行う
+
+                // MasterClientが消滅演出を行う
                 if (PhotonNetwork.IsMasterClient)
                 {
                     // エフェクトの生成座標
@@ -505,6 +495,7 @@ namespace Game
                     PhotonNetwork.Instantiate($"Effect/{destroyEffectObj.name}", pos, Quaternion.identity);
                 }
 
+                // 所有者が消滅処理を行う
                 PhotonView hiderPhotonView = hiderPlayer.GetComponent<PhotonView>();
                 if (hiderPhotonView.IsMine)
                 {
@@ -513,6 +504,7 @@ namespace Game
                 }
             }
 
+            Debug.Log($"hiderPlayerCount:{hiderPlayerCount}");
             // 隠れる側のプレイヤーが全て捕まった場合
             if (hiderPlayerCount <= 0)
             {
