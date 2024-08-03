@@ -17,11 +17,11 @@ namespace Game
         #region PrivateField
         /// <summary>隠れる側のプレイヤー数</summary>
         private int hiderPlayerCount;
-        /// <summary>猶予時間が開始されたかどうかのフラグ</summary>
+        /// <summary>猶予時間が開始されたかどうか</summary>
         private bool isGracePeriodStarted = false;
-        /// <summary>ゲームが開始されたかどうかのフラグ</summary>
+        /// <summary>ゲームが開始されたかどうか</summary>
         private bool isGameStarted = false;
-        /// <summary>ゲームが終了されたかどうかのフラグ</summary>
+        /// <summary>ゲームが終了されたかどうか</summary>
         private bool isGameFinished = false;
         /// <summary>サーバー時間を保持する変数</summary>
         private double startTime;
@@ -155,12 +155,15 @@ namespace Game
         [PunRPC]
         private void RPC_PlayerStandby(double masterStartTime)
         {
+            // 各時間の設定を初期化
             startTime = masterStartTime;
             standbyRemainingTime = standbySeconds;
             graceRemainingTime = gracePeriodSeconds;
             gameRemainingTime = gameTimeSeconds;
 
-
+            // 待機中のCanvasを表示する
+            gameUI.SwicthGameCanvas(true);
+            // 各時間のUIを設定
             gameUI.UpdateStandbyTimer(standbyRemainingTime);
             gameUI.UpdateGraceTimer(graceRemainingTime);
             gameUI.UpdateGameTimer(gameRemainingTime);
@@ -196,7 +199,7 @@ namespace Game
                 yield return null;
             }
 
-            gameUI.ToggleCanvas(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
+            gameUI.SwicthRoleCanvas(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
 
             if (PhotonNetwork.IsMasterClient)
             {
@@ -349,6 +352,9 @@ namespace Game
         [PunRPC]
         private void RPC_StartGracePeriod()
         {
+            // ゲーム中のCanvasを表示する
+            gameUI.SwicthGameCanvas(false);
+
             Observable.EveryUpdate().Subscribe(_ =>
             {
                 if (!isGameStarted)

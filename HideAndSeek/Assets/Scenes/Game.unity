@@ -733,10 +733,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seekerCanvasObj: {fileID: 695061215}
-  seekerStartUIObj: {fileID: 0}
   hiderCanvasObj: {fileID: 764079621}
-  hiderStartUIObj: {fileID: 0}
   standbyCanvas: {fileID: 203974729}
+  gameCanvas: {fileID: 1567240504}
   seekerWinBar: {fileID: 2055789963}
   hiderWinBar: {fileID: 92169111}
   lifeIconList:
@@ -1930,7 +1929,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 200}
+  m_AnchoredPosition: {x: 0, y: 170}
   m_SizeDelta: {x: 800, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1268425997
@@ -1980,8 +1979,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2744,7 +2743,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1567240505
 RectTransform:
   m_ObjectHideFlags: 0

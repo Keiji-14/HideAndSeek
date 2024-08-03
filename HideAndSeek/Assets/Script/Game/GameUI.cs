@@ -20,6 +20,8 @@ namespace Game
         [Header("Common UI")]
         /// <summary>待機時間中に表示するキャンバス</summary>
         [SerializeField] private GameObject standbyCanvas;
+        /// <summary>ゲーム中に表示するキャンバス</summary>
+        [SerializeField] private GameObject gameCanvas;
         /// <summary>鬼側の勝利バー</summary>
         [SerializeField] private GameObject seekerWinBar;
         /// <summary>隠れる側の勝利バー</summary>
@@ -42,10 +44,20 @@ namespace Game
 
         #region PublicMethod
         /// <summary>
+        /// ゲーム中のCanavsを切り替える処理
+        /// </summary>
+        /// <param name="isStandby">待機中かどうか</param>
+        public void SwicthGameCanvas(bool isStandby)
+        {
+            standbyCanvas.SetActive(isStandby);
+            gameCanvas.SetActive(!isStandby);
+        }
+
+        /// <summary>
         /// 役割によって表示するCanavsを切り替える処理
         /// </summary>
         /// <param name="role">役割</param>
-        public void ToggleCanvas(string role)
+        public void SwicthRoleCanvas(string role)
         {
             if (role == "Seeker")
             {
