@@ -21,6 +21,8 @@ namespace Game
         private bool gameStarted = false;
         /// <summary>サーバー時間を保持する変数</summary>
         private double startTime;
+        /// <summary>残りの待機時間</summary>
+        private float standbyTime;
         /// <summary>残りの猶予時間</summary>
         private float graceRemainingTime;
         /// <summary>ゲームの残り時間</summary>
@@ -36,6 +38,8 @@ namespace Game
         #endregion
 
         #region SerializeField
+        /// <summary>遷移後のプレイヤー待機時間</summary>
+        [SerializeField] private float standbySeconds;
         /// <summary>隠れる時の猶予時間</summary>
         [SerializeField] private float gracePeriodSeconds;
         /// <summary>ゲーム全体の制限時間</summary>
@@ -51,8 +55,6 @@ namespace Game
         [SerializeField] private GameObject overheadCameraPrefab;
         /// <summary>消滅時のエフェクト</summary>
         [SerializeField] private GameObject destroyEffectObj;
-        /// <summary>ステージ情報</summary>
-        [SerializeField] private StageData stageData;
         [Header("Component")]
         /// <summary>ゲームUI</summary>
         [SerializeField] private GameUI gameUI;
@@ -64,7 +66,21 @@ namespace Game
         /// </summary>
         public void Init()
         {
-            GameDataManager.Instance().SetStagerData(stageData);
+            // MasterClientがステージを設定
+            if (PhotonNetwork.IsMasterClient)
+            {
+                //double masterStartTime = PhotonNetwork.Time;
+
+                // ランダムにステージを選出
+                var stageDataList = GameDataManager.Instance().GetStageDatabase().stageDataList;
+                var stageNum = Random.Range(0, stageDataList.Count);
+
+                PhotonNetwork.Instantiate($"Prefabs/Stage/{stageDataList[stageNum].name}", Vector3.zero, Quaternion.identity);
+
+                photonView.RPC("RPC_SetStageData", RpcTarget.All, stageNum);
+
+                //photonView.RPC("RPC_StartGracePeriod", RpcTarget.All, masterStartTime);
+            }
 
             StartCoroutine(WaitForCustomProperties());
         }
@@ -121,18 +137,13 @@ namespace Game
         /// <summary>
         /// RPCでステージデータを設定する処理
         /// </summary>
-        /// <param name="stageID">ステージID</param>
+        /// <param name="stageNum">ステージ番号</param>
         [PunRPC]
-        private void RPC_SetStageData(int stageID)
+        private void RPC_SetStageData(int stageNum)
         {
-            // ステージオブジェクトの生成
-            if (stageData != null && stageData.stageObj != null)
-            {
-                GameDataManager.Instance().SetStagerData(stageData);
-
-                // ネットワーク経由でインスタンス化
-                Instantiate(stageData.stageObj, Vector3.zero, Quaternion.identity);
-            }
+            var stageDataList = GameDataManager.Instance().GetStageDatabase().stageDataList;
+            // ステージ情報の設定
+            GameDataManager.Instance().SetStagerData(stageDataList[stageNum]);
         }
 
         /// <summary>

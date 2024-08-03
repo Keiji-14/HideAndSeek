@@ -14,6 +14,8 @@ namespace GameData
         private GameData gameData;
         /// <summary>プレイヤー情報</summary>
         private PlayerData playerData;
+        /// <summary>ステージ情報の管理</summary>
+        private StageDatabase stageDatabase;
         /// <summary>ステージ情報</summary>
         private StageData stageData;
         #endregion
@@ -93,6 +95,26 @@ namespace GameData
         public string GetPlayerRole()
         {
             return playerData != null ? playerData.role : string.Empty;
+        }
+
+        /// <summary>
+        ///  ステージ情報管理の初期化
+        /// </summary>
+        public void StageDatabaseInit()
+        {
+            stageDatabase = Resources.Load<StageDatabase>("Prefabs/Stage/StageDatabase");
+            if (stageDatabase == null)
+            {
+                Debug.LogError("StageDatabaseがResourcesフォルダ内に見つかりません。");
+            }
+        }
+
+        /// <summary>
+        ///  ステージ情報管理を返す
+        /// </summary>
+        public StageDatabase GetStageDatabase()
+        {
+            return stageDatabase;
         }
 
         /// <summary>

@@ -100,6 +100,8 @@ namespace Title
             }).AddTo(this);
 
             myPage.Init();
+
+            GameDataManager.Instance().StageDatabaseInit();
         }
 
         /// <summary>
