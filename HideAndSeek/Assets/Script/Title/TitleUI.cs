@@ -58,7 +58,7 @@ namespace Title
         [Header("Button")]
         /// <summary>鬼側の選択ボタン</summary>
         [SerializeField] private Button seekerBtn;
-        /// <summary>隠れる側側の選択ボタン</summary>
+        /// <summary>隠れる側の選択ボタン</summary>
         [SerializeField] private Button hiderBtn;
         /// <summary>タイトル画面に戻るボタン</summary>
         [SerializeField] private Button titleBackBtn;
@@ -132,7 +132,7 @@ namespace Title
         }
 
         /// <summary>
-        /// マッチング画面の表示を切り替える処理
+        /// 役割選択画面の表示を切り替える処理
         /// </summary>
         /// <param name="isView">表示判定</param>
         public void SwicthMatchWindow(bool isView)
@@ -167,7 +167,7 @@ namespace Title
 
         #region PrivateMethod
         /// <summary>
-        /// マッチング中の画面の表示を切り替える処理
+        /// マッチング中画面の表示を切り替える処理
         /// </summary>
         /// <param name="isView">表示判定</param>
         private void SwicthMatchingWindow(bool isView)
@@ -177,7 +177,7 @@ namespace Title
         }
 
         /// <summary>
-        /// マッチング中の画面の表示を切り替える処理
+        /// 選択した役割の表示を切り替える処理
         /// </summary>
         /// <param name="isSeeker">鬼かどうかの判定</param>
         private void ViewRoleImageUI(bool isSeeker)

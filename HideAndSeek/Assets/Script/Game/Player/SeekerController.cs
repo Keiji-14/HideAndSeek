@@ -29,6 +29,8 @@ namespace Player
         private Camera camera;
         /// <summary>キャラクターコントローラー</summary>
         private CharacterController characterController;
+        /// <summary>AudioListener</summary>
+        private AudioListener audioListener;
         /// <summary>ゲームUI</summary>
         private GameUI gameUI;
         #endregion
@@ -61,6 +63,7 @@ namespace Player
         private void Start()
         {
             characterController = GetComponent<CharacterController>();
+            audioListener = GetComponentInChildren<AudioListener>();
             gameUI = FindObjectOfType<GameUI>();
             camera = Camera.main;
 
@@ -89,11 +92,12 @@ namespace Player
 
         #region PublicMethod
         /// <summary>
-        /// カメラの有効を切り替える処理
+        /// AudioListenerの有効を切り替える処理
         /// </summary>
-        public void SetCamera()
+        /// <param name="isActive">有効判定</param>
+        public void SwitchAudioListener(bool isActive)
         {
-            cameraTransform.gameObject.SetActive(photonView.IsMine);
+            audioListener.enabled = isActive;
         }
 
         /// <summary>
@@ -137,6 +141,14 @@ namespace Player
         #endregion
 
         #region PrivateMethod
+        /// <summary>
+        /// カメラの有効を切り替える処理
+        /// </summary>
+        private void SetCamera()
+        {
+            cameraTransform.gameObject.SetActive(photonView.IsMine);
+        }
+
         /// <summary>
         /// キャンバスをカメラに見えるように回転させる処理
         /// </summary>

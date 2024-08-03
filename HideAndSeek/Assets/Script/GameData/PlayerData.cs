@@ -12,7 +12,6 @@
         public string role;
         #endregion
 
-
         public PlayerData(string name)
         {
             this.name = name;
