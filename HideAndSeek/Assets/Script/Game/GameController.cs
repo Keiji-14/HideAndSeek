@@ -17,12 +17,16 @@ namespace Game
         #region PrivateField
         /// <summary>隠れる側のプレイヤー数</summary>
         private int hiderPlayerCount;
+        /// <summary>猶予時間が開始されたかどうかのフラグ</summary>
+        private bool isGracePeriodStarted = false;
         /// <summary>ゲームが開始されたかどうかのフラグ</summary>
-        private bool gameStarted = false;
+        private bool isGameStarted = false;
+        /// <summary>ゲームが終了されたかどうかのフラグ</summary>
+        private bool isGameFinished = false;
         /// <summary>サーバー時間を保持する変数</summary>
         private double startTime;
         /// <summary>残りの待機時間</summary>
-        private float standbyTime;
+        private float standbyRemainingTime;
         /// <summary>残りの猶予時間</summary>
         private float graceRemainingTime;
         /// <summary>ゲームの残り時間</summary>
@@ -69,7 +73,7 @@ namespace Game
             // MasterClientがステージを設定
             if (PhotonNetwork.IsMasterClient)
             {
-                //double masterStartTime = PhotonNetwork.Time;
+                double masterStartTime = PhotonNetwork.Time;
 
                 // ランダムにステージを選出
                 var stageDataList = GameDataManager.Instance().GetStageDatabase().stageDataList;
@@ -81,8 +85,6 @@ namespace Game
 
                 //photonView.RPC("RPC_StartGracePeriod", RpcTarget.All, masterStartTime);
             }
-
-            StartCoroutine(WaitForCustomProperties());
         }
 
         /// <summary>
@@ -92,7 +94,7 @@ namespace Game
         /// <param name="hiderViewID">捕まったプレイヤーのPhotonViewID</param>
         public void OnPlayerCaught(int seekerViewID, int hiderViewID)
         {
-            if (gameStarted && !capturedHiderIDList.Contains(hiderViewID))
+            if (isGameStarted && !capturedHiderIDList.Contains(hiderViewID))
             {
                 capturedHiderIDList.Add(hiderViewID);
 
@@ -126,7 +128,7 @@ namespace Game
         /// <param name="seekerViewID">鬼プレイヤーのPhotonViewID</param>
         public void SeekerFailed(int seekerViewID)
         {
-            if (gameStarted)
+            if (isGameStarted)
             {
                 photonView.RPC("RPC_DestroySeeker", RpcTarget.All, seekerViewID);
             }
@@ -147,10 +149,42 @@ namespace Game
         }
 
         /// <summary>
-        /// カスタムプロパティを待つコルーチン
+        /// RPCで全プレイヤーに一定時間待機させる
+        /// </summary>
+        /// <param name="masterStartTime">マスタークライアントの開始時間</param>
+        [PunRPC]
+        private void RPC_PlayerStandby(double masterStartTime)
+        {
+            startTime = masterStartTime;
+            standbyRemainingTime = standbySeconds;
+            graceRemainingTime = gracePeriodSeconds;
+            gameRemainingTime = gameTimeSeconds;
+
+            Observable.EveryUpdate().Subscribe(_ =>
+            {
+                if (!isGracePeriodStarted)
+                {
+                    standbyRemainingTime = standbySeconds - (float)(PhotonNetwork.Time - (startTime));
+                    //gameUI.UpdateStandbyTimer(standbyTime);
+
+                    if (standbyRemainingTime <= 0)
+                    {
+                        isGracePeriodStarted = true;
+
+                        if (PhotonNetwork.IsMasterClient)
+                        {
+                            StartCoroutine(SpawnSeekerPlayers());
+                        }
+                    }
+                }
+            }).AddTo(this);
+        }
+
+        /// <summary>
+        /// プレイヤー達を生成する処理
         /// </summary>
         /// <returns></returns>
-        private IEnumerator WaitForCustomProperties()
+        private IEnumerator SpawnSeekerPlayers()
         {
             while (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Role"))
             {
@@ -163,18 +197,18 @@ namespace Game
             {
                 int numberOfBots = 3; // 生成するボットの数を指定
                 SpawnHiderBots(numberOfBots);
+                photonView.RPC("RPC_StartGracePeriod", RpcTarget.All);
             }
 
             // 鬼側か隠れる側かを判定する処理
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
                 SpawnSeekerPlayer(seekerPrefab);
-                StartCoroutine(GracePeriodSeekerCoroutine());
+                StartCoroutine(GracePeriodSeeker());
             }
             else if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Hider")
             {
                 SpawnHiderPlayer(hiderPrefab);
-                StartCoroutine(GracePeriodHiderCoroutine());
             }
         }
 
@@ -192,8 +226,10 @@ namespace Game
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
 
                 SeekerController seekerController = playerObject.GetComponent<SeekerController>();
+                 
                 if (seekerController != null)
                 {
+                    // 鬼のAudioListenerを無効化にする（上空視点のAudioListenerを使用）
                     seekerController.SwitchAudioListener(false);
                 }
 
@@ -264,7 +300,7 @@ namespace Game
         /// 猶予時間中の鬼側の処理
         /// </summary>
         /// <returns></returns>
-        private IEnumerator GracePeriodSeekerCoroutine()
+        private IEnumerator GracePeriodSeeker()
         {
             // 上空視点カメラ
             overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
@@ -300,56 +336,29 @@ namespace Game
                 }
                 hiderPlayerObjectList.Add(hider);
             }
-
-            graceRemainingTime = gracePeriodSeconds;
-            gameRemainingTime = gameTimeSeconds;
-
-            // MasterClientが基準時間を送信
-            if (PhotonNetwork.IsMasterClient)
-            {
-                double masterStartTime = PhotonNetwork.Time;
-                photonView.RPC("RPC_StartGracePeriod", RpcTarget.All, masterStartTime);
-            }
-
-            yield return null;
-        }
-
-        /// <summary>
-        /// 猶予時間中の隠れる側の処理
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator GracePeriodHiderCoroutine()
-        {
-            // MasterClientが基準時間を送信
-            if (PhotonNetwork.IsMasterClient)
-            {
-                double masterStartTime = PhotonNetwork.Time;
-                photonView.RPC("RPC_StartGracePeriod", RpcTarget.All, masterStartTime);
-            }
-
-            yield return null;
         }
 
         /// <summary>
         /// RPCで猶予時間を開始する
         /// </summary>
-        /// <param name="masterStartTime">マスタークライアントの開始時間</param>
         [PunRPC]
-        private void RPC_StartGracePeriod(double masterStartTime)
+        private void RPC_StartGracePeriod()
         {
-            startTime = masterStartTime;
-            graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - masterStartTime);
-            gameUI.UpdateGameTimer(gameTimeSeconds);
-
             Observable.EveryUpdate().Subscribe(_ =>
             {
-                graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - startTime);
-                gameUI.UpdateGraceTimer(graceRemainingTime);
-                if (graceRemainingTime <= 0)
+                if (!isGameStarted)
                 {
-                    if (PhotonNetwork.IsMasterClient)
+                    graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - startTime);
+                    gameUI.UpdateGraceTimer(graceRemainingTime);
+
+                    if (graceRemainingTime <= 0)
                     {
-                        photonView.RPC("RPC_StartGame", RpcTarget.All, startTime);
+                        isGameStarted = true;
+
+                        if (PhotonNetwork.IsMasterClient)
+                        {
+                            photonView.RPC("RPC_StartGame", RpcTarget.All);
+                        }
                     }
                 }
             }).AddTo(this);
@@ -358,19 +367,8 @@ namespace Game
         /// <summary>
         /// RPCでゲームを開始する
         /// </summary>
-        /// <param name="masterStartTime">マスタークライアントの開始時間</param>
         [PunRPC]
-        private void RPC_StartGame(double masterStartTime)
-        {
-            // ゲーム開始
-            StartGameTimer(masterStartTime);
-        }
-
-        /// <summary>
-        /// ゲーム開始後のタイマー処理を行う
-        /// </summary>
-        /// <param name="masterStartTime">マスタークライアントの開始時間</param>
-        private void StartGameTimer(double masterStartTime)
+        private void RPC_StartGame()
         {
             // 開始時の鬼の処理
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
@@ -378,18 +376,16 @@ namespace Game
                 StarGameSeekerInit();
             }
 
-            gameStarted = true;
-            startTime = masterStartTime;
-
             Observable.EveryUpdate().Subscribe(_ =>
             {
-                if (gameStarted)
+                if (!isGameFinished)
                 {
                     gameRemainingTime = gameTimeSeconds - (float)(PhotonNetwork.Time - (startTime + gracePeriodSeconds));
                     gameUI.UpdateGameTimer(gameRemainingTime);
+
                     if (gameRemainingTime <= 0)
                     {
-                        gameStarted = false;
+                        isGameStarted = true;
                         GameOver(false);
                     }
                 }
@@ -471,7 +467,7 @@ namespace Game
                     PhotonNetwork.Destroy(seekerPlayer);
                 }
 
-                gameStarted = false;
+
                 GameOver(false);
             }
         }
@@ -517,7 +513,7 @@ namespace Game
             // 隠れる側のプレイヤーが全て捕まった場合
             if (hiderPlayerCount <= 0)
             {
-                gameStarted = false;
+                isGameStarted = false;
                 GameOver(true);
             }
         }

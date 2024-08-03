@@ -2148,7 +2148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c34dac69b88dc8419f625f4e1da28ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  standbySeconds: 0
+  standbySeconds: 10
   gracePeriodSeconds: 30
   gameTimeSeconds: 180
   seekerPrefab: {fileID: 9205597036917788355, guid: a378cd052e0236740a9568293cc67387, type: 3}
