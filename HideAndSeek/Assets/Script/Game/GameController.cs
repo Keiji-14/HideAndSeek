@@ -60,6 +60,8 @@ namespace Game
         /// <summary>消滅時のエフェクト</summary>
         [SerializeField] private GameObject destroyEffectObj;
         [Header("Component")]
+        /// <summary>待機中のカメラ</summary>
+        [SerializeField] private Camera standbyCamera;
         /// <summary>ゲームUI</summary>
         [SerializeField] private GameUI gameUI;
         #endregion
@@ -354,6 +356,10 @@ namespace Game
         {
             // ゲーム中のCanvasを表示する
             gameUI.SwicthGameCanvas(false);
+
+            // 待機中のカメラを削除する
+            Destroy(standbyCamera);
+            standbyCamera = null;
 
             Observable.EveryUpdate().Subscribe(_ =>
             {
