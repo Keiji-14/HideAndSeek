@@ -34,8 +34,8 @@ namespace NetWork
             if (isGameStarted || !isMatching)
                 return;
 
-            // 3人揃ったかどうかを確認
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
+            // 2人揃ったかどうかを確認
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 isGameStarted = true;
                 // ゲームシーンに移行

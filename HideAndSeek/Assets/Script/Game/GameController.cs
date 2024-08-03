@@ -161,7 +161,7 @@ namespace Game
 
             if (PhotonNetwork.IsMasterClient)
             {
-                int numberOfBots = 2; // 生成するボットの数を指定
+                int numberOfBots = 3; // 生成するボットの数を指定
                 SpawnHiderBots(numberOfBots);
             }
 
