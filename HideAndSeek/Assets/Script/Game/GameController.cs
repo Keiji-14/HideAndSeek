@@ -397,7 +397,7 @@ namespace Game
             {
                 if (!isGameFinished)
                 {
-                    gameRemainingTime = gameTimeSeconds - (float)(PhotonNetwork.Time - (startTime + gracePeriodSeconds));
+                    gameRemainingTime = gameTimeSeconds - (float)(PhotonNetwork.Time - (startTime + standbySeconds + gracePeriodSeconds));
                     gameUI.UpdateGameTimer(gameRemainingTime);
 
                     if (gameRemainingTime <= 0)
