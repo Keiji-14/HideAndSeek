@@ -14,20 +14,20 @@ namespace Game
         [Header("Seeker UI")]
         /// <summary>鬼側のCanvas</summary>
         [SerializeField] private GameObject seekerCanvasObj;
-        /// <summary>鬼側の開始時UI</summary>
-        [SerializeField] private GameObject seekerStartUIObj;
         [Header("Hider UI")]
         /// <summary>隠れる側のCanvas</summary>
         [SerializeField] private GameObject hiderCanvasObj;
-        /// <summary>隠れる側の開始時UI</summary>
-        [SerializeField] private GameObject hiderStartUIObj;
         [Header("Common UI")]
+        /// <summary>待機時間中に表示するキャンバス</summary>
+        [SerializeField] private GameObject standbyCanvas;
         /// <summary>鬼側の勝利バー</summary>
         [SerializeField] private GameObject seekerWinBar;
         /// <summary>隠れる側の勝利バー</summary>
         [SerializeField] private GameObject hiderWinBar;
         /// <summary>ライフアイコン</summary>
         [SerializeField] private List<GameObject> lifeIconList;
+        /// <summary>開始時の待機時間テキスト</summary>
+        [SerializeField] private TextMeshProUGUI standbyTimerText;
         /// <summary>ゲームの制限時間テキスト</summary>
         [SerializeField] private TextMeshProUGUI timerText;
         /// <summary>ゲーム開始の猶予時間テキスト</summary>
@@ -42,7 +42,7 @@ namespace Game
 
         #region PublicMethod
         /// <summary>
-        /// 役割によって表示するCanavsを切り替える
+        /// 役割によって表示するCanavsを切り替える処理
         /// </summary>
         /// <param name="role">役割</param>
         public void ToggleCanvas(string role)
@@ -60,7 +60,7 @@ namespace Game
         }
 
         /// <summary>
-        /// 鬼側の勝利時に表示する
+        /// 鬼側の勝利時に表示する処理
         /// </summary>
         public void ViewSeekerWin()
         {
@@ -68,7 +68,7 @@ namespace Game
         }
 
         /// <summary>
-        /// 隠れる側の勝利時に表示する
+        /// 隠れる側の勝利時に表示する処理
         /// </summary>
         public void ViewHiderWin()
         {
@@ -76,7 +76,17 @@ namespace Game
         }
 
         /// <summary>
-        /// 残りの猶予時間を更新する
+        /// 残りの待機時間を更新する処理
+        /// </summary>
+        /// <param name="time">残り時間</param>
+        public void UpdateStandbyTimer(float time)
+        {
+            standbyTimerText.text = $"{Mathf.Ceil(time)}";
+            standbyCanvas.SetActive(time >= 0);
+        }
+
+        /// <summary>
+        /// 残りの猶予時間を更新する処理
         /// </summary>
         /// <param name="time">残り時間</param>
         public void UpdateGraceTimer(float time)
@@ -86,7 +96,7 @@ namespace Game
         }
 
         /// <summary>
-        /// 残りのゲーム時間を更新する
+        /// 残りのゲーム時間を更新する処理
         /// </summary>
         /// <param name="time">残り時間</param>
         public void UpdateGameTimer(float time)
@@ -95,7 +105,7 @@ namespace Game
         }
 
         /// <summary>
-        /// 残り体力を更新する
+        /// 残り体力を更新する処理
         /// </summary>
         /// <param name="life">残り体力</param>
         public void UpdateLife(float life)
@@ -107,7 +117,7 @@ namespace Game
         }
 
         /// <summary>
-        /// 猶予時間中に表示する
+        /// 猶予時間中に表示する処理
         /// </summary>
         /// <param name="graceAssistStr">表示内容</param>
         public IEnumerator ViewGraceText(string graceAssistStr)
@@ -119,7 +129,7 @@ namespace Game
         }
 
         /// <summary>
-        /// 捕まえた情報を表示する
+        /// 捕まえた情報を表示する処理
         /// </summary>
         /// <param name="caughtStr">表示内容</param>
         public IEnumerator ViewCaughtPlayerName(string caughtStr)
@@ -131,7 +141,7 @@ namespace Game
         }
 
         /// <summary>
-        /// 隠れる側のプレイヤー数を更新する
+        /// 隠れる側のプレイヤー数を更新する処理
         /// </summary>
         /// <param name="value">プレイヤー数</param>
         public void UpdateHider(int value)

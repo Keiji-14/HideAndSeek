@@ -83,7 +83,7 @@ namespace Game
 
                 photonView.RPC("RPC_SetStageData", RpcTarget.All, stageNum);
 
-                //photonView.RPC("RPC_StartGracePeriod", RpcTarget.All, masterStartTime);
+                photonView.RPC("RPC_PlayerStandby", RpcTarget.All, masterStartTime);
             }
         }
 
@@ -160,12 +160,17 @@ namespace Game
             graceRemainingTime = gracePeriodSeconds;
             gameRemainingTime = gameTimeSeconds;
 
+
+            gameUI.UpdateStandbyTimer(standbyRemainingTime);
+            gameUI.UpdateGraceTimer(graceRemainingTime);
+            gameUI.UpdateGameTimer(gameRemainingTime);
+
             Observable.EveryUpdate().Subscribe(_ =>
             {
                 if (!isGracePeriodStarted)
                 {
                     standbyRemainingTime = standbySeconds - (float)(PhotonNetwork.Time - (startTime));
-                    //gameUI.UpdateStandbyTimer(standbyTime);
+                    gameUI.UpdateStandbyTimer(standbyRemainingTime);
 
                     if (standbyRemainingTime <= 0)
                     {
@@ -348,7 +353,7 @@ namespace Game
             {
                 if (!isGameStarted)
                 {
-                    graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - startTime);
+                    graceRemainingTime = gracePeriodSeconds - (float)(PhotonNetwork.Time - (startTime + standbySeconds));
                     gameUI.UpdateGraceTimer(graceRemainingTime);
 
                     if (graceRemainingTime <= 0)
@@ -466,8 +471,6 @@ namespace Game
                     SetSpectatorMode();
                     PhotonNetwork.Destroy(seekerPlayer);
                 }
-
-
                 GameOver(false);
             }
         }
