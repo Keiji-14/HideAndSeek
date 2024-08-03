@@ -97,6 +97,10 @@ namespace Player
         /// <param name="isActive">有効判定</param>
         public void SwitchAudioListener(bool isActive)
         {
+            if (audioListener == null)
+            {
+                audioListener = GetComponentInChildren<AudioListener>();
+            }
             audioListener.enabled = isActive;
         }
 

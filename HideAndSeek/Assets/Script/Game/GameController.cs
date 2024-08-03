@@ -191,8 +191,11 @@ namespace Game
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
 
-                var seeker = playerObject.GetComponent<SeekerController>();
-                seeker.SwitchAudioListener(false);
+                SeekerController seekerController = playerObject.GetComponent<SeekerController>();
+                if (seekerController != null)
+                {
+                    seekerController.SwitchAudioListener(false);
+                }
 
                 StartCoroutine(gameUI.ViewGraceText("他の人が隠れている間にマップを覚えましょう"));
             }
@@ -413,6 +416,7 @@ namespace Game
                 if (seekerController != null)
                 {
                     seekerController.enabled = true;
+                    seekerController.SwitchAudioListener(true);
                 }
             }
 
