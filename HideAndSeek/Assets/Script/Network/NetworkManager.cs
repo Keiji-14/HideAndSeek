@@ -2,10 +2,11 @@
 using GameData;
 using Photon.Pun;
 using Photon.Realtime;
-using ExitGames.Client.Photon;
 using UniRx;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace NetWork
 {
@@ -89,6 +90,10 @@ namespace NetWork
         public override void OnJoinedRoom()
         {
             Debug.Log("Joined Room");
+            foreach (var property in PhotonNetwork.CurrentRoom.CustomProperties)
+            {
+                Debug.Log($"{property.Key}: {property.Value}");
+            }
             matchingController.MatchingStart();
         }
 
@@ -102,6 +107,15 @@ namespace NetWork
             Debug.Log("Failed to join random room: " + message);
             // ルームの参加失敗時に新しいルームを作成する処理
             CreateRoom();
+        }
+
+        public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+        {
+            Debug.Log("Room properties updated:");
+            foreach (DictionaryEntry entry in propertiesThatChanged)
+            {
+                Debug.Log($"{entry.Key}: {entry.Value}");
+            }
         }
 
         /// <summary>
@@ -172,6 +186,7 @@ namespace NetWork
                 LoadGameScene();
             }).AddTo(this);
         }
+
         private void FindAndJoinRoom()
         {
             Debug.Log($"FindAndJoinRoom");
