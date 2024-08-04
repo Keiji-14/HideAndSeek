@@ -36,7 +36,7 @@ namespace NetWork
             isGameStarted = false;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             // ゲームが開始されている場合は何もしない
             if (isGameStarted || !isMatching)

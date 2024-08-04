@@ -189,7 +189,8 @@ namespace NetWork
                 var tilteController = FindObjectOfType<Title.TitleController>();
                 if (tilteController != null)
                 {
-                    tilteController.MatchingCompleted();
+                    photonView.RPC("tilteController.RPC_MatchingCompleted", RpcTarget.All);
+                    //tilteController.MatchingCompleted();
                 }
 
                 LoadGameScene();

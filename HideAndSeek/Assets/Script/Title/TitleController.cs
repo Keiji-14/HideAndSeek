@@ -2,6 +2,7 @@
 using GameData;
 using Audio;
 using System;
+using Photon.Pun;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ namespace Title
     /// <summary>
     /// タイトル画面の処理管理
     /// </summary>
-    public class TitleController : MonoBehaviour
+    public class TitleController : MonoBehaviourPunCallbacks
     {
         #region PrivateField
         /// <summary>マッチング中かどうかの処理</summary>
@@ -105,7 +106,8 @@ namespace Title
         /// <summary>
         /// マッチング完了時の処理
         /// </summary>
-        public void MatchingCompleted()
+        [PunRPC]
+        public void RPC_MatchingCompleted()
         {
             titleUI.MatchingCompletedUI();
             SE.instance.Play(SE.SEName.MatchingSE);
