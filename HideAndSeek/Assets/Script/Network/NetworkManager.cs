@@ -62,15 +62,8 @@ namespace NetWork
         /// </summary>
         public override void OnConnectedToMaster()
         {
-            Debug.Log("Connected to Master Server");
             // ロビーに参加してルームリストの更新を待つ
             PhotonNetwork.JoinLobby();
-        }
-
-        public override void OnJoinedLobby()
-        {
-            Debug.Log("Joined Lobby");
-            // ロビーに参加した後、ルームリストの取得を待ちます
         }
 
         /// <summary>
@@ -79,7 +72,6 @@ namespace NetWork
         /// <param name="updatedRoomList">更新されたルームリスト</param>
         public override void OnRoomListUpdate(List<RoomInfo> updatedRoomList)
         {
-            Debug.Log("OnRoomListUpdate");
             roomList.Update(updatedRoomList);
             FindAndJoinRoom(); // ルームリストが更新されたときに再チェック
         }
@@ -89,7 +81,6 @@ namespace NetWork
         /// </summary>
         public override void OnJoinedRoom()
         {
-            Debug.Log("Joined Room");
             foreach (var property in PhotonNetwork.CurrentRoom.CustomProperties)
             {
                 Debug.Log($"{property.Key}: {property.Value}");
@@ -130,7 +121,6 @@ namespace NetWork
 
         public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
         {
-            Debug.Log("Room properties updated:");
             foreach (DictionaryEntry entry in propertiesThatChanged)
             {
                 Debug.Log($"{entry.Key}: {entry.Value}");
@@ -208,23 +198,37 @@ namespace NetWork
 
         private void FindAndJoinRoom()
         {
-            Debug.Log($"FindAndJoinRoom");
-
             foreach (var room in roomList)
             {
-                Debug.Log($"room name:{room.Name}");
-
                 // ルームのカスタムプロパティから SeekerCount と HiderCount を取得
                 if (room.CustomProperties.TryGetValue("SeekerCount", out object seekerCount) &&
                     room.CustomProperties.TryGetValue("HiderCount", out object hiderCount))
                 {
                     Debug.Log($"seekerCount:{(int)seekerCount}");
+                    Debug.Log($"hiderCount:{(int)hiderCount}");
 
-                    // 鬼がいないかつ隠れる側のプレイヤー数が4未満のルームに参加
-                    if ((int)seekerCount == 0 && (int)hiderCount < 4)
+                    // 現在の役割を取得
+                    PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Role", out object role);
+                    string playerRole = role as string;
+
+                    // プレイヤーの役割に応じて条件を設定
+                    if (playerRole == "Seeker")
                     {
-                        PhotonNetwork.JoinRoom(room.Name);
-                        return; // 参加できたら処理を終了
+                        // 鬼がいないルームに参加
+                        if ((int)seekerCount == 0)
+                        {
+                            PhotonNetwork.JoinRoom(room.Name);
+                            return; // 参加できたら処理を終了
+                        }
+                    }
+                    else if (playerRole == "Hider")
+                    {
+                        // 鬼が1人以上いて隠れる側のプレイヤー数が4未満のルームに参加
+                        if ((int)hiderCount < 4)
+                        {
+                            PhotonNetwork.JoinRoom(room.Name);
+                            return; // 参加できたら処理を終了
+                        }
                     }
                 }
             }
