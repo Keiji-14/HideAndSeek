@@ -62,7 +62,47 @@ namespace NetWork
         public override void OnConnectedToMaster()
         {
             Debug.Log("Connected to Master Server");
-            JoinRandomRoom();
+            // ロビーに参加してルームリストの更新を待つ
+            PhotonNetwork.JoinLobby();
+        }
+
+        public override void OnJoinedLobby()
+        {
+            Debug.Log("Joined Lobby");
+            // ルームリストを取得し、条件に合ったルームを探す
+            FindAndJoinRoom();
+        }
+
+        /// <summary>
+        /// ルームリストが更新されたときに呼ばれるコールバックメソッド
+        /// </summary>
+        /// <param name="updatedRoomList">更新されたルームリスト</param>
+        public override void OnRoomListUpdate(List<RoomInfo> updatedRoomList)
+        {
+            Debug.Log("OnRoomListUpdate");
+            // ルームリストを更新する
+            roomList.Update(updatedRoomList);
+        }
+
+        private void FindAndJoinRoom()
+        {
+            foreach (var room in roomList)
+            {
+                // ルームのカスタムプロパティから SeekerCount と HiderCount を取得
+                if (room.CustomProperties.TryGetValue("SeekerCount", out object seekerCount) &&
+                    room.CustomProperties.TryGetValue("HiderCount", out object hiderCount))
+                {
+                    // 鬼がいないかつ隠れる側のプレイヤー数が4未満のルームに参加
+                    if ((int)seekerCount == 0 && (int)hiderCount < 4)
+                    {
+                        PhotonNetwork.JoinRoom(room.Name);
+                        return; // 参加できたら処理を終了
+                    }
+                }
+            }
+
+            // 条件を満たすルームが見つからなかった場合、新しいルームを作成
+            CreateRoom();
         }
 
         /// <summary>
@@ -82,36 +122,8 @@ namespace NetWork
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
             Debug.Log("Failed to join random room: " + message);
-
-            // ルームリストを取得
-            foreach (RoomInfo room in roomList)
-            {
-                // ルームのカスタムプロパティからSeekerCountとHiderCountを取得
-                if (room.CustomProperties.TryGetValue("SeekerCount", out object seekerCount) &&
-                    room.CustomProperties.TryGetValue("HiderCount", out object hiderCount))
-                {
-                    // 鬼側プレイヤーがいないかつ隠れる側プレイヤー数が4未満のルームに参加
-                    if ((int)seekerCount == 0 && (int)hiderCount < 4)
-                    {
-                        PhotonNetwork.JoinRoom(room.Name);
-                        return;
-                    }
-                }
-            }
-
-            // 条件を満たすルームが見つからなかった場合、新しいルームを作成
+            // ルームの参加失敗時に新しいルームを作成する処理
             CreateRoom();
-        }
-
-        /// <summary>
-        /// ルームリストが更新されたときに呼ばれるコールバックメソッド
-        /// </summary>
-        /// <param name="updatedRoomList">更新されたルームリスト</param>
-        public override void OnRoomListUpdate(List<RoomInfo> updatedRoomList)
-        {
-            Debug.Log("OnRoomListUpdate");
-            // ルームリストを更新する
-            roomList.Update(updatedRoomList);
         }
 
         /// <summary>
