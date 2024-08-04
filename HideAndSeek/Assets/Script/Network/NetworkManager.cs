@@ -99,6 +99,16 @@ namespace NetWork
         }
 
         /// <summary>
+        /// ルームリストが更新されたときに呼ばれるコールバックメソッド
+        /// </summary>
+        /// <param name="updatedRoomList">更新されたルームリスト</param>
+        public override void OnRoomListUpdate(List<RoomInfo> updatedRoomList)
+        {
+            // ルームリストを更新する
+            roomList.Update(updatedRoomList);
+        }
+
+        /// <summary>
         /// ゲームサーバーから退出する処理
         /// </summary>
         public void LeaveRoom()
