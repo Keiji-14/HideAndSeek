@@ -63,6 +63,8 @@ MonoBehaviour:
   - RPC_SyncTransformationList
   - RPC_DisplayCaughtMessage
   - RPC_PlayerStandby
+  - MatchingCompleted
+  - RPC_MatchingCompleted
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

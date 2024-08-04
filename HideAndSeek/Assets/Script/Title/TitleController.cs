@@ -108,18 +108,7 @@ namespace Title
         /// </summary>
         public void MatchingCompleted()
         {
-            photonView.RPC("MatchingCompleted", RpcTarget.All);
-        }
-
-        /// <summary>
-        /// RPCでマッチング完了時の処理
-        /// </summary>
-        [PunRPC]
-        public void RPC_MatchingCompleted()
-        {
-            titleUI.MatchingCompletedUI();
-            matchingController.MatchingFinish();
-            SE.instance.Play(SE.SEName.MatchingSE);
+            photonView.RPC("RPC_MatchingCompleted", RpcTarget.All);
         }
         #endregion
 
@@ -144,6 +133,17 @@ namespace Title
             {
                 NetworkManager.instance.LeaveRoom();
             }
+        }
+
+        /// <summary>
+        /// RPCでマッチング完了時の処理
+        /// </summary>
+        [PunRPC]
+        private void RPC_MatchingCompleted()
+        {
+            titleUI.MatchingCompletedUI();
+            matchingController.MatchingFinish();
+            SE.instance.Play(SE.SEName.MatchingSE);
         }
         #endregion
     }
