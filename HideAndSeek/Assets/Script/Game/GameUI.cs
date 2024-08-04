@@ -18,9 +18,9 @@ namespace Game
         /// <summary>隠れる側のCanvas</summary>
         [SerializeField] private GameObject hiderCanvasObj;
         [Header("Common UI")]
-        /// <summary>待機時間中に表示するキャンバス</summary>
+        /// <summary>待機時間中に表示するCanavs</summary>
         [SerializeField] private GameObject standbyCanvas;
-        /// <summary>ゲーム中に表示するキャンバス</summary>
+        /// <summary>ゲーム中に表示するキCanvas</summary>
         [SerializeField] private GameObject gameCanvas;
         /// <summary>鬼側の勝利バー</summary>
         [SerializeField] private GameObject seekerWinBar;

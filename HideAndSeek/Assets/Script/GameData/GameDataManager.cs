@@ -10,8 +10,6 @@ namespace GameData
         #region PrivateField
         /// <summary>ゲーム情報管理のインスタンス</summary>
         private static GameDataManager instance = null;
-        /// <summary>ゲーム情報</summary>
-        private GameData gameData;
         /// <summary>プレイヤー情報</summary>
         private PlayerData playerData;
         /// <summary>ステージ情報の管理</summary>
@@ -44,22 +42,6 @@ namespace GameData
         public void PlayerDataInit()
         {
             playerData = new PlayerData(PlayerPrefs.GetString("UserName"));
-        }
-
-        /// <summary>
-        /// ゲーム情報を設定する処理
-        /// </summary>
-        public void SetGameData(GameData gameData)
-        {
-            this.gameData = gameData;
-        }
-
-        /// <summary>
-        /// ゲーム情報を返す
-        /// </summary>
-        public GameData GetGameData()
-        {
-            return gameData;
         }
 
         /// <summary>

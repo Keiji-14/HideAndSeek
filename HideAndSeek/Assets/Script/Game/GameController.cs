@@ -36,8 +36,6 @@ namespace Game
         private Camera overheadCamera;
         /// <summary>捕まえたプレイヤーのIDリスト</summary>
         private List<int> capturedHiderIDList = new List<int>();
-        /// <summary>変身可能なオブジェクト番号リスト</summary>
-        private List<int> availableTransformIndexList;
         /// <summary>隠れる側のプレイヤーリスト</summary>
         private List<GameObject> hiderPlayerObjectList = new List<GameObject>();
         #endregion
@@ -50,7 +48,7 @@ namespace Game
         /// <summary>ゲーム全体の制限時間</summary>
         [SerializeField] private float gameTimeSeconds;
         [Header("Player Prefab")]
-        /// <summary>探す側のプレイヤーオブジェクト</summary>
+        /// <summary>鬼側のプレイヤーオブジェクト</summary>
         [SerializeField] private GameObject seekerPrefab;
         /// <summary>隠れる側のプレイヤーオブジェクト</summary>
         [SerializeField] private GameObject hiderPrefab;
@@ -287,9 +285,9 @@ namespace Game
         }
 
         /// <summary>
-        /// 隠れる側のプレイヤー数を更新する処理
+        /// 
         /// </summary>
-        /// <param name="changeValue">変更する数値</param>
+        /// <param name="changeValue">変更する数値</param>隠れる側のプレイヤー数を更新する処理
         [PunRPC]
         private void RPC_UpdateHiderCount(int changeValue)
         {
@@ -386,7 +384,7 @@ namespace Game
         }
 
         /// <summary>
-        /// RPCでゲームを開始する
+        /// RPCでゲームを開始する処理
         /// </summary>
         [PunRPC]
         private void RPC_StartGame()
@@ -571,7 +569,7 @@ namespace Game
         }
 
         /// <summary>
-        /// 観戦モードにする
+        /// 観戦モードにする処理
         /// </summary>
         private void SetSpectatorMode()
         {
@@ -604,7 +602,7 @@ namespace Game
         }
 
         /// <summary>
-        /// タイトル画面に戻るコルーチン
+        /// タイトル画面に戻る処理
         /// </summary>
         private IEnumerator ReturnToTitle()
         {
