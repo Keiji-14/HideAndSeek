@@ -181,10 +181,7 @@ namespace Game
                     {
                         isGracePeriodStarted = true;
 
-                        if (PhotonNetwork.IsMasterClient)
-                        {
-                            StartCoroutine(SpawnSeekerPlayers());
-                        }
+                        StartCoroutine(SpawnSeekerPlayers());
                     }
                 }
             }).AddTo(this);
@@ -203,13 +200,6 @@ namespace Game
 
             gameUI.SwicthRoleCanvas(PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString());
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                int numberOfBots = 3; // 生成するボットの数を指定
-                SpawnHiderBots(numberOfBots);
-                photonView.RPC("RPC_StartGracePeriod", RpcTarget.All);
-            }
-
             // 鬼側か隠れる側かを判定する処理
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
@@ -219,6 +209,13 @@ namespace Game
             else if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Hider")
             {
                 SpawnHiderPlayer(hiderPrefab);
+            }
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                int numberOfBots = 3; // 生成するボットの数を指定
+                SpawnHiderBots(numberOfBots);
+                photonView.RPC("RPC_StartGracePeriod", RpcTarget.All);
             }
         }
 
@@ -357,9 +354,15 @@ namespace Game
             // ゲーム中のCanvasを表示する
             gameUI.SwicthGameCanvas(false);
 
-            // 待機中のカメラを削除する
-            Destroy(standbyCamera);
-            standbyCamera = null;
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (standbyCamera != null)
+                {
+                    // 待機中のカメラを削除する
+                    Destroy(standbyCamera.gameObject);
+                    standbyCamera = null;
+                }
+            }
 
             Observable.EveryUpdate().Subscribe(_ =>
             {
