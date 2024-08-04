@@ -94,6 +94,25 @@ namespace NetWork
             {
                 Debug.Log($"{property.Key}: {property.Value}");
             }
+
+            // 役割に応じてプロパティを更新
+            if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Role", out object role) &&
+                role is string playerRole)
+            {
+                Hashtable updatedProperties = new Hashtable();
+
+                if (playerRole == "Seeker")
+                {
+                    updatedProperties["SeekerCount"] = (int)PhotonNetwork.CurrentRoom.CustomProperties["SeekerCount"] + 1;
+                }
+                else if (playerRole == "Hider")
+                {
+                    updatedProperties["HiderCount"] = (int)PhotonNetwork.CurrentRoom.CustomProperties["HiderCount"] + 1;
+                }
+
+                PhotonNetwork.CurrentRoom.SetCustomProperties(updatedProperties);
+            }
+
             matchingController.MatchingStart();
         }
 
