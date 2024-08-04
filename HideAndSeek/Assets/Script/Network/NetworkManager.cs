@@ -5,6 +5,7 @@ using Photon.Realtime;
 using ExitGames.Client.Photon;
 using UniRx;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace NetWork
 {
@@ -60,7 +61,7 @@ namespace NetWork
         /// </summary>
         public override void OnConnectedToMaster()
         {
-            JoinRandomRoom();
+            PhotonNetwork.JoinLobby();
         }
 
         /// <summary>
@@ -104,6 +105,7 @@ namespace NetWork
         /// <param name="updatedRoomList">更新されたルームリスト</param>
         public override void OnRoomListUpdate(List<RoomInfo> updatedRoomList)
         {
+            Debug.Log("OnRoomListUpdate");
             // ルームリストを更新する
             roomList.Update(updatedRoomList);
         }
