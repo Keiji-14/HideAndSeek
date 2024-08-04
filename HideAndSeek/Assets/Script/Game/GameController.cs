@@ -354,14 +354,11 @@ namespace Game
             // ゲーム中のCanvasを表示する
             gameUI.SwicthGameCanvas(false);
 
-            if (PhotonNetwork.IsMasterClient)
+            if (standbyCamera != null)
             {
-                if (standbyCamera != null)
-                {
-                    // 待機中のカメラを削除する
-                    Destroy(standbyCamera.gameObject);
-                    standbyCamera = null;
-                }
+                // 待機中のカメラを削除する
+                Destroy(standbyCamera.gameObject);
+                standbyCamera = null;
             }
 
             Observable.EveryUpdate().Subscribe(_ =>

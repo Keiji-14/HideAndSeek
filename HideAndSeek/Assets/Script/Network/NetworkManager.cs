@@ -25,6 +25,8 @@ namespace NetWork
         private int maxRoomSuffix = 10000;
         /// <summary>マッチング処理のコンポーネント</summary>
         private MatchingController matchingController;
+        // <summary>ルーム情報を管理するクラス</summary>
+        private RoomList roomList = new RoomList();
         #endregion
 
         #region UnityEvent
@@ -76,6 +78,23 @@ namespace NetWork
         /// <param name="message">失敗の詳細メッセージ</param>
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
+            // ルームリストを取得
+            foreach (RoomInfo room in roomList)
+            {
+                // ルームのカスタムプロパティからSeekerCountとHiderCountを取得
+                if (room.CustomProperties.TryGetValue("SeekerCount", out object seekerCount) &&
+                    room.CustomProperties.TryGetValue("HiderCount", out object hiderCount))
+                {
+                    // 鬼側プレイヤーがいないかつ隠れる側プレイヤー数が4未満のルームに参加
+                    if ((int)seekerCount == 0 && (int)hiderCount < 4)
+                    {
+                        PhotonNetwork.JoinRoom(room.Name);
+                        return;
+                    }
+                }
+            }
+
+            // 条件を満たすルームが見つからなかった場合、新しいルームを作成
             CreateRoom();
         }
 
@@ -107,6 +126,16 @@ namespace NetWork
             // Photonサーバーとの接続を切断する
             PhotonNetwork.Disconnect();
         }
+
+        /// <summary>
+        /// 役割を割り当てる処理
+        /// </summary>
+        public void AssignRoles()
+        {
+            Hashtable customProperties = new Hashtable();
+            customProperties["Role"] = GameDataManager.Instance().GetPlayerRole();
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+        }
         #endregion
 
         #region PrivateMethod
@@ -134,7 +163,7 @@ namespace NetWork
                     tilteController.MatchingCompleted();
                 }
 
-                AssignRolesAndLoadGameScene();
+                LoadGameScene();
             }).AddTo(this);
         }
 
@@ -155,8 +184,8 @@ namespace NetWork
             string randomRoomName = GenerateRandomRoomName();
             // ルームのオプションを設定する
             RoomOptions roomOptions = new RoomOptions { MaxPlayers = 5 };
-            roomOptions.CustomRoomProperties = new Hashtable() { { "IsOpen", true } };
-            roomOptions.CustomRoomPropertiesForLobby = new string[] { "IsOpen" };
+            roomOptions.CustomRoomProperties = new Hashtable() { { "IsOpen", true }, { "SeekerCount", 0 }, { "HiderCount", 0 } };
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "IsOpen", "SeekerCount", "HiderCount" };
             // ルームを作成する
             PhotonNetwork.CreateRoom(randomRoomName, roomOptions, TypedLobby.Default);
         }
@@ -172,14 +201,10 @@ namespace NetWork
         }
 
         /// <summary>
-        /// 役割を割り当ててゲームシーンに移行する処理
+        /// ゲームシーンに移行する処理
         /// </summary>
-        private void AssignRolesAndLoadGameScene()
+        private void LoadGameScene()
         {
-            Hashtable customProperties = new Hashtable();
-            customProperties["Role"] = GameDataManager.Instance().GetPlayerRole();
-            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
-
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;

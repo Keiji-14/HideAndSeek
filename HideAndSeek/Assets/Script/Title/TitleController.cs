@@ -141,8 +141,9 @@ namespace Title
 
             if (isMatching)
             {
-                NetworkManager.instance.ConnectUsingSettings();
                 GameDataManager.Instance().SetPlayerRole(selectedRole);
+                NetworkManager.instance.AssignRoles();
+                NetworkManager.instance.ConnectUsingSettings();
             }
             else
             {
