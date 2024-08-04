@@ -61,7 +61,8 @@ namespace NetWork
         /// </summary>
         public override void OnConnectedToMaster()
         {
-            PhotonNetwork.JoinLobby();
+            Debug.Log("Connected to Master Server");
+            JoinRandomRoom();
         }
 
         /// <summary>
@@ -69,6 +70,7 @@ namespace NetWork
         /// </summary>
         public override void OnJoinedRoom()
         {
+            Debug.Log("Joined Room");
             matchingController.MatchingStart();
         }
 
@@ -79,6 +81,8 @@ namespace NetWork
         /// <param name="message">失敗の詳細メッセージ</param>
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
+            Debug.Log("Failed to join random room: " + message);
+
             // ルームリストを取得
             foreach (RoomInfo room in roomList)
             {
@@ -184,6 +188,7 @@ namespace NetWork
         /// </summary>
         private void JoinRandomRoom()
         {
+            Debug.Log("Attempting to join a random room...");
             PhotonNetwork.JoinRandomRoom();
         }
 
