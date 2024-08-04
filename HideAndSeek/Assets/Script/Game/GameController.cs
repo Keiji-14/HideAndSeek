@@ -213,7 +213,10 @@ namespace Game
 
             if (PhotonNetwork.IsMasterClient)
             {
-                int numberOfBots = 3; // 生成するボットの数を指定
+                // 隠れる側のプレイヤー数に応じてボットの数を決定
+                int hiderCount = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("HiderCount", out object hiderCountObj) ? (int)hiderCountObj : 0;
+                // 足りない分のボットを生成
+                int numberOfBots = Mathf.Max(0, 4 - hiderCount);
                 SpawnHiderBots(numberOfBots);
                 photonView.RPC("RPC_StartGracePeriod", RpcTarget.All);
             }
