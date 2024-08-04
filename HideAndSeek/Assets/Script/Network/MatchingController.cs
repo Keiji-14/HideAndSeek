@@ -10,11 +10,19 @@ namespace NetWork
     public class MatchingController : MonoBehaviour
     {
         #region publicField
+        /// <summary>マッチングカウント時の処理</summary>
+        public Subject<float> MatchingCountSubject = new Subject<float>();
         /// <summary>マッチング完了時の処理</summary>
         public Subject<Unit> MatchingCompletedSubject = new Subject<Unit>();
         #endregion
 
         #region PrivateField
+        /// <summary>マッチング中を計測する値</summary>
+        private float matchingTimer;
+        /// <summary>初期化用の値</summary>
+        private const float resetCount = 0.0f;
+        /// <summary>マッチング待機時間</summary>
+        private const float matchingWaitTime = 60.0f;
         /// <summary>マッチング中かどうかの処理</summary>
         private bool isMatching;
         /// <summary>ゲームが開始済みかどうか</summary>
@@ -34,8 +42,12 @@ namespace NetWork
             if (isGameStarted || !isMatching)
                 return;
 
+            // マッチングタイマーを更新
+            MatchingTimeCount();
+
             // プレイヤー数を確認
-            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+            int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+            if (playerCount > 0 && playerCount <= 5)
             {
                 int seekerCount = 0;
                 int hiderCount = 0;
@@ -57,7 +69,7 @@ namespace NetWork
                 }
 
                 // 鬼が1人以上いて、隠れる側のプレイヤー数が4未満の場合、ゲームを開始
-                if (seekerCount > 0 && hiderCount < 4)
+                if (seekerCount > 0 && (matchingTimer >= matchingWaitTime || playerCount == 5))
                 {
                     isGameStarted = true;
                     // ゲームシーンに移行
@@ -74,6 +86,7 @@ namespace NetWork
         public void MatchingStart()
         {
             isMatching = true;
+            matchingTimer = resetCount;
         }
 
         /// <summary>
@@ -82,6 +95,18 @@ namespace NetWork
         public void MatchingFinish()
         {
             isMatching = false;
+        }
+        #endregion
+
+        #region PrivateMethod
+        /// <summary>
+        /// マッチング中の時間計測の処理
+        /// </summary>
+        private void MatchingTimeCount()
+        {
+            matchingTimer += Time.deltaTime;
+
+            MatchingCountSubject.OnNext(matchingTimer);
         }
         #endregion
     }

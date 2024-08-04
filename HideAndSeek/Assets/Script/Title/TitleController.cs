@@ -14,10 +14,6 @@ namespace Title
     public class TitleController : MonoBehaviour
     {
         #region PrivateField
-        /// <summary>マッチング中を計測する値</summary>
-        private float matchingTime;
-        /// <summary>初期化用の値</summary>
-        private const float resetCount = 0.0f;
         /// <summary>マッチング中かどうかの処理</summary>
         private bool isMatching = false;
         /// <summary>選択した役割</summary>
@@ -28,6 +24,8 @@ namespace Title
         /// <summary>マイページボタンを選択した時の処理</summary>
         private IObservable<Unit> InputMyPageObservable =>
             myPageBtn.OnClickAsObservable();
+        /// <summary>マッチング処理のコンポーネント</summary>
+        private MatchingController matchingController;
         #endregion
 
         #region SerializeField
@@ -41,16 +39,6 @@ namespace Title
         [SerializeField] private TitleUI titleUI;
         /// <summary>マイページ画面</summary>
         [SerializeField] private MyPage myPage;
-        #endregion
-
-        #region UnityEvent
-        public void FixedUpdate()
-        {
-            if (!isMatching)
-                return;
-
-            MatchingTimeCount();
-        }
         #endregion
 
         #region PublicMethod
@@ -101,6 +89,16 @@ namespace Title
 
             myPage.Init();
 
+            matchingController = FindObjectOfType<MatchingController>();
+
+            matchingController.MatchingCountSubject.Subscribe(timer =>
+            {
+                int minutes = Mathf.FloorToInt(timer / 60f);
+                int seconds = Mathf.FloorToInt(timer % 60f);
+
+                titleUI.MatchingTimeUI(minutes, seconds);
+            }).AddTo(this);
+
             GameDataManager.Instance().StageDatabaseInit();
         }
 
@@ -116,26 +114,12 @@ namespace Title
 
         #region PrivateMethod
         /// <summary>
-        /// マッチング中の時間計測の処理
-        /// </summary>
-        private void MatchingTimeCount()
-        {
-            matchingTime += Time.deltaTime;
-
-            int minutes = Mathf.FloorToInt(matchingTime / 60f);
-            int seconds = Mathf.FloorToInt(matchingTime % 60f);
-            
-            titleUI.MatchingTimeUI(minutes, seconds);
-        }
-
-        /// <summary>
         /// マッチングを行うかの処理
         /// </summary>
         /// <param name="isMatching">マッチング中かどうかの判定</param>
         private void IsMatching(bool isMatching)
         {
             this.isMatching = isMatching;
-            matchingTime = resetCount;
 
             titleUI.ViewMatchingUI(isMatching);
 
