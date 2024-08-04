@@ -69,8 +69,7 @@ namespace NetWork
         public override void OnJoinedLobby()
         {
             Debug.Log("Joined Lobby");
-            // ルームリストを取得し、条件に合ったルームを探す
-            FindAndJoinRoom();
+            // ロビーに参加した後、ルームリストの取得を待ちます
         }
 
         /// <summary>
@@ -80,29 +79,8 @@ namespace NetWork
         public override void OnRoomListUpdate(List<RoomInfo> updatedRoomList)
         {
             Debug.Log("OnRoomListUpdate");
-            // ルームリストを更新する
             roomList.Update(updatedRoomList);
-        }
-
-        private void FindAndJoinRoom()
-        {
-            foreach (var room in roomList)
-            {
-                // ルームのカスタムプロパティから SeekerCount と HiderCount を取得
-                if (room.CustomProperties.TryGetValue("SeekerCount", out object seekerCount) &&
-                    room.CustomProperties.TryGetValue("HiderCount", out object hiderCount))
-                {
-                    // 鬼がいないかつ隠れる側のプレイヤー数が4未満のルームに参加
-                    if ((int)seekerCount == 0 && (int)hiderCount < 4)
-                    {
-                        PhotonNetwork.JoinRoom(room.Name);
-                        return; // 参加できたら処理を終了
-                    }
-                }
-            }
-
-            // 条件を満たすルームが見つからなかった場合、新しいルームを作成
-            CreateRoom();
+            FindAndJoinRoom(); // ルームリストが更新されたときに再チェック
         }
 
         /// <summary>
@@ -194,14 +172,31 @@ namespace NetWork
                 LoadGameScene();
             }).AddTo(this);
         }
-
-        /// <summary>
-        /// ランダムルームに参加する
-        /// </summary>
-        private void JoinRandomRoom()
+        private void FindAndJoinRoom()
         {
-            Debug.Log("Attempting to join a random room...");
-            PhotonNetwork.JoinRandomRoom();
+            Debug.Log($"FindAndJoinRoom");
+
+            foreach (var room in roomList)
+            {
+                Debug.Log($"room name:{room.Name}");
+
+                // ルームのカスタムプロパティから SeekerCount と HiderCount を取得
+                if (room.CustomProperties.TryGetValue("SeekerCount", out object seekerCount) &&
+                    room.CustomProperties.TryGetValue("HiderCount", out object hiderCount))
+                {
+                    Debug.Log($"seekerCount:{(int)seekerCount}");
+
+                    // 鬼がいないかつ隠れる側のプレイヤー数が4未満のルームに参加
+                    if ((int)seekerCount == 0 && (int)hiderCount < 4)
+                    {
+                        PhotonNetwork.JoinRoom(room.Name);
+                        return; // 参加できたら処理を終了
+                    }
+                }
+            }
+
+            // 条件を満たすルームが見つからなかった場合、新しいルームを作成
+            CreateRoom();
         }
 
         /// <summary>
@@ -217,6 +212,8 @@ namespace NetWork
             roomOptions.CustomRoomPropertiesForLobby = new string[] { "IsOpen", "SeekerCount", "HiderCount" };
             // ルームを作成する
             PhotonNetwork.CreateRoom(randomRoomName, roomOptions, TypedLobby.Default);
+
+            Debug.Log($"CreateRoom:{randomRoomName}");
         }
 
         /// <summary>
