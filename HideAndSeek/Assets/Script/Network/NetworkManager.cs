@@ -27,7 +27,7 @@ namespace NetWork
         private int maxRoomSuffix = 10000;
         /// <summary>マッチング処理のコンポーネント</summary>
         private MatchingController matchingController;
-        // <summary>ルーム情報を管理するクラス</summary>
+        /// <summary>ルーム情報を管理するクラス</summary>
         private RoomList roomList = new RoomList();
         #endregion
 

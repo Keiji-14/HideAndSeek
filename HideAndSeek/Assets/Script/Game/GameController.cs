@@ -1,5 +1,6 @@
 ﻿using GameData;
 using Scene;
+using Audio;
 using Player;
 using Photon.Pun;
 using System.Collections;
@@ -390,6 +391,8 @@ namespace Game
         [PunRPC]
         private void RPC_StartGame()
         {
+            SE.instance.Play(SE.SEName.WhistleSE);
+
             // 開始時の鬼の処理
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
@@ -585,6 +588,8 @@ namespace Game
         /// <param name="isSeekerWin">鬼の勝利かどうかの判定</param>
         private void GameOver(bool isSeekerWin)
         {
+            SE.instance.Play(SE.SEName.WhistleSE);
+
             // ゲーム終了処理
             if (isSeekerWin)
             {

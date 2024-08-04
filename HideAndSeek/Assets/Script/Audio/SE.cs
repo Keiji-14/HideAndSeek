@@ -43,6 +43,7 @@ namespace Audio
             AttackSE,
             MatchingSE,
             CorrectSE,
+            WhistleSE,
         }
 
         /// <summary>
