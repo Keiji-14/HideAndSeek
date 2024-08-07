@@ -285,9 +285,9 @@ namespace Game
         }
 
         /// <summary>
-        /// 
+        /// 隠れる側のプレイヤー数を更新する処理
         /// </summary>
-        /// <param name="changeValue">変更する数値</param>隠れる側のプレイヤー数を更新する処理
+        /// <param name="changeValue">変更する数値</param>
         [PunRPC]
         private void RPC_UpdateHiderCount(int changeValue)
         {
@@ -333,16 +333,19 @@ namespace Game
             // 隠れる側のプレイヤーを見えなくする
             foreach (var hider in hiders)
             {
-                HiderBotController botController = hider.GetComponent<HiderBotController>();
-                if (botController != null)
+                HiderController hiderController = hider.GetComponent<HiderController>();
+                HiderBotController hiderBotController = hider.GetComponent<HiderBotController>();
+                
+                // プレイヤーかボットの場合は非表示にする
+                if (hiderController != null)
                 {
-                    botController.HideBot();
+                    hiderController.HidePlayer();
                 }
-                else
+                else if (hiderBotController != null)
                 {
-                    // オブジェクトごと非表示にする
-                    SetActiveRecursively(hider, false);
+                    hiderBotController.HideBotPlayer();
                 }
+                
                 hiderPlayerObjectList.Add(hider);
             }
         }
@@ -440,35 +443,19 @@ namespace Game
             // 猶予時間終了後の処理
             foreach (var hider in hiderPlayerObjectList)
             {
-                // オブジェクトを再表示
-                SetActiveRecursively(hider, true);
                 var hiderController = hider.GetComponent<HiderController>();
                 var hiderBotController = hider.GetComponent<HiderBotController>();
 
                 if (hiderController != null)
                 {
                     // オブジェクトを再表示
-                    SetActiveRecursively(hider, true);
+                    hiderController.ShowPlayer();
                     hiderController.SetCamera();
                 }
                 else if (hiderBotController != null)
                 {
-                    hiderBotController.ShowBot();
+                    hiderBotController.ShowBotPlayer();
                 }
-            }
-        }
-
-        /// <summary>
-        /// オブジェクトのアクティブを切り替える処理
-        /// </summary>
-        /// <param name="obj">対象のオブジェクト</param>
-        /// <param name="state">アクティブにするかどうかの判定</param>
-        private void SetActiveRecursively(GameObject obj, bool state)
-        {
-            obj.SetActive(state);
-            foreach (Transform child in obj.transform)
-            {
-                SetActiveRecursively(child.gameObject, state);
             }
         }
 

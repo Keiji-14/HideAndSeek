@@ -28,7 +28,7 @@ namespace Player
 
         #region PrivateMethod
         /// <summary>
-        /// カメラの移動を処理するメソッド
+        /// カメラの移動を行う処理
         /// </summary>
         private void MoveCamera()
         {
@@ -55,7 +55,7 @@ namespace Player
         }
 
         /// <summary>
-        /// カメラの回転を処理するメソッド
+        /// カメラの回転を行う処理
         /// </summary>
         private void RotateCamera()
         {

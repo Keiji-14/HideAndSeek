@@ -11,13 +11,14 @@ namespace Player
     public class HiderController : MonoBehaviourPunCallbacks
     {
         #region PrivateField
-        [Header("Transform Object")]
         /// <summary>現在の変身オブジェクト</summary>
         private GameObject currentObject;
         /// <summary>Rigidbody</summary>
         private Rigidbody rigidbody;
         /// <summary>自身のカメラ処理のコンポーネント</summary>
         private HiderCamera hiderCamera;
+        /// <summary>鬼に見えないようにするためのRendererリスト</summary>
+        private List<Renderer> rendererList;
         #endregion
 
         #region SerializeField
@@ -51,6 +52,7 @@ namespace Player
 
             rigidbody = GetComponent<Rigidbody>();
             hiderCamera = GetComponentInChildren<HiderCamera>();
+            rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
 
             // ランダムなオブジェクトに変身させる
             int randomIndex = Random.Range(0, transformationObjList.Count);
@@ -74,6 +76,28 @@ namespace Player
         #endregion
 
         #region PublicMethod
+        /// <summary>
+        /// 隠れる側のプレイヤーを非表示にする
+        /// </summary>
+        public void HidePlayer()
+        {
+            foreach (var renderer in rendererList)
+            {
+                renderer.enabled = false;
+            }
+        }
+
+        /// <summary>
+        /// 隠れる側のプレイヤーを表示する
+        /// </summary>
+        public void ShowPlayer()
+        {
+            foreach (var renderer in rendererList)
+            {
+                renderer.enabled = true;
+            }
+        }
+
         /// <summary>
         /// カメラの有効を切り替える処理
         /// </summary>

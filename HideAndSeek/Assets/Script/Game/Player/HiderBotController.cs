@@ -22,7 +22,7 @@ namespace Player
         private List<GameObject> transformationObjList;
         /// <summary>移動先のリスト</summary>
         private List<Transform> targetPositionList;
-        /// <summary>隠れる側が鬼に見えないようにするためのRendererリスト</summary>
+        /// <summary>鬼に見えないようにするためのRendererリスト</summary>
         private List<Renderer> rendererList;
         #endregion
 
@@ -82,9 +82,9 @@ namespace Player
         }
 
         /// <summary>
-        /// 隠れる側のプレイヤーを非表示にする
+        /// 隠れる側のボットプレイヤーを非表示にする
         /// </summary>
-        public void HideBot()
+        public void HideBotPlayer()
         {
             foreach (var renderer in rendererList)
             {
@@ -93,9 +93,9 @@ namespace Player
         }
 
         /// <summary>
-        /// 隠れる側のプレイヤーを表示する
+        /// 隠れる側のボットプレイヤーを表示する
         /// </summary>
-        public void ShowBot()
+        public void ShowBotPlayer()
         {
             foreach (var renderer in rendererList)
             {
@@ -138,7 +138,7 @@ namespace Player
         }
 
         /// <summary>
-        /// プレイヤーを物に変身させる処理
+        /// RPCでプレイヤーを物に変身させる処理
         /// </summary>
         /// <param name="transformIndex">変身するオブジェクトのインデックス</param>
         [PunRPC]
@@ -157,6 +157,9 @@ namespace Player
             currentObject.transform.localRotation = Quaternion.identity;
         }
 
+        /// <summary>
+        /// ランダムに移動させる処理
+        /// </summary>
         private void MoveToRandomPosition()
         {
             if (targetPositionList.Count == 0) return;
