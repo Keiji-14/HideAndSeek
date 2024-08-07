@@ -321,7 +321,14 @@ namespace Player
         /// <param name="target">攻撃対象のオブジェクト</param>
         private void HandleWrongAttack(GameObject target)
         {
-            Debug.Log("Wrong target hit: " + target.name);
+            // 壁や床、味方の鬼プレイヤー等に当たった場合はダメージを受けない
+            if (target.CompareTag("Wall") || 
+                target.CompareTag("Floor") || 
+                target.CompareTag("Seeker"))
+            {
+                return;
+            }
+
             life--;
             gameUI.UpdateLife(life);
 

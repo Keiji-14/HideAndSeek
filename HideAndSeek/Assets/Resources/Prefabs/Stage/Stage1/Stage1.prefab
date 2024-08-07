@@ -2733,7 +2733,7 @@ GameObject:
   - component: {fileID: 1194085758561227346}
   m_Layer: 0
   m_Name: Prim.00000012
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4621,7 +4621,7 @@ GameObject:
   - component: {fileID: 746160067745590475}
   m_Layer: 0
   m_Name: Collider (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5029,7 +5029,7 @@ GameObject:
   - component: {fileID: 9171063560308222339}
   m_Layer: 0
   m_Name: Collider (12)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9631,7 +9631,7 @@ GameObject:
   - component: {fileID: 5712229944939566119}
   m_Layer: 0
   m_Name: Collider (14)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10707,7 +10707,7 @@ GameObject:
   - component: {fileID: 434393284059178015}
   m_Layer: 0
   m_Name: Prim.00000002
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12442,7 +12442,7 @@ GameObject:
   - component: {fileID: 3418532516027025892}
   m_Layer: 0
   m_Name: Collider (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19344,7 +19344,7 @@ GameObject:
   - component: {fileID: 2073106799532416134}
   m_Layer: 0
   m_Name: pizzeria house
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27698,7 +27698,7 @@ GameObject:
   - component: {fileID: 3608892095731270139}
   m_Layer: 0
   m_Name: Wall (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31387,7 +31387,7 @@ GameObject:
   - component: {fileID: 7142264641567397755}
   m_Layer: 0
   m_Name: land (1)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34369,7 +34369,7 @@ GameObject:
   - component: {fileID: 1527398740486745918}
   m_Layer: 0
   m_Name: Collider (7)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35203,7 +35203,7 @@ GameObject:
   - component: {fileID: 3442340694976615709}
   m_Layer: 0
   m_Name: Prim.00000011
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38135,7 +38135,7 @@ GameObject:
   - component: {fileID: 7738830071335969218}
   m_Layer: 0
   m_Name: Wall (3)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47425,7 +47425,7 @@ GameObject:
   - component: {fileID: 8068845369618301274}
   m_Layer: 0
   m_Name: Prim.00000003
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50384,7 +50384,7 @@ GameObject:
   - component: {fileID: 5957992534706817116}
   m_Layer: 0
   m_Name: land (3)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51330,7 +51330,7 @@ GameObject:
   - component: {fileID: 7758606053307421420}
   m_Layer: 0
   m_Name: paved road turn
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51517,7 +51517,7 @@ GameObject:
   - component: {fileID: 2807035198386845747}
   m_Layer: 0
   m_Name: Collider (6)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52568,7 +52568,7 @@ GameObject:
   - component: {fileID: 429756968153222073}
   m_Layer: 0
   m_Name: Prim.00000007
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53200,7 +53200,7 @@ GameObject:
   - component: {fileID: 8192166119274104060}
   m_Layer: 0
   m_Name: Prim.00000000
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58371,7 +58371,7 @@ GameObject:
   - component: {fileID: 8518208100006260144}
   m_Layer: 0
   m_Name: Collider (3)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58618,7 +58618,7 @@ GameObject:
   - component: {fileID: 8001899980309332836}
   m_Layer: 0
   m_Name: Collider (11)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -59213,7 +59213,7 @@ GameObject:
   - component: {fileID: 2759278455376987382}
   m_Layer: 0
   m_Name: Prim.00000004
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60471,7 +60471,7 @@ GameObject:
   - component: {fileID: 7656708316846791390}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -70976,7 +70976,7 @@ GameObject:
   - component: {fileID: 9008411200458706529}
   m_Layer: 0
   m_Name: Prim.00000013
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71486,7 +71486,7 @@ GameObject:
   - component: {fileID: 8695689623880653814}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73246,7 +73246,7 @@ GameObject:
   - component: {fileID: 6794276356777405315}
   m_Layer: 0
   m_Name: Prim.00000008
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -77720,7 +77720,7 @@ GameObject:
   - component: {fileID: 7069169898819629300}
   m_Layer: 0
   m_Name: Prim.00000016
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -80512,7 +80512,7 @@ GameObject:
   - component: {fileID: 4186768268081316158}
   m_Layer: 0
   m_Name: Prim.00000014
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85013,7 +85013,7 @@ GameObject:
   - component: {fileID: 1946564269226523673}
   m_Layer: 0
   m_Name: Prim.00000005
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85655,7 +85655,7 @@ GameObject:
   - component: {fileID: 139420242047349951}
   m_Layer: 0
   m_Name: T_Generic_colors
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87749,7 +87749,7 @@ GameObject:
   - component: {fileID: 8780292633354332493}
   m_Layer: 0
   m_Name: Wall (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -88418,7 +88418,7 @@ GameObject:
   - component: {fileID: 7202957864715431949}
   m_Layer: 0
   m_Name: Prim.00000010
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -88580,7 +88580,7 @@ GameObject:
   - component: {fileID: 3707206435539368892}
   m_Layer: 0
   m_Name: land (4)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90987,7 +90987,7 @@ GameObject:
   - component: {fileID: 3152414568380441560}
   m_Layer: 0
   m_Name: paved road pedestrian crossing
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -91827,7 +91827,7 @@ GameObject:
   - component: {fileID: 8135586812158418132}
   m_Layer: 0
   m_Name: SM_Sandbox_01
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -94251,7 +94251,7 @@ GameObject:
   - component: {fileID: 439658505407150952}
   m_Layer: 0
   m_Name: asphalt ground wide side turn
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96038,7 +96038,7 @@ GameObject:
   - component: {fileID: 5378134834469433120}
   m_Layer: 0
   m_Name: Collider (13)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96496,7 +96496,7 @@ GameObject:
   - component: {fileID: 5751387086748966853}
   m_Layer: 0
   m_Name: Collider (8)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98247,7 +98247,7 @@ GameObject:
   - component: {fileID: 4692923043028802316}
   m_Layer: 0
   m_Name: Prim.00000001
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100395,7 +100395,7 @@ GameObject:
   - component: {fileID: 3451048268763778831}
   m_Layer: 0
   m_Name: land (2)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100708,7 +100708,7 @@ GameObject:
   - component: {fileID: 8028257522946399068}
   m_Layer: 0
   m_Name: Prim.00000015
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101343,7 +101343,7 @@ GameObject:
   - component: {fileID: 3109383285796647139}
   m_Layer: 0
   m_Name: Collider (4)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107742,7 +107742,7 @@ GameObject:
   - component: {fileID: 2594613583701923340}
   m_Layer: 0
   m_Name: land (5)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108695,7 +108695,7 @@ GameObject:
   - component: {fileID: 5945100561244298508}
   m_Layer: 0
   m_Name: Collider (2)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109419,7 +109419,7 @@ GameObject:
   - component: {fileID: 8287684642083420875}
   m_Layer: 0
   m_Name: Prim.00000009
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110145,7 +110145,7 @@ GameObject:
   - component: {fileID: 1087336206015499554}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110681,7 +110681,7 @@ GameObject:
   - component: {fileID: 4868173988225152595}
   m_Layer: 0
   m_Name: Collider (1)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112443,7 +112443,7 @@ GameObject:
   - component: {fileID: 31152234897146200}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -117009,8 +117009,8 @@ Transform:
   - {fileID: 2333466565171302707}
   - {fileID: 4737660649347605203}
   - {fileID: 6254587907653013347}
-  - {fileID: 358786938517382598}
   - {fileID: 2320683219561906525}
+  - {fileID: 358786938517382598}
   - {fileID: 475715859386053131}
   - {fileID: 5293278112002184882}
   - {fileID: 6455815493923490693}
@@ -121915,7 +121915,7 @@ GameObject:
   - component: {fileID: 7413102158599903304}
   m_Layer: 0
   m_Name: Collider (10)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122740,7 +122740,7 @@ GameObject:
   - component: {fileID: 5895821993931508276}
   m_Layer: 0
   m_Name: Collider (5)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124197,7 +124197,7 @@ GameObject:
   - component: {fileID: 3380919818518709331}
   m_Layer: 0
   m_Name: Collider (9)
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125818,7 +125818,7 @@ GameObject:
   - component: {fileID: 1548810015924820382}
   m_Layer: 0
   m_Name: land
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136753,7 +136753,7 @@ GameObject:
   - component: {fileID: 3569586603652071775}
   m_Layer: 0
   m_Name: Prim.00000006
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
