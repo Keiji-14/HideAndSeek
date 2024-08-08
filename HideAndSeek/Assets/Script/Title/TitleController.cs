@@ -15,8 +15,6 @@ namespace Title
     public class TitleController : MonoBehaviourPunCallbacks
     {
         #region PrivateField
-        /// <summary>マッチング中かどうかの処理</summary>
-        private bool isMatching = false;
         /// <summary>選択した役割</summary>
         private string selectedRole;
         /// <summary>開始ボタンを選択した時の処理</summary>
@@ -119,8 +117,6 @@ namespace Title
         /// <param name="isMatching">マッチング中かどうかの判定</param>
         private void IsMatching(bool isMatching)
         {
-            this.isMatching = isMatching;
-
             titleUI.ViewMatchingUI(isMatching);
 
             if (isMatching)

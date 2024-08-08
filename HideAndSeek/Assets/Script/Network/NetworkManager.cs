@@ -119,11 +119,16 @@ namespace NetWork
             CreateRoom();
         }
 
-        public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+        public override void OnPlayerEnteredRoom(Photon.Realtime.Player player)
         {
-            foreach (DictionaryEntry entry in propertiesThatChanged)
+            Debug.Log($"{player.NickName} has joined the room.");
+
+            // ルームにプレイヤーが参加した際にUIを更新する処理を呼び出す
+            var titleController = FindObjectOfType<Title.TitleController>();
+            if (titleController != null)
             {
-                Debug.Log($"{entry.Key}: {entry.Value}");
+                // タイトルコントローラの更新メソッドを呼び出し
+                // titleController.UpdatePlayerJoined(newPlayer.NickName);  // このメソッドは後で実装
             }
         }
 
@@ -154,6 +159,33 @@ namespace NetWork
 
             // Photonサーバーとの接続を切断する
             PhotonNetwork.Disconnect();
+        }
+
+        public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+        {
+            if (otherPlayer.CustomProperties.TryGetValue("Role", out object role))
+            {
+                if (role as string == "Seeker")
+                {
+                    int seekerCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["SeekerCount"];
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { "SeekerCount", seekerCount - 1 } });
+                }
+                else if (role as string == "Hider")
+                {
+                    int hiderCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["HiderCount"];
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { "HiderCount", hiderCount - 1 } });
+                }
+
+                Debug.Log($"{otherPlayer.NickName} has left the room.");
+
+                // ルームからプレイヤーが退出した際にUIを更新する処理を呼び出す
+                var titleController = FindObjectOfType<Title.TitleController>();
+                if (titleController != null)
+                {
+                    // タイトルコントローラの更新メソッドを呼び出し
+                    // titleController.UpdatePlayerLeft(otherPlayer.NickName);  // このメソッドは後で実装
+                }
+            }
         }
 
         /// <summary>
@@ -192,21 +224,50 @@ namespace NetWork
                     tilteController.MatchingCompleted();
                 }
 
-                LoadGameScene();
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    // ルームの解放状態を解除する
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
+
+                    SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
+                }
             }).AddTo(this);
         }
 
+        /// <summary>
+        /// 既存のルームに参加する処理
+        /// </summary>
         private void FindAndJoinRoom()
         {
-            foreach (var room in roomList)
+            foreach (RoomInfo roomInfo in roomList)
+            {
+                int seekerCount = (int)roomInfo.CustomProperties["SeekerCount"];
+                int hiderCount = (int)roomInfo.CustomProperties["HiderCount"];
+                int totalCount = seekerCount + hiderCount;
+
+                if (totalCount < roomInfo.MaxPlayers)
+                {
+                    if (seekerCount == 0)
+                    {
+                        PhotonNetwork.JoinRoom(roomInfo.Name);
+                        return;
+                    }
+                    else if (seekerCount > 0 && hiderCount < 4)
+                    {
+                        PhotonNetwork.JoinRoom(roomInfo.Name);
+                        return;
+                    }
+                }
+            }
+
+            CreateRoom();
+
+            /*foreach (var room in roomList)
             {
                 // ルームのカスタムプロパティから SeekerCount と HiderCount を取得
                 if (room.CustomProperties.TryGetValue("SeekerCount", out object seekerCount) &&
                     room.CustomProperties.TryGetValue("HiderCount", out object hiderCount))
                 {
-                    Debug.Log($"seekerCount:{(int)seekerCount}");
-                    Debug.Log($"hiderCount:{(int)hiderCount}");
-
                     // 現在の役割を取得
                     PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Role", out object role);
                     string playerRole = role as string;
@@ -218,7 +279,7 @@ namespace NetWork
                         if ((int)seekerCount == 0)
                         {
                             PhotonNetwork.JoinRoom(room.Name);
-                            return; // 参加できたら処理を終了
+                            return;
                         }
                     }
                     else if (playerRole == "Hider")
@@ -227,14 +288,14 @@ namespace NetWork
                         if ((int)hiderCount < 4)
                         {
                             PhotonNetwork.JoinRoom(room.Name);
-                            return; // 参加できたら処理を終了
+                            return;
                         }
                     }
                 }
             }
 
             // 条件を満たすルームが見つからなかった場合、新しいルームを作成
-            CreateRoom();
+            CreateRoom();*/
         }
 
         /// <summary>
@@ -243,38 +304,15 @@ namespace NetWork
         private void CreateRoom()
         {
             // ランダムなルーム名を生成する
-            string randomRoomName = GenerateRandomRoomName();
-            // ルームのオプションを設定する
-            RoomOptions roomOptions = new RoomOptions { MaxPlayers = 5 };
-            roomOptions.CustomRoomProperties = new Hashtable() { { "IsOpen", true }, { "SeekerCount", 0 }, { "HiderCount", 0 } };
-            roomOptions.CustomRoomPropertiesForLobby = new string[] { "IsOpen", "SeekerCount", "HiderCount" };
-            // ルームを作成する
-            PhotonNetwork.CreateRoom(randomRoomName, roomOptions, TypedLobby.Default);
-
-            Debug.Log($"CreateRoom:{randomRoomName}");
-        }
-
-        /// <summary>
-        /// ランダムなルーム名を生成する
-        /// </summary>
-        /// <returns>生成されたランダムなルーム名</returns>
-        private string GenerateRandomRoomName()
-        {
             int randomSuffix = Random.Range(0, maxRoomSuffix);
-            return $"{roomPrefix}{randomSuffix}";
-        }
-
-        /// <summary>
-        /// ゲームシーンに移行する処理
-        /// </summary>
-        private void LoadGameScene()
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-
-                SceneLoader.Instance().PhotonNetworkLoad(SceneLoader.SceneName.Game);
-            }
+            string roomName = roomPrefix + randomSuffix.ToString("0000");
+            // ルームのオプションを設定する
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.MaxPlayers = 5; // 最大5人のプレイヤーを設定
+            roomOptions.CustomRoomProperties = new Hashtable() { { "SeekerCount", 0 }, { "HiderCount", 0 } };
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "SeekerCount", "HiderCount" };
+            // ルームを作成する
+            PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
         }
 
         /// <summary>
