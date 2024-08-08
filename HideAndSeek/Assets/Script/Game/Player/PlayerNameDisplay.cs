@@ -29,11 +29,8 @@ namespace Player
                 PhotonNetwork.NickName = playerName;
             }
 
-            // プレイヤー名を設定し、他のプレイヤーに通知
-            photonView.RPC("RPC_SyncPlayerName", RpcTarget.AllBuffered, playerName);
-
             // 自分の役割に基づいて名前の表示を設定
-            SetNameVisibility();
+            SetNameVisibility(playerName);
         }
         #endregion
 
@@ -52,7 +49,7 @@ namespace Player
         /// <summary>
         /// 自分の役割に基づいて名前の表示を設定
         /// </summary>
-        private void SetNameVisibility()
+        private void SetNameVisibility(string playerName)
         {
             var nameLabel = gameObject.GetComponent<Text>();
             // 自分の役割を取得
@@ -69,6 +66,7 @@ namespace Player
                 {
                     // 自分自身には名前を表示
                     nameLabel.enabled = true;
+                    nameLabel.text = playerName;
                 }
             }
             else
@@ -80,11 +78,16 @@ namespace Player
                 {
                     // 鬼の場合、鬼のみの名前を表示
                     nameLabel.enabled = (otherPlayerRole == "Seeker");
+                    if (otherPlayerRole == "Seeker")
+                    {
+                        photonView.RPC("RPC_SyncPlayerName", RpcTarget.AllBuffered, playerName);
+                    }
                 }
                 else if (myRole == "Hider")
                 {
-                    // 隠れる側の場合、全てのプレイヤーの名前を表示
+                    // 隠れる側の場合、他のプレイヤー名を表示
                     nameLabel.enabled = true;
+                    photonView.RPC("RPC_SyncPlayerName", RpcTarget.AllBuffered, playerName);
                 }
             }
         }
