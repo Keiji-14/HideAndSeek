@@ -46,7 +46,6 @@ namespace Title
         /// </summary>
         public void Init()
         {
-            isMatching = false;
             selectedRole = string.Empty;
 
             Cursor.lockState = CursorLockMode.None;
@@ -99,6 +98,7 @@ namespace Title
             }).AddTo(this);
 
             GameDataManager.Instance().StageDatabaseInit();
+            NetworkManager.instance.SetNickName();
         }
 
         /// <summary>

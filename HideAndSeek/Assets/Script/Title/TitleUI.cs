@@ -4,6 +4,7 @@ using System.Collections;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Title
 {
@@ -69,6 +70,9 @@ namespace Title
         [SerializeField] private Text matchingText;
         /// <summary>マッチング中の経過時間テキスト</summary>
         [SerializeField] private Text timeCountText;
+        [Header("Matching Log UI")]
+        [SerializeField] private ScrollRect matchingLogScrollRect;
+        [SerializeField] private TextMeshProUGUI matchingLogText;
         #endregion
 
         #region PublicMethod
@@ -163,6 +167,24 @@ namespace Title
             // マッチング完了後にキャンセルボタンを無効化
             matchingCancelBtn.interactable = false;
         }
+
+        /// <summary>
+        /// プレイヤーがルームに参加した際のメッセージをログに追加
+        /// </summary>
+        /// <param name="playerName">参加したプレイヤーの名前</param>
+        public void UpdatePlayerJoined(string playerName)
+        {
+            AddLogMessage($"{playerName}が参加しました。");
+        }
+
+        /// <summary>
+        /// プレイヤーがルームから退出した際のメッセージをログに追加
+        /// </summary>
+        /// <param name="playerName">退出したプレイヤーの名前</param>
+        public void UpdatePlayerLeft(string playerName)
+        {
+            AddLogMessage($"{playerName}が退出しました。");
+        }
         #endregion
 
         #region PrivateMethod
@@ -199,6 +221,13 @@ namespace Title
                 dotCount = (dotCount + 1) % 4;
                 yield return new WaitForSeconds(0.5f);
             }
+        }
+
+        private void AddLogMessage(string message)
+        {
+            matchingLogText.text += $"{message}\n";
+            Canvas.ForceUpdateCanvases();
+            matchingLogScrollRect.verticalNormalizedPosition = 0;
         }
         #endregion
     }

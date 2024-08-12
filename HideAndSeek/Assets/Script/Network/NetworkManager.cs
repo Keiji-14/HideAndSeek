@@ -5,7 +5,6 @@ using Photon.Realtime;
 using UniRx;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace NetWork
@@ -186,6 +185,14 @@ namespace NetWork
                     // titleController.UpdatePlayerLeft(otherPlayer.NickName);  // このメソッドは後で実装
                 }
             }
+        }
+
+        /// <summary>
+        /// PhotonNetworkのNickNameを設定する処理
+        /// </summary>
+        public void SetNickName()
+        {
+            PhotonNetwork.NickName = GameDataManager.Instance().GetPlayerData().name;
         }
 
         /// <summary>

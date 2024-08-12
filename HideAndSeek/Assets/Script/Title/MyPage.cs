@@ -1,10 +1,10 @@
 ﻿using GameData;
+using NetWork;
 using Audio;
 using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace Title
 {
@@ -70,6 +70,7 @@ namespace Title
 
                     PlayerData playerData = new PlayerData(nameInputField.text);
                     GameDataManager.Instance().SetPlayerData(playerData);
+                    NetworkManager.instance.SetNickName();
 
                     UpdateViewName();
                 }

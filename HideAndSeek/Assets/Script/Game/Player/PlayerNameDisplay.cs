@@ -24,10 +24,6 @@ namespace Player
             {
                 playerName = "bot";
             }
-            else
-            {
-                PhotonNetwork.NickName = playerName;
-            }
 
             // 自分の役割に基づいて名前の表示を設定
             SetNameVisibility(playerName);
