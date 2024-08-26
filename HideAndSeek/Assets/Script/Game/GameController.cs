@@ -79,7 +79,7 @@ namespace Game
                 // ランダムにステージを選出
                 var stageDataList = GameDataManager.Instance().GetStageDatabase().stageDataList;
                 //var stageNum = Random.Range(0, stageDataList.Count);
-                var stageNum = 2;
+                var stageNum = 1;
 
                 PhotonNetwork.Instantiate($"Prefabs/Stage/{stageDataList[stageNum].name}/{stageDataList[stageNum].name}", Vector3.zero, Quaternion.identity);
 
