@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageID: 1
   stageObj: {fileID: 7600103224990438655, guid: 5d10be6e03cd1a64d8ff24c1fc7a6cef, type: 3}
-  seekerStartArea: {fileID: 0}
+  seekerStartArea: {fileID: 7439954568939597064, guid: acbf555f453351f43a1b3a4940fbc3d2, type: 3}
   transformationObjList:
   - {fileID: 2377257199419369997, guid: 145c1984f74cc6d4bad8ceb4b1240dcb, type: 3}
   - {fileID: 2910992837531415620, guid: 198719953c143e0458dd68aa71544cdd, type: 3}
