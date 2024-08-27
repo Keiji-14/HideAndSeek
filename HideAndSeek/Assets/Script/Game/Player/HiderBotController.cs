@@ -133,7 +133,7 @@ namespace Player
         private void TransformIntoObject(int transformIndex)
         {
             photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, transformIndex);
-            
+
             rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
         }
 

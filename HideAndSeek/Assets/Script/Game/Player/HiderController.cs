@@ -78,6 +78,7 @@ namespace Player
         /// </summary>
         public void HidePlayer()
         {
+            Debug.Log("HidePlayer called for " + gameObject.name);
             foreach (var renderer in rendererList)
             {
                 renderer.enabled = false;
