@@ -49,8 +49,6 @@ namespace Player
             navMeshAgent.speed = speed;
             navMeshAgent.baseOffset = 0;
 
-            rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
-
             // ランダムなオブジェクトに変身させる
             int randomIndex = Random.Range(0, transformationObjList.Count);
             TransformIntoObject(randomIndex);
@@ -135,6 +133,8 @@ namespace Player
         private void TransformIntoObject(int transformIndex)
         {
             photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, transformIndex);
+            
+            rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
         }
 
         /// <summary>

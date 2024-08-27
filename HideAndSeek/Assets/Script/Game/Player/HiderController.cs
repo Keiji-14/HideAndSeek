@@ -50,7 +50,6 @@ namespace Player
 
             rigidbody = GetComponent<Rigidbody>();
             hiderCamera = GetComponentInChildren<HiderCamera>();
-            rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
 
             // ランダムなオブジェクトに変身させる
             int randomIndex = Random.Range(0, transformationObjList.Count);
@@ -161,6 +160,8 @@ namespace Player
         private void TransformIntoObject(int transformIndex)
         {
             photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, transformIndex);
+
+            rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
         }
 
         /// <summary>
