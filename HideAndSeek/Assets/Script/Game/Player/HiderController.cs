@@ -22,8 +22,6 @@ namespace Player
         #endregion
 
         #region SerializeField
-        /// <summary>変身するオブジェクトのファイルパス</summary>
-        [SerializeField] private string transformPath;
         /// <summary>移動速度</summary>
         [SerializeField] private float speed;
         /// <summary>ジャンプの高さ</summary>
