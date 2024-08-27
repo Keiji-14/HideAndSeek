@@ -329,9 +329,17 @@ namespace Game
                 }
             }
 
+            // Hiderが生成されるまで待機する
+            GameObject[] hiders = GameObject.FindGameObjectsWithTag("Hider");
+            while (hiders.Length == 0)
+            {
+                hiders = GameObject.FindGameObjectsWithTag("Hider");
+                yield return new WaitForSeconds(0.5f); // 少し待って再チェック
+            }
+
+
             // リストをクリア
             hiderPlayerObjectList.Clear();
-            var hiders = GameObject.FindGameObjectsWithTag("Hider");
             // 隠れる側のプレイヤーを見えなくする
             foreach (var hider in hiders)
             {
