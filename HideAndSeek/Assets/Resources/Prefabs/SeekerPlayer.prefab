@@ -506,7 +506,7 @@ Transform:
   m_GameObject: {fileID: 2869964940523654063}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.75, z: 0.4}
+  m_LocalPosition: {x: 0, y: 0.8, z: -0.055}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -813,7 +813,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5900409962775078586}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -845,7 +845,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3496325973756972308}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 HeadNub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1099,7 +1099,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8508843337903961001}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HEAD_CONTAINER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1258,7 +1258,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5759386555080743362}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bip001 Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1325,7 +1325,7 @@ GameObject:
   - component: {fileID: 4738915252277024967}
   - component: {fileID: 9124731305536713847}
   - component: {fileID: 3937461772691695888}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: head_46_police_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1455,7 +1455,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.5
-  m_Radius: 0.3
+  m_Radius: 0.32
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
