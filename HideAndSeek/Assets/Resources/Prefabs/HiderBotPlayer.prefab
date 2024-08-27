@@ -322,7 +322,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042"
+  m_Text: 'Bot
+
+'
 --- !u!114 &5280966556022745534
 MonoBehaviour:
   m_ObjectHideFlags: 0
