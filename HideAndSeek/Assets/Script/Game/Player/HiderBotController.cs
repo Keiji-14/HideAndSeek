@@ -49,6 +49,9 @@ namespace Player
             navMeshAgent.speed = speed;
             navMeshAgent.baseOffset = 0;
 
+            // ランダムなオブジェクトに変身させる
+            int randomIndex = Random.Range(0, transformationObjList.Count);
+            TransformIntoObject(randomIndex);
             // 初期移動先を設定
             MoveToRandomPosition();
         }
@@ -69,20 +72,10 @@ namespace Player
         /// 初期化
         /// </summary>
         /// <param name="name">ボットの名前</param>
-        /// <param name="index">オブジェクトの変身番号</param>
-        public void Init(string name, int index)
+        public void Init(string name)
         {
             botName = name;
             playerNameDisplay.Init(true, botName);
-
-            var stageData = GameDataManager.Instance().GetStageData();
-            if (stageData != null)
-            {
-                transformationObjList = stageData.transformationObjList;
-                targetPositionList = stageData.botTargetPositionList;
-            }
-
-            TransformIntoObject(index);
         }
 
         /// <summary>
