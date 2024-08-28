@@ -254,12 +254,19 @@ namespace Game
         /// <param name="prefab">生成するプレイヤーオブジェクト</param>
         private void SpawnHiderPlayer(GameObject prefab)
         {
+            var transformationObjList = GameDataManager.Instance().GetStageData().transformationObjList;
+
             if (!HasSpawnedPlayer(PhotonNetwork.LocalPlayer))
             {
                 var position = new Vector3(Random.Range(-4f, 4f), 3f, Random.Range(-8f, 8f));
                 var playerObject = PhotonNetwork.Instantiate($"Prefabs/{prefab.name}", position, Quaternion.identity);
+                var hiderPlayer = playerObject.GetComponent<HiderController>();
                 // TagObjectに生成したプレイヤーオブジェクトを設定
                 PhotonNetwork.LocalPlayer.TagObject = playerObject;
+
+                // 変身するオブジェクトをランダムで選出
+                int randomIndex = Random.Range(0, transformationObjList.Count);
+                hiderPlayer.Init(randomIndex);
 
                 var addHider = 1;
 
@@ -274,12 +281,17 @@ namespace Game
         /// <param name="botNum">生成するボットの数</param>
         private void SpawnHiderBots(int botNum)
         {
+            var transformationObjList = GameDataManager.Instance().GetStageData().transformationObjList;
+
             for (int i = 0; i < botNum; i++)
             {
                 var position = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
                 var botObject = PhotonNetwork.Instantiate($"Prefabs/{hiderBotPrefab.name}", position, Quaternion.identity);
                 var botPlayerObject = botObject.GetComponent<HiderBotController>();
-                botPlayerObject.Init("bot");
+
+                // 変身するオブジェクトをランダムで選出
+                int randomIndex = Random.Range(0, transformationObjList.Count);
+                botPlayerObject.Init("bot", randomIndex);
 
                 var addHider = 1;
                 photonView.RPC("RPC_UpdateHiderCount", RpcTarget.All, addHider);

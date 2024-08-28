@@ -75,7 +75,7 @@ namespace Player
                 if (myRole == "Seeker")
                 {
                     // 鬼の場合、鬼のみの名前を表示
-                    nameLabel.enabled = (otherPlayerRole == "Seeker");
+                    nameLabel.enabled = false;
                 }
                 else if (myRole == "Hider")
                 {

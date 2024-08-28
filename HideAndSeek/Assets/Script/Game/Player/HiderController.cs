@@ -51,10 +51,6 @@ namespace Player
             rigidbody = GetComponent<Rigidbody>();
             hiderCamera = GetComponentInChildren<HiderCamera>();
 
-            // ランダムなオブジェクトに変身させる
-            int randomIndex = Random.Range(0, transformationObjList.Count);
-            TransformIntoObject(randomIndex);
-
             SetCamera();
 
             playerNameDisplay.Init(false);
@@ -73,6 +69,15 @@ namespace Player
         #endregion
 
         #region PublicMethod
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="index">オブジェクトの変身番号</param>
+        public void Init(int index)
+        {
+            TransformIntoObject(index);
+        }
+
         /// <summary>
         /// 隠れる側のプレイヤーを非表示にする
         /// </summary>
