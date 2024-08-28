@@ -163,7 +163,7 @@ namespace Player
 
             var position = transform.position;
             var rotation = transform.rotation;
-            currentObject = Instantiate(transformationObjList[transformIndex], position, rotation);
+            currentObject = PhotonNetwork.Instantiate($"Prefabs/Transform/{GameDataManager.Instance().GetStageData().name}/{transformationObjList[transformIndex].name}", position, rotation);
             currentObject.transform.SetParent(this.transform);
             currentObject.transform.localPosition = Vector3.zero;
             currentObject.transform.localRotation = Quaternion.identity;
