@@ -78,10 +78,16 @@ namespace Player
         /// </summary>
         public void HidePlayer()
         {
-            Debug.Log("HidePlayer called for " + gameObject.name);
             foreach (var renderer in rendererList)
             {
-                renderer.enabled = false;
+                if (renderer != null && renderer.gameObject != null)
+                {
+                    renderer.enabled = false;
+                }
+                else
+                {
+                    Debug.LogWarning("Renderer is missing or has been destroyed.");
+                }
             }
         }
 
@@ -172,6 +178,11 @@ namespace Player
         [PunRPC]
         private void RPC_TransformIntoObject(int transformIndex)
         {
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                return;
+            }
+
             if (currentObject != null && currentObject != gameObject)
             {
                 Destroy(currentObject);
