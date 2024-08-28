@@ -42,12 +42,6 @@ namespace Player
         #region UnityEvent
         private void Start()
         {
-            var stageData = GameDataManager.Instance().GetStageData();
-            if (stageData != null)
-            {
-                transformationObjList = stageData.transformationObjList;
-            }
-
             rigidbody = GetComponent<Rigidbody>();
             hiderCamera = GetComponentInChildren<HiderCamera>();
 
@@ -75,6 +69,12 @@ namespace Player
         /// <param name="index">オブジェクトの変身番号</param>
         public void Init(int index)
         {
+            var stageData = GameDataManager.Instance().GetStageData();
+            if (stageData != null)
+            {
+                transformationObjList = stageData.transformationObjList;
+            }
+
             TransformIntoObject(index);
         }
 

@@ -38,13 +38,6 @@ namespace Player
         #region UnityEvent
         void Start()
         {
-            var stageData = GameDataManager.Instance().GetStageData();
-            if (stageData != null)
-            {
-                transformationObjList = stageData.transformationObjList;
-                targetPositionList = stageData.botTargetPositionList;
-            }
-
             navMeshAgent = GetComponent<NavMeshAgent>();
             navMeshAgent.speed = speed;
             navMeshAgent.baseOffset = 0;
@@ -74,6 +67,13 @@ namespace Player
         {
             botName = name;
             playerNameDisplay.Init(true, botName);
+
+            var stageData = GameDataManager.Instance().GetStageData();
+            if (stageData != null)
+            {
+                transformationObjList = stageData.transformationObjList;
+                targetPositionList = stageData.botTargetPositionList;
+            }
 
             TransformIntoObject(index);
         }
