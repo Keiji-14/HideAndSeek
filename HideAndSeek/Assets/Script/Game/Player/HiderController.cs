@@ -178,19 +178,18 @@ namespace Player
         [PunRPC]
         private void RPC_TransformIntoObject(int transformIndex)
         {
-            if (!PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient)
             {
-                return;
+                if (currentObject != null && currentObject != gameObject)
+                {
+                    Destroy(currentObject);
+                }
+
+                var position = transform.position;
+                var rotation = transform.rotation;
+                currentObject = PhotonNetwork.Instantiate($"Prefabs/Transform/{GameDataManager.Instance().GetStageData().name}/{transformationObjList[transformIndex].name}", position, rotation);
             }
 
-            if (currentObject != null && currentObject != gameObject)
-            {
-                Destroy(currentObject);
-            }
-
-            var position = transform.position;
-            var rotation = transform.rotation;
-            currentObject = PhotonNetwork.Instantiate($"Prefabs/Transform/{GameDataManager.Instance().GetStageData().name}/{transformationObjList[transformIndex].name}", position, rotation);
             currentObject.transform.SetParent(this.transform);
             currentObject.transform.localPosition = Vector3.zero;
             currentObject.transform.localRotation = Quaternion.identity;

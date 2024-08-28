@@ -18,7 +18,6 @@ MonoBehaviour:
   transformationObjList:
   - {fileID: 2377257199419369997, guid: 145c1984f74cc6d4bad8ceb4b1240dcb, type: 3}
   - {fileID: 2910992837531415620, guid: 198719953c143e0458dd68aa71544cdd, type: 3}
-  - {fileID: 5222628658600891921, guid: fa9dd10dc9b21b244848f2d3aca44415, type: 3}
   - {fileID: 1012801347181419043, guid: f9e8d0dd7068ec640803fc31118714e4, type: 3}
   - {fileID: 2233073554443396861, guid: f36cbb80013ee4040a005f8036a23d9e, type: 3}
   - {fileID: 7288478035659052150, guid: 40c5c1fd4f09c8249af6ce06f0aa6034, type: 3}
@@ -26,6 +25,8 @@ MonoBehaviour:
   - {fileID: 3378359737902332844, guid: 8c37b06fa0acd6f409d2f03c7f2d8708, type: 3}
   - {fileID: 6068814645637610015, guid: b268a5aaecc45fb4880a8bb81f0c8038, type: 3}
   - {fileID: 3748832181005548058, guid: bc34b87ac1b03734a9696a7d3af5b861, type: 3}
+  - {fileID: 7948909965087111179, guid: 5f0c5023fdc4a87449e00d2ad69ee3bc, type: 3}
+  - {fileID: 5931084092324021587, guid: ce39923c4559f7b4c9b33218d43837a6, type: 3}
   botTargetPositionList:
   - {fileID: 7948269974583671758, guid: 7c46200b5f6d9354b8490d5c479f4789, type: 3}
   - {fileID: 4528255029184880926, guid: 9791b0ed7f67849418b1c327c8c12bbc, type: 3}
