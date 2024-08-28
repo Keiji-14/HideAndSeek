@@ -380,6 +380,7 @@ namespace Game
 
                     if (graceRemainingTime <= 0)
                     {
+                        gameUI.UpdateGraceTimer(graceRemainingTime);
                         isGameStarted = true;
 
                         if (PhotonNetwork.IsMasterClient)
