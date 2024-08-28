@@ -45,6 +45,12 @@ namespace Player
             rigidbody = GetComponent<Rigidbody>();
             hiderCamera = GetComponentInChildren<HiderCamera>();
 
+            var stageData = GameDataManager.Instance().GetStageData();
+            if (stageData != null)
+            {
+                transformationObjList = stageData.transformationObjList;
+            }
+
             SetCamera();
 
             playerNameDisplay.Init(false);
