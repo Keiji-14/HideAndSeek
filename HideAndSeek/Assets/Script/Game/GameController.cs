@@ -203,7 +203,6 @@ namespace Game
             if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Seeker")
             {
                 SpawnSeekerPlayer(seekerPrefab);
-                StartCoroutine(GracePeriodSeeker());
             }
             else if (PhotonNetwork.LocalPlayer.CustomProperties["Role"].ToString() == "Hider")
             {
@@ -244,6 +243,7 @@ namespace Game
                     seekerController.SwitchAudioListener(false);
                 }
 
+                StartCoroutine(GracePeriodSeeker());
                 StartCoroutine(gameUI.ViewGraceText("他の人が隠れている間にマップを覚えましょう"));
             }
         }
@@ -318,7 +318,7 @@ namespace Game
             // 上空視点カメラ
             overheadCamera = Instantiate(overheadCameraPrefab).GetComponent<Camera>();
             // プレイヤー生成待ちのため少し待つ
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
 
             // 自プレイヤーのSeekerControllerを取得して移動を無効にする
             GameObject playerObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
