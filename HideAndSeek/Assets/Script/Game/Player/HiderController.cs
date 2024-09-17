@@ -51,9 +51,7 @@ namespace Player
                 transformationObjList = stageData.transformationObjList;
             }
 
-            // ランダムなオブジェクトに変身させる
-            int randomIndex = Random.Range(0, transformationObjList.Count);
-            TransformIntoObject(randomIndex);
+            TransformIntoObject();
 
             SetCamera();
 
@@ -163,32 +161,28 @@ namespace Player
         /// <summary>
         /// プレイヤーを物に変身させる処理
         /// </summary>
-        /// <param name="transformIndex">変身するオブジェクトのインデックス</param>
-        private void TransformIntoObject(int transformIndex)
+        private void TransformIntoObject()
         {
-            photonView.RPC("RPC_TransformIntoObject", RpcTarget.AllBuffered, transformIndex);
+            if (!photonView.IsMine)
+                return;
 
-            rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
-        }
-
-        /// <summary>
-        /// プレイヤーを物に変身させる処理
-        /// </summary>
-        /// <param name="transformIndex">変身するオブジェクトのインデックス</param>
-        [PunRPC]
-        private void RPC_TransformIntoObject(int transformIndex)
-        {
             if (currentObject != null && currentObject != gameObject)
             {
                 Destroy(currentObject);
             }
 
+            var stageData = GameDataManager.Instance().GetStageData();
+            // ランダムなオブジェクトに変身させる
+            var randomIndex = Random.Range(0, transformationObjList.Count);
             var position = transform.position;
             var rotation = transform.rotation;
-            currentObject = Instantiate(transformationObjList[transformIndex], position, rotation);
+
+            currentObject = PhotonNetwork.Instantiate($"Prefabs/Transform/{stageData.name}/{transformationObjList[randomIndex].name}",position, rotation);
             currentObject.transform.SetParent(this.transform);
             currentObject.transform.localPosition = Vector3.zero;
             currentObject.transform.localRotation = Quaternion.identity;
+
+            rendererList = new List<Renderer>(GetComponentsInChildren<Renderer>());
         }
         #endregion
     }
